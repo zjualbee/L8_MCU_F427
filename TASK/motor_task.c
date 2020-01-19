@@ -105,7 +105,7 @@ static portTASK_FUNCTION(motor_task, pvParameters)
     motor_36V_init(&g_motor_36v);
     g_motor_36v.on(&g_motor_36v);
 
-#if 0
+#if 1
     while(1)
         {
             osDelay(1000);
