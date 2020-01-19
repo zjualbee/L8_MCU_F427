@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F427xx,USE_HAL_DRIVER,STM32F427xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;  ../Drivers/STM32F4xx_HAL_Driver/Inc;  ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;  ../Drivers/CMSIS/Include;  ..\at_protocol;  ../Middlewares/Third_Party/FreeRTOS/Source/include;  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;  ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;  ..\TASK;  ..\BSP;  ..\Src</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;..\TASK;..\BSP;..\Src;..\..\at_protocol</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -521,17 +521,17 @@
             <File>
               <FileName>at_cmd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\at_protocol\at_cmd.c</FilePath>
+              <FilePath>..\..\at_protocol\at_cmd.c</FilePath>
             </File>
             <File>
               <FileName>at_decode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\at_protocol\at_decode.c</FilePath>
+              <FilePath>..\..\at_protocol\at_decode.c</FilePath>
             </File>
             <File>
               <FileName>at_encode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\at_protocol\at_encode.c</FilePath>
+              <FilePath>..\..\at_protocol\at_encode.c</FilePath>
             </File>
           </Files>
         </Group>

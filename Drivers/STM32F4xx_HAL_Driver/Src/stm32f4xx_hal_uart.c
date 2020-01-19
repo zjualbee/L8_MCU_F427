@@ -2987,13 +2987,20 @@ static HAL_StatusTypeDef UART_EndTransmit_IT(UART_HandleTypeDef *huart)
   *                the configuration information for the specified UART module.
   * @retval HAL status
   */
+#include "main.h"
+
 static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
 {
-  uint16_t *tmp;
+    uint16_t *tmp;
+    uint8_t temp;
 
   /* Check that a Rx process is ongoing */
   if (huart->RxState == HAL_UART_STATE_BUSY_RX)
   {
+
+  temp = (uint8_t)(huart->Instance->DR &0xFF);
+  At_Fifo_In(&at_decode_buf[0],temp);
+  #if 0
     if (huart->Init.WordLength == UART_WORDLENGTH_9B)
     {
       tmp = (uint16_t *) huart->pRxBuffPtr;
@@ -3019,8 +3026,9 @@ static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
         *huart->pRxBuffPtr++ = (uint8_t)(huart->Instance->DR & (uint8_t)0x007F);
       }
     }
+#endif
 
-    if (--huart->RxXferCount == 0U)
+    if(huart->RxXferCount == 0U)
     {
       /* Disable the UART Data Register not empty Interrupt */
       __HAL_UART_DISABLE_IT(huart, UART_IT_RXNE);

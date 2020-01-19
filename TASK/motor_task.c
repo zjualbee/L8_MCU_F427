@@ -103,15 +103,16 @@ static portTASK_FUNCTION(motor_task, pvParameters)
 
     osDelay(20);
     motor_36V_init(&g_motor_36v);
+    g_motor_36v.on(&g_motor_36v);
 
-
+#if 0
     while(1)
         {
             osDelay(1000);
             printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt);
             g_CW_speed_cnt=0;
         }
-
+#endif
 
 
     while(1){
@@ -123,7 +124,7 @@ static portTASK_FUNCTION(motor_task, pvParameters)
             //g_motor_36v.temp_update(&g_motor_36v);
             g_motor_36v.closed_loop(&g_motor_36v);
             g_motor_36v.run_need_reset(&g_motor_36v);
-           // motor_status_check();
+            motor_status_check();
         }
     }
 }
