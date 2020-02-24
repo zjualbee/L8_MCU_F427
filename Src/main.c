@@ -434,7 +434,7 @@ static void MX_TIM2_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 220;
+  sConfigOC.Pulse = 400;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
@@ -527,6 +527,15 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : PF8 */
+ GPIO_InitStruct.Pin = GPIO_PIN_8;
+ GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+ HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+
+
+
+
   /*Configure GPIO pin : PF15 */
   GPIO_InitStruct.Pin = GPIO_PIN_15;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
@@ -566,10 +575,10 @@ void StartDefaultTask(void const * argument)
   /* USER CODE BEGIN 5 */
 
 
-  led_task_create();
+    led_task_create();
 
-  uart_task_create();
-  motor_task_create();
+    uart_task_create();
+    motor_task_create();
 
 
   /* Infinite loop */

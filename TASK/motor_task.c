@@ -99,17 +99,52 @@ static portTASK_FUNCTION(motor_task, pvParameters)
 {
     uint32_t tick_cur = xTaskGetTickCount();
     uint32_t tick_last = xTaskGetTickCount();
-
+    static int Speed_Ok_Cnt = 0;
 
     osDelay(20);
     motor_36V_init(&g_motor_36v);
     g_motor_36v.on(&g_motor_36v);
 
+
+#if 0
+while(1)
+    {
+        osDelay(1000);
+        printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt );
+         g_CW_speed_cnt=0;
+}
+#endif
+
+
+    
+//PF8
 #if 1
     while(1)
         {
             osDelay(1000);
-            printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt);
+            printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
+            if(g_CW_speed_cnt > 80)
+                {
+                    Speed_Ok_Cnt++;
+                }
+            else
+                {
+                    Speed_Ok_Cnt = 0;
+                    //laser off
+                    
+                    printf("laser OFF\r\n");
+                    HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+                }
+
+
+            if(Speed_Ok_Cnt >= 5)
+                {
+                    //laser on
+                    printf("laser on\r\n");
+                    Speed_Ok_Cnt = 5;
+                    HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
+
+                }
             g_CW_speed_cnt=0;
         }
 #endif
