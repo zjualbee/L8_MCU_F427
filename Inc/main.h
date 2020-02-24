@@ -45,11 +45,20 @@ extern "C" {
 #include "at_encode.h"
 #include "system.h"
 
+
+#include "motor_task.h"
+#include "heat_sink_task.h"
+#include "led_task.h"
+
+
+
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 
+extern I2C_HandleTypeDef hi2c1;
 
 extern SPI_HandleTypeDef hspi4;
 
