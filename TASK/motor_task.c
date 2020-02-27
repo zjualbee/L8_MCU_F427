@@ -43,7 +43,7 @@ xTaskHandle g_xTaskHandle_motor = NULL;
 *******************************************************************************/
 static void motor_status_check(void)
 {
-    int i = 0;
+   
     static int s_motor_speed_low = 0;
     static int s_motor_temp_high = 0;
     struct_SysErr err = {0};
@@ -174,7 +174,7 @@ while(1)
 *******************************************************************************/
 portBASE_TYPE motor_task_create(void)
 {
-    return xTaskCreate(motor_task, "motor", 512, NULL, TASK_PRIORITY+6, &g_xTaskHandle_motor);
+    return xTaskCreate(motor_task, "motor", 512, NULL, TASK_PRIORITY+2, &g_xTaskHandle_motor);
 }
 
 /******************* (C) COPYRIGHT 2014 APPOTRONICS ************END OF FILE****/

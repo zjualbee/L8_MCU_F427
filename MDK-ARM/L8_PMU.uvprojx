@@ -139,7 +139,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F427xx,USE_HAL_DRIVER,STM32F427xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;  ../Drivers/STM32F4xx_HAL_Driver/Inc;  ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;  ../Drivers/CMSIS/Include;  ../Middlewares/Third_Party/FreeRTOS/Source/include;  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;  ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;  ..\TASK;  ..\BSP;  ..\Src;  ..\..\appo_lib\at_protocol</IncludePath>
+              <IncludePath>../Inc;   ../Drivers/STM32F4xx_HAL_Driver/Inc;   ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;   ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;   ../Drivers/CMSIS/Include;   ../Middlewares/Third_Party/FreeRTOS/Source/include;   ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;   ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;   ..\TASK;   ..\BSP;   ..\Src;   ..\..\appo_lib\at_protocol</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -623,6 +623,11 @@
               <FileType>1</FileType>
               <FilePath>..\TASK\heat_sink_task.c</FilePath>
             </File>
+            <File>
+              <FileName>temprature_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TASK\temprature_task.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -637,6 +642,16 @@
               <FileName>motor_36V.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BSP\motor_36V.c</FilePath>
+            </File>
+            <File>
+              <FileName>MAX31790.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\MAX31790.c</FilePath>
+            </File>
+            <File>
+              <FileName>ADS7830.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\ADS7830.c</FilePath>
             </File>
           </Files>
         </Group>

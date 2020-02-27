@@ -1,9 +1,9 @@
 /******************** (C) COPYRIGHT 2017 APPOTRONICS ***************************
-* File Name          : motor_task.h
-* Author             : WWZ
+* File Name          : temprature_task.h
+* Author             : YAN  SHENG WEI
 * Version            : V1.0.0
-* Date(mm/dd/yy)     : 2017-12-13
-* Description        : Header for motor_task.c file. 
+* Date(mm/dd/yy)     : 2020-2-27
+* Description        : 
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
@@ -14,14 +14,12 @@
 *******************************************************************************/
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __HEAT_SINK_TASK_H__
-#define __HEAT_SINK_TASK_H__
+#ifndef __TEMPRATURE_TASK_H__
+#define __TEMPRATURE_TASK_H__
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
-#include "MAX31790.h"
 
-//#include "motor_36V.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
@@ -30,7 +28,10 @@
 /* Exported functions --------------------------------------------------------*/
 
 // 建立任务
-portBASE_TYPE heat_sink_task_create(void);
+portBASE_TYPE temprature_task_create(void);
 
 #endif
-/******************* (C) COPYRIGHT 2017 APPOTRONICS ************END OF FILE****/
+
+/******************* (C) COPYRIGHT 2020 APPOTRONICS ************END OF FILE****/
+
+

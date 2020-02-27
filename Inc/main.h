@@ -49,6 +49,7 @@ extern "C" {
 #include "motor_task.h"
 #include "heat_sink_task.h"
 #include "led_task.h"
+#include "temprature_task.h"
 
 
 
@@ -59,7 +60,7 @@ extern "C" {
 /* USER CODE BEGIN ET */
 
 extern I2C_HandleTypeDef hi2c1;
-
+extern I2C_HandleTypeDef hi2c2;
 extern SPI_HandleTypeDef hspi4;
 
 extern TIM_HandleTypeDef htim1;
