@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F427xx,USE_HAL_DRIVER,STM32F427xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;   ../Drivers/STM32F4xx_HAL_Driver/Inc;   ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;   ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;   ../Drivers/CMSIS/Include;   ../Middlewares/Third_Party/FreeRTOS/Source/include;   ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;   ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;   ..\TASK;   ..\BSP;   ..\Src;   ..\..\appo_lib\at_protocol</IncludePath>
+              <IncludePath>../Inc;     ../Drivers/STM32F4xx_HAL_Driver/Inc;     ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;     ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;     ../Drivers/CMSIS/Include;     ../Middlewares/Third_Party/FreeRTOS/Source/include;     ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;     ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;     ..\TASK;     ..\BSP;     ..\Src;     ..\..\appo_lib\at_protocol</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -628,6 +628,11 @@
               <FileType>1</FileType>
               <FilePath>..\TASK\temprature_task.c</FilePath>
             </File>
+            <File>
+              <FileName>tec_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TASK\tec_task.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -652,6 +657,11 @@
               <FileName>ADS7830.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BSP\ADS7830.c</FilePath>
+            </File>
+            <File>
+              <FileName>uart_tec.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\uart_tec.c</FilePath>
             </File>
           </Files>
         </Group>

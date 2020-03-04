@@ -3000,6 +3000,24 @@ static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
 
   temp = (uint8_t)(huart->Instance->DR &0xFF);
   At_Fifo_In(&at_decode_buf[0],temp);
+
+
+  if(huart->Instance == UART8)  //   2  5  8
+    {
+         TEC_Recv_Buf_In(&Uart_Tec1,temp);
+    }
+  else if(huart->Instance == USART2)
+    {
+      TEC_Recv_Buf_In(&Uart_Tec2,temp);
+
+    }
+  else if(huart->Instance == UART5)
+    {
+      TEC_Recv_Buf_In(&Uart_Tec3,temp);
+    }
+
+
+  
   #if 0
     if (huart->Init.WordLength == UART_WORDLENGTH_9B)
     {

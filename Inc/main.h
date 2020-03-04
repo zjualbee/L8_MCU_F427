@@ -50,6 +50,10 @@ extern "C" {
 #include "heat_sink_task.h"
 #include "led_task.h"
 #include "temprature_task.h"
+#include "power_task.h"
+#include "tec_task.h"
+#include "uart_task.h"
+
 
 
 
@@ -67,6 +71,10 @@ extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 
 extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart7;
+extern UART_HandleTypeDef huart8;
+extern UART_HandleTypeDef huart2;
+extern UART_HandleTypeDef huart5;
 
 
 
