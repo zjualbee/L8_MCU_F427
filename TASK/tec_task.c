@@ -113,9 +113,9 @@ static portTASK_FUNCTION(tec_task, pvParameters)
 
     while(1)
         {
-            osDelay(5000);
             TEC_handler(&Uart_Tec1);
-            TEC_Get_Run_Param(&Uart_Tec1,0,8);
+            //TEC_Get_Run_Param(&Uart_Tec1,0,12);
+            osDelay(5000);
             //TEC_SetPowerUp(&Uart_Tec1);
         }
 

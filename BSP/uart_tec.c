@@ -200,7 +200,6 @@ void TEC_On_Recv_Buf(pUART_TEC p)
     if(((p->active_opt == OPT_GET_RUN_PARAM)&&(p->recv_buf[1] == OPT_GET_RUN_PARAM))||\
         ((p->active_opt == OPT_GET_RUN_STATUS)&&(p->recv_buf[1] == OPT_GET_RUN_STATUS)))
         {
-            ;
             printf("On %02X\r\n",p->active_opt);
         }
     else
@@ -209,20 +208,21 @@ void TEC_On_Recv_Buf(pUART_TEC p)
         }
         
 
-
+    print_buf(p->recv_buf,p->recv_index);
     /////////////check crc//////////////
-    crc = u16modbusCRC(p->recv_buf,p->recv_index);
+    crc = u16modbusCRC(p->recv_buf,p->recv_index-2);
 
-    if((p->recv_buf[p->recv_index - 2]==(crc&0xff00)>>8)&&\
-        (p->recv_buf[p->recv_index - 1]==(crc&0xff)))
+    if((p->recv_buf[p->recv_index - 1]==(crc&0xff00)>>8)&&\
+        (p->recv_buf[p->recv_index - 2]==(crc&0xff)))
         {
                 ;
                 printf("check ok\r\n");
-
         }
     else
         {
-            printf("check error\r\n");
+        
+            printf("check error--%02X %02X,%04X\r\n",\
+                p->recv_buf[p->recv_index - 2],p->recv_buf[p->recv_index - 1],crc);
             return ;
         }
 
@@ -234,18 +234,23 @@ void TEC_On_Recv_Buf(pUART_TEC p)
     
     if(p->active_opt == OPT_GET_RUN_PARAM)
         {
+            printf("RUN param addr:%d,len:%d\r\n",p->active_reg_addr_l,p->active_reg_len);
+            if((p->active_reg_addr_l + p->active_reg_len ) < MAX_PARAM_REG_LEN)
+                {
+                    memcpy(&(p->run_param_reg[p->active_reg_addr_l]),&p->recv_buf[3],p->active_reg_len);
+                }
 
-
+            
 
         }
-    else if(p->active_opt == OPT_GET_RUN_PARAM)
+    else if(p->active_opt == OPT_GET_RUN_STATUS)
         {
-
+            printf("RUN status\r\n");
 
         }
 
 
-
+    
 
 }
 
@@ -294,6 +299,7 @@ uint16_t TEC_Send_Cmd(pUART_TEC p,uint8_t option,uint16_t reg_addr,uint16_t para
     p->active_reg_addr_l = (reg_addr&0xff);
     p->active_reg_len    =  param;
     p->recv_index = 0;
+    p->active_opt =option ;
     ////////////////////////
 
     print_buf(TEC_Buf,8);
@@ -361,15 +367,6 @@ void TEC_Init_Table(pUART_TEC p)
 
 
 
-void TEC_handler(pUART_TEC p)
-{
-
-    TEC_On_Recv_Buf(p);
-
-
-
-}
-
 
 
 //////////////////////GET  Param////////////////////////////
@@ -379,6 +376,66 @@ void TEC_Get_Run_Param(pUART_TEC p,uint16_t reg_addr,uint16_t len)
 {
     TEC_Send_Cmd(p,OPT_GET_RUN_PARAM,reg_addr,len);
 }
+
+
+
+
+//循环获取TEC内寄存器值
+void TEC_Loop_Get_Run_Param(pUART_TEC p)
+{
+    // 0 ---64
+    static int x=0;
+    if(x>64) x = 0;
+    
+    TEC_Send_Cmd(p,OPT_GET_RUN_PARAM,x,16);
+    x=x+16;
+}
+
+
+
+/////////////////////////TEC   HANDLE/////////////////////////////
+
+void TEC_handler(pUART_TEC p)
+{
+
+    TEC_On_Recv_Buf(p);
+    TEC_Loop_Get_Run_Param(p);
+    TEC_Show(p);
+
+}
+
+
+
+
+///////////////////////////////show/////////////////////////////
+
+
+
+
+void TEC_Show(pUART_TEC p)
+{
+    int16_t temp=0;
+    
+    temp = p->run_param_reg[0]|((p->run_param_reg[1]<<8)&0xff00);
+    printf("TEC_CHANNEL1:%d\r\n",temp);
+
+
+    
+    temp = p->run_param_reg[8]|((p->run_param_reg[9]<<8)&0xff00);
+    printf("TEC_CHANNEL3:%d\r\n",temp);
+
+
+
+
+   // temp = p->run_param_reg[42*2]|((p->run_param_reg[42*2+1]<<8)&0xff00);
+    //printf("TEC_CHANNEL3:%d\r\n",temp);
+
+
+}
+
+
+
+
 
 #if 0
 

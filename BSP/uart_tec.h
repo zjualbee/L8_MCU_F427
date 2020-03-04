@@ -21,6 +21,8 @@ extern "C" {
 
 
 #define MAX_RECV_BUF  128
+#define MAX_PARAM_REG_LEN  80
+#define MAX_STAUTS_REG_LEN  10
 
 
 
@@ -113,8 +115,8 @@ typedef struct _UART_TEC
     uint16_t active_reg_len;
     
 
-    uint8_t run_param_reg[80];     //   param reg       2BYTE   
-    uint8_t run_state_reg[10];  // running state reg    1bit    
+    uint8_t run_param_reg[MAX_PARAM_REG_LEN];     //   param reg       2BYTE   
+    uint8_t run_state_reg[MAX_STAUTS_REG_LEN];  // running state reg    1bit    
 //////////////do command/////////////
 
     Uart_Tec_Bsp_Send  uart_send;  
@@ -131,6 +133,7 @@ extern UART_TEC Uart_Tec2;
 extern UART_TEC Uart_Tec3;
 
 
+void TEC_Show(pUART_TEC p);
 
 
 
