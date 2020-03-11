@@ -132,6 +132,31 @@ static int A4960_36V_reg_read(uint16_t *pData, uint16_t reg)
     return ret;
 }
 
+
+
+
+
+/*******************************************************************************
+* Function Name  : bsp_tim_pwm_pulse_set
+* Description    : 设置占空比1~1000 = 0~100.0%
+* Input          : None
+* Output         : None
+* Return         : 0正常，非0异常
+*******************************************************************************/
+int bsp_tim_pwm_pulse_set(TIM_HandleTypeDef *htim, uint32_t ch, uint32_t pulse)
+{
+    TIM_OC_InitTypeDef sConfigOC;
+
+    memset(&sConfigOC, 0, sizeof(sConfigOC));
+    sConfigOC.OCMode        = TIM_OCMODE_PWM1;
+    sConfigOC.Pulse         = pulse;
+    sConfigOC.OCPolarity    = TIM_OCPOLARITY_HIGH;
+    sConfigOC.OCFastMode    = TIM_OCFAST_DISABLE;
+    return HAL_TIM_PWM_ConfigChannel(htim, &sConfigOC, ch);
+}
+
+
+
 /*******************************************************************************
 * Function Name  : A4960_36V_pwm_start
 * Description    : duty_cycle: 0~1000 = 0.0~100.0%
@@ -141,7 +166,7 @@ static int A4960_36V_reg_read(uint16_t *pData, uint16_t reg)
 *******************************************************************************/
 int A4960_36V_pwm_start(uint16_t duty_cycle)
 {
-    //bsp_tim_pwm_pulse_set(&htim3, TIM_CHANNEL_1, duty_cycle);
+    bsp_tim_pwm_pulse_set(&htim2, TIM_CHANNEL_2, duty_cycle);
     //htim2
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
 

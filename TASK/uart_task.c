@@ -51,6 +51,80 @@ xTaskHandle g_xTaskHandle_uart = NULL;
 static portTASK_FUNCTION(uart_task, pvParameters)
 {
 
+#if 0
+    
+#define DC_POWER_CTR  0x0001 
+
+#define DC_FAN_CTR  0x0002 
+
+#define DC_LASER_CTR  0x0003 
+
+#define DPK_POWER_CTR_STATUS  0x0001 
+
+#define DPK_POWER_CTR_READY  0x0002 
+
+#define DPK_FAN_CTR_FAN1_STATUS  0x0001 
+
+#define DPK_FAN_CTR_FAN2_STATUS  0x0002 
+
+#define DPK_FAN_CTR_FAN3_STATUS  0x0003 
+
+#define DPK_FAN_CTR_FAN4_STATUS  0x0004 
+
+#define DPK_LASER_CTR_CTR  0x0001 
+
+#define DPV_POWER_CTR_STATUS_ON  0x0001 
+
+#define DPV_POWER_CTR_STATUS_OFF  0x0002 
+
+#define DPV_POWER_CTR_READY_OK  0x0003 
+
+#define DPV_POWER_CTR_READY_NG  0x0004 
+
+#define DPV_FAN_CTR_FAN1_STATUS_HIGH  0x0005 
+
+#define DPV_FAN_CTR_FAN1_STATUS_MIDDLE  0x0006 
+
+#define DPV_FAN_CTR_FAN1_STATUS_LOW  0x0007 
+
+#define DPV_FAN_CTR_FAN2_STATUS_HIGH  0x0008 
+
+#define DPV_FAN_CTR_FAN2_STATUS_MIDDLE  0x0009 
+
+#define DPV_FAN_CTR_FAN2_STATUS_LOW  0x000A 
+
+#define DPV_FAN_CTR_FAN3_STATUS_HIGH  0x000B 
+
+
+
+#endif
+
+
+
+#if 0
+        uint8_t at_buf[200]={0};
+    
+        ONE_ELEMENT ElementT={0};
+    
+        ElementT.operator     = AT_OPERATOR_SET;
+        ElementT.cmd_id       = DC_POWER_CTR;
+        ElementT.key_id       = 0;
+        ElementT.value_type  =  VALUE_TYPE_ENUM;
+        ElementT.value_id     = DPV_POWER_CTR_STATUS_ON;
+        At_Make_Cmd_Buf(&ElementT,at_buf);
+        printf("at cmd1 buf:%s\r\n",at_buf);
+
+         
+        
+            ElementT.operator     = AT_OPERATOR_SET;
+            ElementT.cmd_id       = DC_POWER_CTR;
+            ElementT.key_id       = 0;
+            ElementT.value_type   =  VALUE_TYPE_INT;
+            ElementT.value_data   = 100;
+            ElementT.value_id     = DPV_POWER_CTR_STATUS_ON;
+            At_Make_Cmd_Buf(&ElementT,at_buf);
+            printf("at cmd2 buf:%s\r\n",at_buf);
+#endif
 
 
     while(1)

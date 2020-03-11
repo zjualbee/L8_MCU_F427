@@ -132,20 +132,20 @@ uint32_t App_Func(pONE_ELEMENT pElement)
 {
 
     //printf("App_Func\r\n");
-    if(pElement->value_class == VALUE_CLASS_STRING)
+    if(pElement->value_type == VALUE_TYPE_STRING)
         {
-            printf("STRING===operator:%d,cmd_id:%d,key_id:%d,value_class:%d,value_string:%s===\r\n",\
-            pElement->operator,pElement->cmd_id,pElement->key_id,pElement->value_class,pElement->value_buf);
+            printf("STRING===operator:%d,cmd_id:%d,key_id:%d,value_type:%d,value_string:%s===\r\n",\
+            pElement->operator,pElement->cmd_id,pElement->key_id,pElement->value_type,pElement->value_buf);
         }
-    else if(pElement->value_class == VALUE_CLASS_INT)
+    else if(pElement->value_type == VALUE_TYPE_INT)
         {
-           printf("INT===operator:%d,cmd_id:%d,key_id:%d,value_class:%d,value_data:%d===\r\n",\
-           pElement->operator,pElement->cmd_id,pElement->key_id,pElement->value_class,pElement->value_data);
+           printf("INT===operator:%d,cmd_id:%d,key_id:%d,value_type:%d,value_data:%d===\r\n",\
+           pElement->operator,pElement->cmd_id,pElement->key_id,pElement->value_type,pElement->value_int);
         }
-    else if(pElement->value_class == VALUE_CLASS_ENUM)
+    else if(pElement->value_type == VALUE_TYPE_ENUM)
         {
-           printf("ENUM===operator:%d,cmd_id:%d,key_id:%d,value_class:%d,value_enum:%d===\r\n",\
-           pElement->operator,pElement->cmd_id,pElement->key_id,pElement->value_class,pElement->value_id);
+           printf("ENUM===operator:%d,cmd_id:%d,key_id:%d,value_type:%d,value_enum:%d===\r\n",\
+           pElement->operator,pElement->cmd_id,pElement->key_id,pElement->value_type,pElement->value_id);
         }
 
 	return 0;
@@ -223,19 +223,7 @@ int main(void)
     at_decode_buf[0].Do_One_Element= App_Func;
 
   
-#if 0
-    uint8_t at_buf[200]={0};
 
-    ONE_ELEMENT ElementT={0};
-
-    ElementT.operator     = AT_OPERATOR_SET;
-    ElementT.cmd_id       = DC_LIGHTSOURCE;
-    ElementT.key_id       = DPK_LIGHTSOURCE_STATUS;
-    ElementT.value_class  = VALUE_CLASS_ENUM;
-    ElementT.value_id     = DPV_LIGHTSOURCE_STATUS_ON;
-    At_Make_Cmd_Buf(&ElementT,at_buf);
-    printf("at cmd buf:%s\r\n",at_buf);
-#endif
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -527,9 +515,9 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 4;
+  htim2.Init.Prescaler = 4-1;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 1000;
+  htim2.Init.Period = 1000-1;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
@@ -552,7 +540,7 @@ static void MX_TIM2_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 400;
+  sConfigOC.Pulse = 100;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
@@ -817,11 +805,11 @@ void StartDefaultTask(void const * argument)
 
   /* USER CODE BEGIN 5 */
 
-    //led_task_create();
+    led_task_create();
     uart_task_create();
-    //motor_task_create();
-    //heat_sink_task_create();
-    //temprature_task_create();
+    motor_task_create();
+   // heat_sink_task_create();
+   // temprature_task_create();
     tec_task_create();
 
   /* Infinite loop */

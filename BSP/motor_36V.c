@@ -17,6 +17,9 @@
 #include "motor_36V.h"
 #include "main.h"
 
+
+
+//#define MOTOR_ERR_DEBUG 1
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 
@@ -59,6 +62,48 @@ struct_Motor g_motor_36v;
 
 /* Private function prototypes -----------------------------------------------*/
 
+
+
+
+
+/*******************************************************************************
+* Function Name  : app_printf_debug
+* Description    : printf_debug
+* Input          : None
+* Output         : None
+* Return         : 0正常，非0异常
+*******************************************************************************/
+int app_printf_debug(uint8_t *pStr, uint32_t len)
+{
+    int ret = 0;
+    uint16_t send_count = 0;
+
+   // xSemaphoreTake(s_mutex_uart_debug, portMAX_DELAY);
+    // ret = HAL_UART_Transmit(&huart1, pStr, len, ~0);
+    while(send_count < len){
+        if (RESET != __HAL_UART_GET_FLAG(&huart1, UART_FLAG_TXE)){
+            huart1.Instance->DR = (*pStr++ & (uint8_t)0xFF);
+            send_count++;
+        }
+    }
+   // xSemaphoreGive(s_mutex_uart_debug);
+    return ret;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 static int motor_36V_off_error_handle(struct Motor *thiz);
 
 /* Private functions ---------------------------------------------------------*/
@@ -99,9 +144,9 @@ static int motor_36V_on(struct Motor *thiz)
     A4960_36V_off();
     if (A4960_36V_init() != 0){
         #ifdef MOTOR_ERR_DEBUG 
-        app_printf_debug(str10, strlen((char*)str10));    // DEBUG
+        //app_printf_debug(str10, strlen((char*)str10));    // DEBUG
         #endif
-        goto MOTOR_ON_ERR;
+       // goto MOTOR_ON_ERR;
     }
     memset((uint8_t*)&thiz->error, 0, sizeof(struct_MotorError));
     // START
