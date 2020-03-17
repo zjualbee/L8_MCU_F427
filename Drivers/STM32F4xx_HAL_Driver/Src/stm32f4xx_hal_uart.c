@@ -3000,7 +3000,7 @@ static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
   {
 
   temp = (uint8_t)(huart->Instance->DR &0xFF);
-  At_Fifo_In(&at_decode_buf[0],temp);
+ // At_Fifo_In(&at_decode_buf,temp);
 
 
   if(huart->Instance == UART8)  //   2  5  8

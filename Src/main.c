@@ -105,11 +105,11 @@ int fputc(int ch, FILE *f)
 {
 	uint8_t temp;
     
-    vTaskSuspendAll();
+    //vTaskSuspendAll();
 	temp=(uint8_t)ch;
     
 	HAL_UART_Transmit(&huart1,&temp,1,50);
-    xTaskResumeAll();
+   // xTaskResumeAll();
 	return ch;
 }
 
@@ -128,30 +128,6 @@ uint8_t uart1_recv_buf[100]={0};
 
 
 
-uint32_t App_Func(pONE_ELEMENT pElement)
-{
-
-    //printf("App_Func\r\n");
-    if(pElement->value_type == VALUE_TYPE_STRING)
-        {
-            printf("STRING===operator:%d,cmd_id:%d,key_id:%d,value_type:%d,value_string:%s===\r\n",\
-            pElement->operator,pElement->cmd_id,pElement->key_id,pElement->value_type,pElement->value_buf);
-        }
-    else if(pElement->value_type == VALUE_TYPE_INT)
-        {
-           printf("INT===operator:%d,cmd_id:%d,key_id:%d,value_type:%d,value_data:%d===\r\n",\
-           pElement->operator,pElement->cmd_id,pElement->key_id,pElement->value_type,pElement->value_int);
-        }
-    else if(pElement->value_type == VALUE_TYPE_ENUM)
-        {
-           printf("ENUM===operator:%d,cmd_id:%d,key_id:%d,value_type:%d,value_enum:%d===\r\n",\
-           pElement->operator,pElement->cmd_id,pElement->key_id,pElement->value_type,pElement->value_id);
-        }
-
-	return 0;
-
-}
-
 
 /* USER CODE END 0 */
 
@@ -159,6 +135,10 @@ uint32_t App_Func(pONE_ELEMENT pElement)
   * @brief  The application entry point.
   * @retval int
   */
+
+//AT_DECODE_HEAD at_decode_buf1={0};
+
+
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -215,13 +195,12 @@ int main(void)
     HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
 
 
-    print_cmd_string_list();
+    //print_cmd_string_list();
 
   //Test_Func();
 
 
-    at_decode_buf[0].Do_One_Element= App_Func;
-
+   // at_decode_buf1.Do_One_Element= App_Func;
   
 
   /* USER CODE END 2 */
@@ -264,7 +243,7 @@ int main(void)
     //printf("LOOP\r\n");
 
     
-    //At_Analyze_Handle(&at_decode_buf[0]);
+    //At_Analyze_Handle(&at_decode_buf);
 
 
     
@@ -807,10 +786,10 @@ void StartDefaultTask(void const * argument)
 
     led_task_create();
     uart_task_create();
-    motor_task_create();
+   // motor_task_create();
    // heat_sink_task_create();
    // temprature_task_create();
-    tec_task_create();
+   // tec_task_create();
 
   /* Infinite loop */
   for(;;)
