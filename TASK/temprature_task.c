@@ -42,9 +42,9 @@ xTaskHandle g_xTaskHandle_temprature = NULL;
 
 
 
-ADS7830_OBJ  Tec_1_8={0};
-ADS7830_OBJ  Tec_9_16={0};
-ADS7830_OBJ  Tec_17_24={0};
+ADS7830_OBJ  Ntc_1_8={0};
+ADS7830_OBJ  Ntc_9_16={0};
+ADS7830_OBJ  Ntc_17_24={0};
 
 
 
@@ -53,48 +53,35 @@ ADS7830_OBJ  Tec_17_24={0};
 uint8_t I2c_Recv(uint8_t dev_addr ,uint8_t * pBuf_out,uint16_t len)
 {
 
-
-    HAL_I2C_Master_Receive(&hi2c1,dev_addr,pBuf_out,1,200);
-
-
-
-    return 0;
+    HAL_StatusTypeDef res ;//
+    res = HAL_I2C_Master_Receive(&hi2c1,dev_addr,pBuf_out,len,500);
+    if(res!= HAL_OK)
+    { 
+        printf("receive res:%d\r\n",res);
+    }
+    return res;
 }
 
 uint8_t I2c_Transmit(uint8_t dev_addr ,uint8_t * pBuf_in,uint16_t len)
 {
 
-
-    HAL_I2C_Master_Transmit(&hi2c1,dev_addr,pBuf_in,1,200);
-
-    return 0;
+    HAL_StatusTypeDef res ;//
+    res = HAL_I2C_Master_Transmit(&hi2c1,dev_addr,pBuf_in,len,500);
+    if(res!= HAL_OK)
+    {
+        printf("transmit res:%d\r\n",res);
+    }
+    return res;
 }
-
-
-
-  
-
-
-
-
-
-
 
 
 
 
 void  Task_Init_Ads7830(void)
 {
-
-    Ads8730_Init(&Tec_1_8,0x90,I2c_Recv,I2c_Transmit,osDelay);
-    Ads8730_Init(&Tec_9_16,0x92,I2c_Recv,I2c_Transmit,osDelay);
-    Ads8730_Init(&Tec_17_24,0x96,I2c_Recv,I2c_Transmit,osDelay);
-
-
-
-
-
-
+    Ads8730_Init(&Ntc_1_8,0x90,I2c_Recv,I2c_Transmit,osDelay);
+    Ads8730_Init(&Ntc_9_16,0x92,I2c_Recv,I2c_Transmit,osDelay);
+    Ads8730_Init(&Ntc_17_24,0x96,I2c_Recv,I2c_Transmit,osDelay);
 }
 
 
@@ -112,21 +99,34 @@ static portTASK_FUNCTION(temprature_task, pvParameters)
 
     int i=0;
 
-    uint8_t temp=0;
+    uint8_t reg=0;
+    int16_t temprature=0;
     Task_Init_Ads7830();
     while(1)
 	{
 	    for(i=0;i<8;i++)
         {
+           reg = Ads8730_Get_Raw_Adc(&Ntc_1_8,i);
+           temprature = Transform_Reg_To_Temprature(reg,3.3);
+           printf("Ntc_1_8 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
+        }
+	    for(i=0;i<8;i++)
+        {
+           reg = Ads8730_Get_Raw_Adc(&Ntc_9_16,i);
+           temprature = Transform_Reg_To_Temprature(reg,3.3);
+           printf("Ntc_9_16 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
+        }
+	    for(i=0;i<8;i++)
+        {
+           reg = Ads8730_Get_Raw_Adc(&Ntc_17_24,i);
+           temprature = Transform_Reg_To_Temprature(reg,3.3);
+           printf("Ntc_17_24 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
+        }
 
-           temp = Ads8730_Get_Raw_Adc(&Tec_1_8,i);
 
-           printf("channel:%d,temprature:%d\r\n",i,temp);
 
-           }
-        
 
-    
+
 
         osDelay(2000);
         }
@@ -135,9 +135,11 @@ static portTASK_FUNCTION(temprature_task, pvParameters)
     while(1)
 			{
             
-        for(i=0;i<255;i++)
+        //for(i=0;i<255;i++)
             {
-            if(HAL_OK ==HAL_I2C_Master_Transmit(&hi2c1, i, "a", 1,100))
+
+            if(HAL_OK ==Ntc_1_8.iic_transmit(0x90, "a", 1))
+           // if(HAL_OK ==HAL_I2C_Master_Transmit(&hi2c1, i, "a", 1,100))
                 {
                     printf("dev:%02X  ok\r\n",i);
                 }

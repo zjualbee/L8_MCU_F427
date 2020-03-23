@@ -81,7 +81,7 @@
             <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
-            <RunUserProg1>1</RunUserProg1>
+            <RunUserProg1>0</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
             <UserProg1Name>C:\Keil_v5\ARM\ARMCC\bin\fromelf.exe --bin -o "$L@L.bin" "#L"</UserProg1Name>
             <UserProg2Name></UserProg2Name>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F427xx,USE_HAL_DRIVER,STM32F427xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;..\TASK;..\BSP;..\Src;..\..\appo_lib\at_protocol;..\..\appo_lib\at_protocol\gtest</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;..\TASK;..\BSP;..\Src;..\..\appo_lib\at_protocol;..\..\appo_lib\at_protocol\gtest;..\vdebug;..\protocol</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -633,6 +633,16 @@
               <FileType>1</FileType>
               <FilePath>..\TASK\tec_task.c</FilePath>
             </File>
+            <File>
+              <FileName>do_msg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TASK\do_msg.c</FilePath>
+            </File>
+            <File>
+              <FileName>appo_power_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TASK\appo_power_task.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -672,6 +682,26 @@
               <FileName>at_gtest.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\appo_lib\at_protocol\gtest\at_gtest.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>vdebug</GroupName>
+          <Files>
+            <File>
+              <FileName>vdebug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\vdebug\vdebug.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>protocol</GroupName>
+          <Files>
+            <File>
+              <FileName>appo_power_protocol.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\appo_power_protocol.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -96,7 +96,7 @@ void StartDefaultTask(void const * argument);
 /* USER CODE BEGIN 0 */
 
 
-#if 1
+#if 0
 #pragma import(__use_no_semihosting)             
 //标准库需要的支持函数                 
 
@@ -177,12 +177,12 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 
-
-
     HAL_UART_Receive_IT(&huart1, uart1_recv_buf,50);
     HAL_UART_Receive_IT(&huart2, uart1_recv_buf,50);
     HAL_UART_Receive_IT(&huart5, uart1_recv_buf,50);
     HAL_UART_Receive_IT(&huart8, uart1_recv_buf,50);
+    HAL_UART_Receive_IT(&huart7, uart1_recv_buf,50);
+
 
     printf("hello YSW\r\n");
     HAL_GPIO_WritePin(GPIOF,GPIO_PIN_10,GPIO_PIN_RESET);
@@ -314,7 +314,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 100000;
+  hi2c1.Init.ClockSpeed = 10000;
   hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -519,7 +519,7 @@ static void MX_TIM2_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 100;
+  sConfigOC.Pulse = 500 - 1;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
@@ -753,11 +753,15 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PG1 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1;
+  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_11;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+
+  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_SET);
+
+
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI0_IRQn, 5, 0);
@@ -783,13 +787,14 @@ void StartDefaultTask(void const * argument)
     
 
   /* USER CODE BEGIN 5 */
+    appo_power_task_create();
 
     led_task_create();
     uart_task_create();
-   // motor_task_create();
-   // heat_sink_task_create();
+    motor_task_create();
+    // heat_sink_task_create();
    // temprature_task_create();
-   // tec_task_create();
+    tec_task_create();
 
   /* Infinite loop */
   for(;;)

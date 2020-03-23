@@ -66,6 +66,7 @@ int Ads8730_Init(pADS7830_OBJ pObj,uint8_t dev_addr,\
     Ads7830_Bsp_Delayms   delayms);
 
 
+int16_t Transform_Reg_To_Temprature(uint8_t reg,double base_volt);
 
 
 #endif

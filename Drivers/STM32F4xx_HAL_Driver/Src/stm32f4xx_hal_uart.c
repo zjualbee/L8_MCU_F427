@@ -3000,10 +3000,12 @@ static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
   {
 
   temp = (uint8_t)(huart->Instance->DR &0xFF);
- // At_Fifo_In(&at_decode_buf,temp);
 
-
-  if(huart->Instance == UART8)  //   2  5  8
+   if(huart->Instance == USART1)
+    {
+        At_Fifo_In(&at_decode,temp);
+    }
+  else if(huart->Instance == UART8)  //   2  5  8
     {
          TEC_Recv_Buf_In(&Uart_Tec1,temp);
     }
@@ -3015,6 +3017,16 @@ static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
   else if(huart->Instance == UART5)
     {
       TEC_Recv_Buf_In(&Uart_Tec3,temp);
+    }
+  else if(huart->Instance == UART7)
+    {
+        ;//;protocol_light_ISR_frame_get(temp);
+        protocol_power_ISR_frame_get(temp);
+
+        if(U7_recv_len < MAX_U7_RECV_LEN)
+        {
+            U7_recv_buf[U7_recv_len++] = temp;
+        }
     }
 
 

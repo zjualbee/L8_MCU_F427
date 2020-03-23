@@ -109,9 +109,11 @@ static portTASK_FUNCTION(motor_task, pvParameters)
 #if 0
 while(1)
     {
+    
+    HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
         osDelay(1000);
-        printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt );
-         g_CW_speed_cnt=0;
+       // printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
+        // g_CW_speed_cnt=0;
 }
 #endif
 
@@ -119,30 +121,44 @@ while(1)
     
 //PF8
 #if 1
+    static uint8_t pre_laser_state=0;
     while(1)
         {
             osDelay(1000);
             printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
             if(g_CW_speed_cnt > 80)
                 {
+                //printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
                     Speed_Ok_Cnt++;
                 }
             else
                 {
+                led_speed = 0;
                     Speed_Ok_Cnt = 0;
                     //laser off
-                    
-                    printf("laser OFF\r\n");
-                    HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+                    if(pre_laser_state!=0)
+                        {
+                            pre_laser_state=0;
+                            printf("laser OFF\r\n");
+                            printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
+                            HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+                        }
                 }
 
 
             if(Speed_Ok_Cnt >= 5)
                 {
                     //laser on
-                    printf("laser on\r\n");
+                    
                     Speed_Ok_Cnt = 5;
-                    HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
+                    led_speed = 1800;
+                    if(pre_laser_state!=1)
+                    {
+                        pre_laser_state=1;
+                        printf("laser on\r\n");
+                        printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
+                        HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
+                    }
 
                 }
             g_CW_speed_cnt=0;

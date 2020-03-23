@@ -25,6 +25,8 @@
 /* Exported variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 
+extern  AT_DECODE_HEAD at_decode;
+
 // 建立任务
 portBASE_TYPE uart_task_create(void);
 

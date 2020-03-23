@@ -104,9 +104,9 @@ static portTASK_FUNCTION(motor_task, pvParameters)
 
 
 
-    while(1)
+    while(0)
         {
-            osDelay(1000);
+            osDelay(5000);
             printf("CW Count:%d\r\n",g_CW_speed_cnt);
             g_CW_speed_cnt=0;
         }

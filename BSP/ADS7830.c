@@ -15,15 +15,22 @@ uint8_t Ads8730_Get_Raw_Adc(pADS7830_OBJ pObj,uint8_t channel)
 
     uint8_t b_value;
     uint8_t channel_cmd;
+    uint8_t res=1;
 
 
     channel_cmd = cfg_words[ channel < 8 ? channel:0];
  
-    pObj->iic_transmit(pObj->dev_addr,&channel_cmd, 1);
-
-    pObj->delayms(10);
-
-	pObj->iic_recv(pObj->dev_addr, &b_value,1);
+    res = pObj->iic_transmit(pObj->dev_addr,&channel_cmd, 1);
+    if(res==0)
+        {
+            pObj->delayms(100);
+        	pObj->iic_recv(pObj->dev_addr, &b_value,1);
+            //printf("Ads8730 iic ok\r\n");
+        }
+    else
+        {
+            printf("Ads8730 iic error\r\n");
+        }
 
 	return b_value;
 }
@@ -45,6 +52,7 @@ int Ads8730_Init(pADS7830_OBJ pObj,uint8_t dev_addr,\
 
     pObj->iic_transmit = iic_transmit;
     pObj->iic_recv = iic_recv;
+    pObj->dev_addr = dev_addr;
     pObj->delayms = delayms;
 
 
@@ -53,6 +61,41 @@ int Ads8730_Init(pADS7830_OBJ pObj,uint8_t dev_addr,\
 
 
 
+int16_t Transform_Reg_To_Temprature(uint8_t reg,double base_volt)
+    {
+        double ConvVolt, Resistor, temp;
+        int8_t temperature = ADS7830_TEMPERATURE_ERROR; 
+    
+    
+        uint16_t MODE_C=3380;//10K
+
+        #if 0
+        MODE_C=4050;//47K 25-50 'C  800-DMD
+        MODE_C=4108;//47K 25-85 'C  800-CW-Laser
+        MODE_C=4101;//47K 25-80 'C    L4-CW
+        MODE_C=3380;//10K 25 'C
+        MODE_C=4150;//10K 25 'C FOR IDU
+        MODE_C=3380;//10K 25 'C
+        #endif
+    
+
+
+    
+        MODE_C=4108;
+
+
+        //P/N   NCP18WB473F10RB
+        //R25        47             k ohm +/-      1            %
+        //B(25/50)   4050       K +/-        1.5            %
+
+
+    ConvVolt = base_volt * (double)reg / (1 << 8);
+    Resistor = (base_volt - ConvVolt) ? ((ConvVolt * 100) / (base_volt - ConvVolt)) : (ADS7830_NTC_MAX);
+    temp = 1/(log(Resistor/47)/MODE_C+1/(25+273.15))-273.15;
+    temperature = (temp > 0) ? (int8_t)((temp * 100 + 5)/100) : (int8_t)((temp * 100 - 5)/100); //Round     
+
+        return temperature;
+    }
 
 
 

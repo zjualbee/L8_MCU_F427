@@ -23,7 +23,8 @@
 
 /* Private typedef -----------------------------------------------------------*/
 #include "uart_task.h"
-#include "at_gtest.h"
+#include "do_msg.h"
+//#include "at_gtest.h"
 /* Private define ------------------------------------------------------------*/
 
 // 任务参数
@@ -39,6 +40,7 @@ xTaskHandle g_xTaskHandle_uart = NULL;
 /* Private functions ---------------------------------------------------------*/
 
 
+AT_DECODE_HEAD at_decode={0};
 
 
 
@@ -53,19 +55,22 @@ xTaskHandle g_xTaskHandle_uart = NULL;
 static portTASK_FUNCTION(uart_task, pvParameters)
 {
 
-    At_Gtest_Init();
-    int16_t res;
+    //At_Gtest_Init();
+    //int16_t res;
     //AT_Gtset_All(10,10,100);
     //AT_Gtset1();
     //AT_Gtest_Ok(20);
-    AT_Gtest_Make_Buf();
+   // AT_Gtest_Make_Buf();
 
+    at_decode.Do_Data_End = Do_Data_End_Msg_Func;
+    at_decode.Do_One_Element = Do_Msg_Func;
+
+    
 
 
     while(1)
         {
-            
-            At_Analyze_Handle(&at_decode_buf);
+            At_Analyze_Handle(&at_decode);
             osDelay(1);
         }
 

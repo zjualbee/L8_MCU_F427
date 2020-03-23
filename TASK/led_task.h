@@ -27,7 +27,7 @@
 /* Exported macro ------------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
-
+extern int led_speed;
 // 建立任务
 portBASE_TYPE led_task_create(void);
 

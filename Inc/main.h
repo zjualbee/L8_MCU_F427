@@ -50,9 +50,9 @@ extern "C" {
 #include "heat_sink_task.h"
 #include "led_task.h"
 #include "temprature_task.h"
-#include "power_task.h"
 #include "tec_task.h"
 #include "uart_task.h"
+#include "appo_power_task.h"
 
 
 
