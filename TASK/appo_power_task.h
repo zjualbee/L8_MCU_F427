@@ -14,20 +14,43 @@
 *******************************************************************************/
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __APPO_POWER_H__
-#define __APPO_POWER_H__
+#ifndef __APPO_POWER_TASK_H__
+#define __APPO_POWER_TASK_H__
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+#include "cmsis_os.h"
 
 //#include "motor_36V.h"
 
 #define MAX_U7_RECV_LEN  50
+
+
+
+typedef struct _G_POWER_STATUS
+{
+    uint8_t  on_off_flag;   //  0 off     1  on
+    uint16_t current_r;
+    uint16_t current_g;
+    uint16_t current_b;
+
+
+}G_POWER_STATUS,*pG_POWER_STATUS;
+
+
+
+
+
+extern G_POWER_STATUS g_Power_Status;
+
+
+
 extern int U7_recv_len;
 extern uint8_t U7_recv_buf[MAX_U7_RECV_LEN];
 extern QueueHandle_t  Q_Power_Ack;
 
 
+uint32_t Appo_Power_Set_Current(pG_POWER_STATUS p);
 
 
 

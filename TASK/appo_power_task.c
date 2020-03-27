@@ -49,6 +49,7 @@ QueueHandle_t  Q_Power_Ack;
 int U7_recv_len=0;
 uint8_t U7_recv_buf[MAX_U7_RECV_LEN]={0};
 
+G_POWER_STATUS g_Power_Status;
 
 
 
@@ -76,6 +77,66 @@ void print_frame(pPowerFrame p)
     print_buf(&(p->buf[POWER_FRAME_PARA1]),p->buf[POWER_FRAME_PARAM_LEN]);
 
 }
+
+
+
+#if 0
+
+APPO_POWER_ON_OFF on_off;
+on_off.dev_id = 0x20;
+on_off.cmd = APPO_POWER_CMD_ON_OFF;
+on_off.Param.power_on_off.on_off_flag = g_Power_Status.on_off_flag;
+on_off.Param.power_on_off.current_r =   g_Power_Status.current_r;
+on_off.Param.power_on_off.current_g =   g_Power_Status.current_g;
+on_off.Param.power_on_off.current_b =   g_Power_Status.current_b;
+
+#endif
+
+
+
+
+
+uint32_t Appo_Power_Set_Current(pG_POWER_STATUS p)
+{
+    uint8_t send_buf[30]={0};
+
+    send_buf[0] = p->on_off_flag;
+
+    // blue   455
+    send_buf[1] = p->current_b&0xff;
+    send_buf[2] = (p->current_b>>8)&0xff;;
+
+    //blue  465
+    send_buf[3] = p->current_g&0xff;
+    send_buf[4] = (p->current_g>>8)&0xff;;
+
+    // red
+    send_buf[5] = p->current_r&0xff;
+    send_buf[6] = (p->current_r>>8)&0xff;;
+    
+    send_buf[7] = 0;
+    send_buf[8] = 0; 
+    
+    send_buf[9] = 0;
+    send_buf[10] = 0;  
+
+    printf("R:%d ,G:%d ,B:%d \r\n",p->current_r,p->current_g,p->current_b);
+
+    protocol_power_frame_cmd_send_to_uart(0x20,POWER_CMD_ID_ONOFF_POWER,send_buf,7);
+    osDelay(100);
+    protocol_power_frame_cmd_send_to_uart(0x21,POWER_CMD_ID_ONOFF_POWER,send_buf,7);
+    osDelay(100);
+    protocol_power_frame_cmd_send_to_uart(0x22,POWER_CMD_ID_ONOFF_POWER,send_buf,7);
+
+    return 0;
+}
+
+
+
+
+
+
+
 
 
 

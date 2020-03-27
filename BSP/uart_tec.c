@@ -257,7 +257,7 @@ void TEC_Uart_SendComm(pUART_TEC p,uint8_t* Buf)
     send_crc[1]=((crc>>8)&0xff);
     p->uart_send(Buf,6);
     p->uart_send(send_crc,2);
-    print_buf(Buf,6);
+    //print_buf(Buf,6);
     //print_buf(send_crc,2);
 }
 

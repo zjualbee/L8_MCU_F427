@@ -118,22 +118,9 @@ int fputc(int ch, FILE *f)
    // xTaskResumeAll();
 	return ch;
 }
-
-
-
 #endif 
 
-
-
-
-
-
 uint8_t uart1_recv_buf[100]={0};
-
-
-
-
-
 
 /* USER CODE END 0 */
 
@@ -148,41 +135,43 @@ int main(void)
   /* USER CODE END 1 */
   
 
-  /* MCU Configuration--------------------------------------------------------*/
+    /* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+    /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+    HAL_Init();
 
-  /* USER CODE BEGIN Init */
+    /* USER CODE BEGIN Init */
 
-  /* USER CODE END Init */
+    /* USER CODE END Init */
 
-  /* Configure the system clock */
-  SystemClock_Config();
+    /* Configure the system clock */
+    SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
+    /* USER CODE BEGIN SysInit */
 
-  /* USER CODE END SysInit */
+    /* USER CODE END SysInit */
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_TIM1_Init();
-  MX_USART1_UART_Init();
-  MX_TIM2_Init();
-  MX_SPI4_Init();
-  MX_I2C1_Init();
-  MX_I2C2_Init();
-  MX_UART7_Init();
-  MX_UART5_Init();
-  MX_UART8_Init();
-  MX_USART2_UART_Init();
-  MX_UART4_Init();
-  MX_USART3_UART_Init();
-  MX_USART6_UART_Init();
-  /* USER CODE BEGIN 2 */
+    /* Initialize all configured peripherals */
+    MX_GPIO_Init();
+    MX_TIM1_Init();
+    MX_USART1_UART_Init();
+    MX_TIM2_Init();
+    MX_SPI4_Init();
+    MX_I2C1_Init();
+    MX_I2C2_Init();
+    MX_UART7_Init();
+    MX_UART5_Init();
+    MX_UART8_Init();
+    MX_USART2_UART_Init();
+    MX_UART4_Init();
+    MX_USART3_UART_Init();
+    MX_USART6_UART_Init();
+    /* USER CODE BEGIN 2 */
 
-
-    HAL_UART_Receive_IT(&huart1, uart1_recv_buf,50);
+	HAL_UART_Receive_IT(&huart1, uart1_recv_buf,50);
+    HAL_UART_Receive_IT(&huart4, uart1_recv_buf,50);
+    HAL_UART_Receive_IT(&huart3, uart1_recv_buf,50);
+    HAL_UART_Receive_IT(&huart6, uart1_recv_buf,50);
     HAL_UART_Receive_IT(&huart2, uart1_recv_buf,50);
     HAL_UART_Receive_IT(&huart5, uart1_recv_buf,50);
     HAL_UART_Receive_IT(&huart8, uart1_recv_buf,50);
@@ -199,14 +188,11 @@ int main(void)
     HAL_TIM_Base_Start_IT(&htim2);
     HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
 
-
+    
     //print_cmd_string_list();
+    //Test_Func();
+    //at_decode_buf1.Do_One_Element= App_Func;
 
-  //Test_Func();
-
-
-   // at_decode_buf1.Do_One_Element= App_Func;
-  
 
   /* USER CODE END 2 */
 
@@ -887,18 +873,14 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void const * argument)
 {
     
-    
-    
-
   /* USER CODE BEGIN 5 */
     appo_power_task_create();
-
     led_task_create();
     uart_task_create();
     motor_task_create();
-    // heat_sink_task_create();
-   // temprature_task_create();
-    tec_task_create();
+    //heat_sink_task_create();
+    //temprature_task_create();
+   tec_task_create();
 
   /* Infinite loop */
   for(;;)

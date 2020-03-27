@@ -7,8 +7,9 @@
 #include "string.h"
 #include "stdint.h" 
 #include "appo_power_protocol.h"
-
+#include "appo_power_cmd.h"
 #include "do_msg.h"
+#include "appo_power_task.h"
 
 #define PRINT_FUNCTION  // printf("%s\r\n",__FUNCTION__);
 
@@ -37,15 +38,19 @@ void On_Set_LightSource(pONE_ELEMENT p)
 {
     PRINT_FUNCTION
 
-    uint8_t send_buf[30]={0};
     if(p->cmd_id == DC_LIGHTSOURCE)
     {
     if(p->value_id == DPV_LIGHTSOURCE_STATUS_ON)
         {
-        ;
+            g_Power_Status.on_off_flag = 1;
+            Appo_Power_Set_Current(&g_Power_Status);
+
         }
     else if(p->value_id == DPV_LIGHTSOURCE_STATUS_OFF)
-        {;
+        {
+        g_Power_Status.on_off_flag = 0;
+        Appo_Power_Set_Current(&g_Power_Status);
+
         }
     }
 }
@@ -61,42 +66,32 @@ void On_Set_SetCurrent(pONE_ELEMENT p)
         if(p->key_id == DPK_SETCURRENT_ALL)
             {
             printf("DPK_SETCURRENT_ALL\r\n");
-            send_buf[0] = 0x01;
-            send_buf[1] = 0xc4;
-            send_buf[2] = 0x09;
-            send_buf[3] = 0xc4;
-            send_buf[4] = 0x09;
-            send_buf[5] = 0xc4;
-            send_buf[6] = 0x09;    
-            send_buf[7] = 0xc4;
-            send_buf[8] = 0x09; 
-            send_buf[9] = 0xc4;
-            send_buf[10] = 0x09;             
-            protocol_power_frame_cmd_send_to_uart(0x20,POWER_CMD_ID_ONOFF_POWER,send_buf,7);
+            g_Power_Status.current_r = p->value_int&0xffff;
+            g_Power_Status.current_g = p->value_int&0xffff;
+            g_Power_Status.current_b = p->value_int&0xffff;
+            Appo_Power_Set_Current(&g_Power_Status);
+            
             }
         else if(p->key_id == DPK_SETCURRENT_R)
             {
-            
             printf("DPK_SETCURRENT_R\r\n");
-            memset(send_buf,5,30);
-            send_buf[0]=1;
-            protocol_power_frame_cmd_send_to_uart(0x20,POWER_CMD_ID_ONOFF_POWER,send_buf,7);
+            g_Power_Status.current_r = p->value_int&0xffff;
+            Appo_Power_Set_Current(&g_Power_Status);
             }  
         else if(p->key_id == DPK_SETCURRENT_G)
             {
             
             printf("DPK_SETCURRENT_G\r\n");
-            memset(send_buf,0,30);
-            send_buf[0] = 0;
-            protocol_power_frame_cmd_send_to_uart(0x20,POWER_CMD_ID_ONOFF_POWER,send_buf,7);
+             g_Power_Status.current_g = p->value_int&0xffff;
+             Appo_Power_Set_Current(&g_Power_Status);
+
             }  
         else if(p->key_id == DPK_SETCURRENT_B)
             {
             
-            printf("DPK_SETCURRENT_B\r\n");
-            memset(send_buf,0,30);
-            send_buf[0] = 0;
-            protocol_power_frame_cmd_send_to_uart(0x20,POWER_CMD_ID_READ_LASER_CURRENT,send_buf,0);
+            printf("DPK_SETCURRENT_B\r\n");           
+            g_Power_Status.current_b = p->value_int&0xffff;
+            Appo_Power_Set_Current(&g_Power_Status);
             }  
 
 
