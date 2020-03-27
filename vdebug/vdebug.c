@@ -7,6 +7,36 @@
 
 
 
+
+int vdebug_buf_len=0;
+uint8_t vdebug_buf[VDEBUG_BUF_LEN]={0};
+
+
+
+void vdebug_buf_in(uint8_t chr)
+{
+    if(vdebug_buf_len < VDEBUG_BUF_LEN)
+    {
+        vdebug_buf[vdebug_buf_len++] = chr;
+    }
+}
+
+uint32_t vdebug_buf_handle(void)
+{
+
+    if(vdebug_buf_len > 0)
+        {
+            vdebug_buf_len = 0;
+            print_buf_c(vdebug_buf,vdebug_buf_len);
+        }
+}
+
+
+
+
+
+
+
 #if 1
 #pragma import(__use_no_semihosting)             
 //标准库需要的支持函数                 
@@ -40,9 +70,18 @@ void print_buf(uint8_t* buf,int len)
         {
             printf("%02X ",buf[i]);
         }
-    printf("\r\n");
+    //,printf("\r\n");
 }
 
+void print_buf_c(uint8_t* buf,int len)
+{
+    int i=0;
+    for(i = 0; i<len; i++)
+        {
+            printf("%c",buf[i]);
+        }
+    //,printf("\r\n");
+}
 
 
 

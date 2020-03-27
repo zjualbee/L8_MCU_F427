@@ -24,7 +24,7 @@
 /* Private typedef -----------------------------------------------------------*/
 #include "uart_task.h"
 #include "do_msg.h"
-//#include "at_gtest.h"
+#include "at_gtest.h"
 /* Private define ------------------------------------------------------------*/
 
 // 任务参数
@@ -64,6 +64,8 @@ static portTASK_FUNCTION(uart_task, pvParameters)
 
     at_decode.Do_Data_End = Do_Data_End_Msg_Func;
     at_decode.Do_One_Element = Do_Msg_Func;
+    //at_decode.Do_One_Element = App_Func1;
+   
 
     
 
@@ -90,7 +92,7 @@ static portTASK_FUNCTION(uart_task, pvParameters)
 *******************************************************************************/
 portBASE_TYPE uart_task_create(void)
 {
-    return xTaskCreate(uart_task, "uart_task", 512, NULL, TASK_PRIORITY+1+3, &g_xTaskHandle_uart);
+    return xTaskCreate(uart_task, "uart_task", 512, NULL, TASK_PRIORITY+1, &g_xTaskHandle_uart);
 }
 
 

@@ -211,7 +211,7 @@ while(1)
 *******************************************************************************/
 portBASE_TYPE motor_task_create(void)
 {
-    return xTaskCreate(motor_task, "motor", 512, NULL, TASK_PRIORITY+2, &g_xTaskHandle_motor);
+    return xTaskCreate(motor_task, "motor", 512, NULL, TASK_PRIORITY+1, &g_xTaskHandle_motor);
 }
 
 /******************* (C) COPYRIGHT 2014 APPOTRONICS ************END OF FILE****/

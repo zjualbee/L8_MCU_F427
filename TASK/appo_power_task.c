@@ -181,16 +181,17 @@ static portTASK_FUNCTION(appo_power_task, pvParameters)
 
 
     while(1)
-        {
+    {
         Uart7_Send_Buf(send_buf,9);
-
-            if(U7_recv_len > 0)
-                {
-                    print_buf(U7_recv_buf,U7_recv_len);
-                    U7_recv_len = 0;
-                }
-            osDelay(2000);
+        if(U7_recv_len > 0)
+        {
+            print_buf(U7_recv_buf,U7_recv_len);
+            U7_recv_len = 0;
         }
+        osDelay(2000);
+    }
+
+    
 }
 
 

@@ -19,6 +19,7 @@
 
 
 
+#define VDEBUG_BUF_LEN  50
 
 
 /* Exported types ------------------------------------------------------------*/
@@ -31,6 +32,7 @@
 
 void print_buf(uint8_t* buf,int len);
 
+void print_buf_c(uint8_t* buf,int len);
 
 
 

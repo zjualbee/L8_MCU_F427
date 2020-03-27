@@ -3022,11 +3022,18 @@ static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
     {
         ;//;protocol_light_ISR_frame_get(temp);
         protocol_power_ISR_frame_get(temp);
-
-        if(U7_recv_len < MAX_U7_RECV_LEN)
-        {
-            U7_recv_buf[U7_recv_len++] = temp;
-        }
+    }
+  else if(huart->Instance == USART6)
+    {
+         vdebug_buf_in(temp);
+    }
+  else if(huart->Instance == UART4)
+    {
+      vdebug_buf_in(temp);
+    }
+  else if(huart->Instance == USART3)
+    {
+      vdebug_buf_in(temp);
     }
 
 

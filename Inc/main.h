@@ -20,8 +20,8 @@
 /* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __MAIN_H
-#define __MAIN_H
+#ifndef __MAIN_H__
+#define __MAIN_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -53,6 +53,7 @@ extern "C" {
 #include "tec_task.h"
 #include "uart_task.h"
 #include "appo_power_task.h"
+#include "dlp4422_task.h"
 
 
 
@@ -71,6 +72,9 @@ extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 
 extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart3;
+extern UART_HandleTypeDef huart4;
+extern UART_HandleTypeDef huart6;
 extern UART_HandleTypeDef huart7;
 extern UART_HandleTypeDef huart8;
 extern UART_HandleTypeDef huart2;

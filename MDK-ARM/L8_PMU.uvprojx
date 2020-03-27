@@ -643,6 +643,11 @@
               <FileType>1</FileType>
               <FilePath>..\TASK\appo_power_task.c</FilePath>
             </File>
+            <File>
+              <FileName>dlp4422_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TASK\dlp4422_task.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
