@@ -43,16 +43,15 @@ static portTASK_FUNCTION(dlp4422_task, pvParameters)
 
 // g_queue_dlp4422 = xQueueCreate(1,120);
 
-    uint8_t dlp_send_buf[100]={0x5a,0xa5,0,0x0b,0,0,0x08,0x01,0x04,0x02,0,0};
+    uint8_t dlp_send_buf[100]={0x5a,0xa5,0,0x0b,0,0,0x08,0x01,0x84,0x02,0x7B,0x7B};
 
     while(1)
     {
-        
-        HAL_UART_Transmit(&huart3,dlp_send_buf,12,50);
-        HAL_UART_Transmit(&huart4,dlp_send_buf,12,50);
-        HAL_UART_Transmit(&huart6,dlp_send_buf,12,50);
+        HAL_UART_Transmit(&huart3,dlp_send_buf,0x0b,100);
+        HAL_UART_Transmit(&huart4,dlp_send_buf,0x0b,100);
+        HAL_UART_Transmit(&huart6,dlp_send_buf,0x0b,100);
         vdebug_buf_handle();
-        osDelay(100);
+        osDelay(3000);
         //printf("dlp4422\r\n");
     }
 }

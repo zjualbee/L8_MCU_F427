@@ -151,12 +151,9 @@ void Init_Heat_Sink(void)
     Max31790_On(&Fan31_32_And_Bump1_4);
 
 
-     Max31790_Full_Speed(&Fan19_24);
-     Max31790_Full_Speed(&Fan25_30);
-     Max31790_Full_Speed(&Fan31_32_And_Bump1_4);
-
-
-
+    Max31790_Full_Speed(&Fan19_24);
+    Max31790_Full_Speed(&Fan25_30);
+    Max31790_Full_Speed(&Fan31_32_And_Bump1_4);
 
 
     Max31790_List_Reg(&Fan19_24);
@@ -186,32 +183,29 @@ static portTASK_FUNCTION(heat_sink_task, pvParameters)
     HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_SET);
     //HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_RESET);
     Init_Heat_Sink();
-   // MAX31790_on_full_speed();
-   
-   Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,2,511);
-   Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,3,511);
-   Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,4,511);
-   Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,5,511);
+    // MAX31790_on_full_speed();
+
+    Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,2,511);
+    Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,3,511);
+    Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,4,511);
+    Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,5,511);
 
    while(1)
     {
        osDelay(1000);
-
     }
-    {
 
-    
-  //  Max31790_List_Reg(&Fan19_24);
-  //  Max31790_List_Reg(&Fan25_30);
-  //  Max31790_List_Reg(&Fan31_32_And_Bump1_4);
+   
+    {
+    //Max31790_List_Reg(&Fan19_24);
+    //Max31790_List_Reg(&Fan25_30);
+    //Max31790_List_Reg(&Fan31_32_And_Bump1_4);
     //Max31790_Off(&Fan31_32_And_Bump1_4);
     Max31790_List_Reg(&Fan19_24);
     osDelay(5000);
     Max31790_On(&Fan31_32_And_Bump1_4);
-
     Max31790_List_Reg(&Fan19_24);
     osDelay(5000);
-
     }
 
 

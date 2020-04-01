@@ -25,10 +25,11 @@ uint32_t vdebug_buf_handle(void)
 {
 
     if(vdebug_buf_len > 0)
-        {
-            vdebug_buf_len = 0;
-            print_buf_c(vdebug_buf,vdebug_buf_len);
-        }
+    {
+
+    print_buf(vdebug_buf,vdebug_buf_len);
+    vdebug_buf_len = 0;
+    }
 }
 
 
