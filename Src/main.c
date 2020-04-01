@@ -878,10 +878,10 @@ void StartDefaultTask(void const * argument)
     appo_power_task_create();
     led_task_create();
     uart_task_create();
-    motor_task_create();
+    //motor_task_create();
     //heat_sink_task_create();
     //temprature_task_create();
-    tec_task_create();
+    //tec_task_create();
 
   /* Infinite loop */
   for(;;)

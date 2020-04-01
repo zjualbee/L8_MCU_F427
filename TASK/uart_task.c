@@ -63,9 +63,14 @@ static portTASK_FUNCTION(uart_task, pvParameters)
    // AT_Gtest_Make_Buf();
 
     at_decode.Do_Data_End = Do_Data_End_Msg_Func;
-    at_decode.Do_One_Element = Do_Msg_Func;
-    //at_decode.Do_One_Element = App_Func1;
-   
+    //at_decode.Do_One_Element = Do_Msg_Func;
+    at_decode.Do_One_Element = App_Func1;
+    at_decode.Do_All_Element = Gtest_On_All_Element;
+
+    at_decode.Do_Cmd_Error = Gtest_On_Cmd_Error;
+    at_decode.Do_Param_Key_Error = Gtest_On_Param_Key_Error;
+    at_decode.Do_Param_Value_Error = Gtest_On_Param_Value_Error;
+
 
     
 
