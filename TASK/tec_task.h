@@ -27,6 +27,9 @@
 /* Exported macro ------------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
 extern xQueueHandle g_queue_tec_cmd;
+extern UART_TEC Uart_Tec1;
+extern UART_TEC Uart_Tec2;
+extern UART_TEC Uart_Tec3;
 
 /* Exported functions --------------------------------------------------------*/
 

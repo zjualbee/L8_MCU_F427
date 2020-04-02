@@ -117,6 +117,17 @@ typedef struct _UART_TEC
 
     uint8_t run_param_reg[MAX_PARAM_REG_LEN];     //   param reg       2BYTE   
     uint8_t run_state_reg[MAX_STAUTS_REG_LEN];  // running state reg    1bit    
+
+
+
+
+//////////////////////////////////////
+    int16_t temp1;
+    int16_t temp2;
+    int16_t temp3;
+
+
+    
 //////////////do command/////////////
 
     Uart_Tec_Bsp_Send  uart_send;  
@@ -138,10 +149,15 @@ void TEC_Show(pUART_TEC p);
 
 
 void TEC_SetPowerUp(pUART_TEC p);
-
-
 void TEC_SetPowerDown(pUART_TEC p);
+
+
 void TEC_Get_Run_Param(pUART_TEC p,uint16_t reg_addr,uint16_t len);
+void TEC_SetTemprature(pUART_TEC p,int16_t temprature1,int16_t temprature3);
+
+
+
+
 
 
 void TEC_handler(pUART_TEC p);

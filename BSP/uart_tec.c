@@ -184,7 +184,7 @@ void TEC_On_Recv_Buf(pUART_TEC p)
     if(((p->active_opt == OPT_GET_RUN_PARAM)&&(p->recv_buf[1] == OPT_GET_RUN_PARAM))||\
         ((p->active_opt == OPT_GET_RUN_STATUS)&&(p->recv_buf[1] == OPT_GET_RUN_STATUS)))
         {
-            printf("On %02X\r\n",p->active_opt);
+            ;//printf("On %02X\r\n",p->active_opt);
         }
     else
         {
@@ -192,7 +192,7 @@ void TEC_On_Recv_Buf(pUART_TEC p)
         }
         
 
-    print_buf(p->recv_buf,p->recv_index);
+   //print_buf(p->recv_buf,p->recv_index);
     /////////////check crc//////////////
     crc = u16modbusCRC(p->recv_buf,p->recv_index-2);
 
@@ -200,7 +200,7 @@ void TEC_On_Recv_Buf(pUART_TEC p)
         (p->recv_buf[p->recv_index - 2]==(crc&0xff)))
         {
                 ;
-                printf("check ok\r\n");
+                //printf("check ok\r\n");
         }
     else
         {
@@ -218,7 +218,7 @@ void TEC_On_Recv_Buf(pUART_TEC p)
     
     if(p->active_opt == OPT_GET_RUN_PARAM)
         {
-            printf("RUN param addr:%d,len:%d\r\n",p->active_reg_addr_l,p->active_reg_len);
+           // printf("RUN param addr:%d,len:%d\r\n",p->active_reg_addr_l,p->active_reg_len);
             if((p->active_reg_addr_l + p->active_reg_len ) < MAX_PARAM_REG_LEN)
                 {
                     memcpy(&(p->run_param_reg[p->active_reg_addr_l]),&p->recv_buf[3],p->active_reg_len);
@@ -226,7 +226,7 @@ void TEC_On_Recv_Buf(pUART_TEC p)
         }
     else if(p->active_opt == OPT_GET_RUN_STATUS)
         {
-            printf("RUN status\r\n");
+            ;//printf("RUN status\r\n");
 
         }
 }
@@ -345,6 +345,9 @@ void TEC_SetTemprature(pUART_TEC p,int16_t temprature1,int16_t temprature3)
 {
 
     int i =0 ;
+    int16_t temprature = 0;
+
+    temprature = temprature1*10;
     uint8_t TEC_Buf[8]={0};
 
     memset(TEC_Buf,0,8);
@@ -352,8 +355,8 @@ void TEC_SetTemprature(pUART_TEC p,int16_t temprature1,int16_t temprature3)
     TEC_Buf[1]=0x06;
     TEC_Buf[2] = 0;
     TEC_Buf[3] = 67;
-    TEC_Buf[4] = (temprature1>>8)&0xff;
-    TEC_Buf[5] = (temprature1&0xff);
+    TEC_Buf[4] = (temprature>>8)&0xff;
+    TEC_Buf[5] = (temprature&0xff);
     TEC_Uart_SendComm(p,TEC_Buf);
     
     if(p->delayms!=0)
@@ -361,10 +364,12 @@ void TEC_SetTemprature(pUART_TEC p,int16_t temprature1,int16_t temprature3)
             p->delayms(150);
         }
 
+    temprature = temprature3*10;
+
     
     TEC_Buf[3] = 72;
-    TEC_Buf[4] = (temprature3>>8)&0xff;
-    TEC_Buf[5] = (temprature3&0xff);
+    TEC_Buf[4] = (temprature>>8)&0xff;
+    TEC_Buf[5] = (temprature&0xff);
     TEC_Uart_SendComm(p,TEC_Buf);
     
     if(p->delayms!=0)
@@ -422,20 +427,18 @@ void TEC_Show(pUART_TEC p)
 {
     int16_t temp=0;
     
-    temp = p->run_param_reg[0]|((p->run_param_reg[1]<<8)&0xff00);
-    printf("TEC_CHANNEL1:%d\r\n",temp);
-
+    temp = p->run_param_reg[1]|((p->run_param_reg[0]<<8)&0xff00);
+    printf("TEC_CHANNEL1:%d.%d \r\n",temp/10,temp%10);
+    p->temp1 = temp;
 
     
-    temp = p->run_param_reg[8]|((p->run_param_reg[9]<<8)&0xff00);
-    printf("TEC_CHANNEL3:%d\r\n",temp);
+    temp = p->run_param_reg[9]|((p->run_param_reg[8]<<8)&0xff00);
+    printf("TEC_CHANNEL3:%d.%d \r\n",temp/10,temp%10);
+    p->temp3 = temp;
 
 
 
-
-   // temp = p->run_param_reg[42*2]|((p->run_param_reg[42*2+1]<<8)&0xff00);
-    //printf("TEC_CHANNEL3:%d\r\n",temp);
-
+  
 
 }
 
