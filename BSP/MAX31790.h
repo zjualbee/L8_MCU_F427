@@ -5,11 +5,15 @@
 #define __MAX31790_H__
 /* Define to prevent recursive inclusion -------------------------------------*/
 
+#include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
+#include "stdint.h"
 
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
+//#include "main.h"
 
 
 
@@ -19,15 +23,11 @@ typedef uint8_t (*Max_Bsp_Write)(uint8_t dev_addr , uint8_t reg , uint8_t value)
 
 typedef struct _MAX31790_OBJ
 {
-
     uint8_t  dev_addr; 
-
-
 //////////////do command/////////////
 
      Max_Bsp_Read  iic_read;  
      Max_Bsp_Write iic_write; 
-
 }MAX31790_OBJ,*pMAX31790_OBJ;
 
 

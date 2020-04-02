@@ -80,8 +80,8 @@ uint8_t I2c_Transmit(uint8_t dev_addr ,uint8_t * pBuf_in,uint16_t len)
 void  Task_Init_Ads7830(void)
 {
     Ads8730_Init(&Ntc_1_8,0x90,I2c_Recv,I2c_Transmit,osDelay);
-    Ads8730_Init(&Ntc_9_16,0x92,I2c_Recv,I2c_Transmit,osDelay);
-    Ads8730_Init(&Ntc_17_24,0x96,I2c_Recv,I2c_Transmit,osDelay);
+    Ads8730_Init(&Ntc_9_16,0x96,I2c_Recv,I2c_Transmit,osDelay);
+    Ads8730_Init(&Ntc_17_24,0x92,I2c_Recv,I2c_Transmit,osDelay);
 }
 
 
@@ -102,8 +102,10 @@ static portTASK_FUNCTION(temprature_task, pvParameters)
     uint8_t reg=0;
     int16_t temprature=0;
     Task_Init_Ads7830();
+	osDelay(5000);
     while(1)
 	{
+	osDelay(5000);
 	    for(i=0;i<8;i++)
         {
            reg = Ads8730_Get_Raw_Adc(&Ntc_1_8,i);
@@ -128,7 +130,7 @@ static portTASK_FUNCTION(temprature_task, pvParameters)
 
 
 
-        osDelay(2000);
+        
         }
 
 

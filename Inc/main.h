@@ -54,6 +54,7 @@ extern "C" {
 #include "uart_task.h"
 #include "appo_power_task.h"
 #include "dlp4422_task.h"
+#include "i2c5.h"
 
 
 
@@ -97,6 +98,7 @@ extern int g_CW_speed_cnt;
 /* USER CODE BEGIN EM */
 
 /* USER CODE END EM */
+void bsp_delay_us(uint32_t us);
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 

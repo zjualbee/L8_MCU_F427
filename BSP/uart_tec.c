@@ -96,7 +96,7 @@ TEC_Option TEC_InitDate[]=
 	{64,0,0},		/*40065	30065	备用							                    */
 	{65,0,0},		/*40066	30066	备用							                    */
 	{66,0,0},		/*40067	30067	备用							                    */
-	{67,1,30*10},	/*40068	30068	TEC1温度设定点			℃	x10			      */
+	{67,1,25*10},	/*40068	30068	TEC1温度设定点			℃	x10			      */
 	{68,0,1*10},	/*40069	30069	TEC1灵敏度设定			℃	x10			      */
 	{69,0,0*10},	/*40070	30070	TEC1P参数设定				x10			          */
 	{70,0,0},		/*40071	30071	TEC1I参数设定			s	1			            */
@@ -110,7 +110,7 @@ TEC_Option TEC_InitDate[]=
 	{76,0,0},		/*40077	30077	TEC2D参数设定			s	1			            */
 
 
-	{77,1,30*10},	/*40078	30078	TEC3温度设定点			℃	x10			      */
+	{77,1,25*10},	/*40078	30078	TEC3温度设定点			℃	x10			      */
 	{78,0,1*10},	/*40079	30079	TEC3灵敏度设定			℃	x10			      */
 	{79,0,0*10},	/*40080	30080	TEC3P参数设定				x10			          */
 	{80,0,0},		/*40081	30081	TEC3I参数设定			s	1			            */
@@ -128,9 +128,6 @@ TEC_Option TEC_InitDate2[]=
    {62,0,0} , /*[40063]  (0~100%)TEC2输出*/
    {63,0,0} , /*[40064]  (0~100%)TEC3输出*/
 };
-
-
-
 
 
 
@@ -226,19 +223,12 @@ void TEC_On_Recv_Buf(pUART_TEC p)
                 {
                     memcpy(&(p->run_param_reg[p->active_reg_addr_l]),&p->recv_buf[3],p->active_reg_len);
                 }
-
-            
-
         }
     else if(p->active_opt == OPT_GET_RUN_STATUS)
         {
             printf("RUN status\r\n");
 
         }
-
-
-    
-
 }
 
 
@@ -347,9 +337,43 @@ void TEC_Init_Table(pUART_TEC p)
                 {
                     p->delayms(150);
                 }
-            
         }
+}
+
+
+void TEC_SetTemprature(pUART_TEC p,int16_t temprature1,int16_t temprature3)
+{
+
+    int i =0 ;
+    uint8_t TEC_Buf[8]={0};
+
+    memset(TEC_Buf,0,8);
+    TEC_Buf[0]=0x01;
+    TEC_Buf[1]=0x06;
+    TEC_Buf[2] = 0;
+    TEC_Buf[3] = 67;
+    TEC_Buf[4] = (temprature1>>8)&0xff;
+    TEC_Buf[5] = (temprature1&0xff);
+    TEC_Uart_SendComm(p,TEC_Buf);
     
+    if(p->delayms!=0)
+        {
+            p->delayms(150);
+        }
+
+    
+    TEC_Buf[3] = 72;
+    TEC_Buf[4] = (temprature3>>8)&0xff;
+    TEC_Buf[5] = (temprature3&0xff);
+    TEC_Uart_SendComm(p,TEC_Buf);
+    
+    if(p->delayms!=0)
+        {
+            p->delayms(150);
+        }
+
+
+
 }
 
 
@@ -371,7 +395,6 @@ void TEC_Loop_Get_Run_Param(pUART_TEC p)
     // 0 ---64
     static int x=0;
     if(x>64) x = 0;
-    
     TEC_Send_Cmd(p,OPT_GET_RUN_PARAM,x,16);
     x=x+16;
 }
@@ -382,11 +405,9 @@ void TEC_Loop_Get_Run_Param(pUART_TEC p)
 
 void TEC_handler(pUART_TEC p)
 {
-
     TEC_On_Recv_Buf(p);
     TEC_Loop_Get_Run_Param(p);
     TEC_Show(p);
-
 }
 
 

@@ -678,6 +678,16 @@
               <FileType>1</FileType>
               <FilePath>..\BSP\uart_tec.c</FilePath>
             </File>
+            <File>
+              <FileName>i2c5.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\i2c5.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\i2c_gpio.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

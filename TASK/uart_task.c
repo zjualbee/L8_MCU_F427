@@ -60,26 +60,23 @@ static portTASK_FUNCTION(uart_task, pvParameters)
     //AT_Gtset_All(10,10,100);
     //AT_Gtset1();
     //AT_Gtest_Ok(20);
-   // AT_Gtest_Make_Buf();
+    //AT_Gtest_Make_Buf();
 
     at_decode.Do_Data_End = Do_Data_End_Msg_Func;
-    //at_decode.Do_One_Element = Do_Msg_Func;
-    at_decode.Do_One_Element = App_Func1;
-    at_decode.Do_All_Element = Gtest_On_All_Element;
+    at_decode.Do_One_Element = Do_Msg_Func;
+    //at_decode.Do_One_Element = App_Func1;
+    //at_decode.Do_All_Element = Gtest_On_All_Element;
 
     at_decode.Do_Cmd_Error = Gtest_On_Cmd_Error;
     at_decode.Do_Param_Key_Error = Gtest_On_Param_Key_Error;
     at_decode.Do_Param_Value_Error = Gtest_On_Param_Value_Error;
 
 
-    
-
-
     while(1)
-        {
-            At_Analyze_Handle(&at_decode);
-            osDelay(1);
-        }
+    {
+        At_Analyze_Handle(&at_decode);
+        osDelay(1);
+    }
 
 
     
@@ -97,7 +94,7 @@ static portTASK_FUNCTION(uart_task, pvParameters)
 *******************************************************************************/
 portBASE_TYPE uart_task_create(void)
 {
-    return xTaskCreate(uart_task, "uart_task", 512, NULL, TASK_PRIORITY+1, &g_xTaskHandle_uart);
+    return xTaskCreate(uart_task, "uart_task", 700, NULL, TASK_PRIORITY+1, &g_xTaskHandle_uart);
 }
 
 

@@ -101,6 +101,40 @@ void StartDefaultTask(void const * argument);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+/*******************************************************************************
+* Function Name  : bsp_delay_us
+* Description    : delay_us
+* Input          : None
+* Output         : None
+* Return         : None
+*******************************************************************************/
+static uint32_t s_systick_counter_us_init = 0;
+static uint32_t s_systick_counter_us = 0;
+void bsp_delay_us(uint32_t us)
+{
+    uint32_t counter = 0;
+    uint32_t tick_pre = SysTick->VAL;
+    uint32_t tick_cur = 0;
+    uint32_t counter_delay = 0;
+
+    if (0 == s_systick_counter_us_init){
+        s_systick_counter_us_init = 1;
+        s_systick_counter_us = SystemCoreClock / 1000 / 1000;
+    }
+    if (0 == us)
+        return;
+    counter_delay = us * s_systick_counter_us;
+    while(1){
+        tick_cur = SysTick->VAL;
+        if (tick_cur < tick_pre)
+            counter += tick_pre - tick_cur;
+        else
+            counter += tick_pre + SysTick->LOAD - tick_cur;
+        tick_pre = tick_cur;
+        if (counter >= counter_delay)
+            return;
+    }
+}
 
 #if 0
 #pragma import(__use_no_semihosting)             
@@ -849,6 +883,30 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
+
+
+
+  /*Configure GPIO pin : PE8  E9*/
+  GPIO_InitStruct.Pin = GPIO_PIN_8;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+  
+  GPIO_InitStruct.Pin = GPIO_PIN_9;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+
+  
+
+
+
+
+
+
   HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_SET);
 
 
@@ -874,14 +932,15 @@ void StartDefaultTask(void const * argument)
 {
     
   /* USER CODE BEGIN 5 */
-    //dlp4422_task_create();
+    i2c5_init();
+    dlp4422_task_create();
     appo_power_task_create();
     led_task_create();
     uart_task_create();
-    //motor_task_create();
-    //heat_sink_task_create();
-    //temprature_task_create();
-    //tec_task_create();
+    motor_task_create();
+    heat_sink_task_create();
+    temprature_task_create();
+    tec_task_create();
 
   /* Infinite loop */
   for(;;)

@@ -28,6 +28,7 @@ int Max31790_Pwm_Set(pMAX31790_OBJ pObj,uint8_t id, uint16_t pwm)
     
     if(id >= 6)return 0;
 
+    printf("Pwm_Set %d\r\n",pwm);
 
   //  pObj->iic_write(pObj->dev_addr,0x30+(id*2), (pwm >> 1) & 0xFF);
   //  pObj->iic_write(pObj->dev_addr,0x31+(id*2), (pwm & 0x01) << 7 & 0xFF);
@@ -167,7 +168,7 @@ int Max31790_Init(pMAX31790_OBJ pObj,uint8_t dev_addr,Max_Bsp_Read  iic_read,Max
     pObj->iic_write = iic_write;
 
 
-	//printf("init31790");
+	printf("init31790 %02X\r\n",dev_addr);
 	//FULL_SPEED1_SET;
 	pObj->iic_write(pObj->dev_addr,0x00, 0x60);    // RESET
 	HAL_Delay(20);                       // > 1ms

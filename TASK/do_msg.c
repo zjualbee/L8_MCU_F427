@@ -10,6 +10,7 @@
 #include "appo_power_cmd.h"
 #include "do_msg.h"
 #include "appo_power_task.h"
+#include "heat_sink_task.h"
 
 #define PRINT_FUNCTION  // printf("%s\r\n",__FUNCTION__);
 
@@ -104,30 +105,6 @@ void On_Set_SetCurrent(pONE_ELEMENT p)
 
 
 
-void On_Set_SetFan(pONE_ELEMENT p)
-{
-    PRINT_FUNCTION
-
-    if(p->cmd_id == DC_SETFAN)
-    {
-    if(p->key_id == DPK_SETFAN_FAN1)
-        {;
-        }
-    else if(p->key_id == DPK_SETFAN_FAN2)
-        {;
-        }
-    else if(p->key_id == DPK_SETFAN_FAN3)
-        {;
-        }
-    else if(p->key_id == DPK_SETFAN_FAN4)
-        {;
-        }
-    else if(p->key_id == DPK_SETFAN_FAN5)
-        {;
-        }
-    }
-}
-
 void On_Set_Xprfixed(pONE_ELEMENT p)
 {
     PRINT_FUNCTION
@@ -173,6 +150,57 @@ void On_Set_TestPattern(pONE_ELEMENT p)
 }
 
 
+void On_Set_SetFan(pONE_ELEMENT p)
+{
+    PRINT_FUNCTION
+    uint8_t send_buf[30]={0};
+    int i=0;
+    uint16_t PWM=0    ;
+
+    if(p->cmd_id == DC_SETFAN)
+    {
+        if((p->value_int*5) > 511)
+        {
+            PWM = 511;
+        }
+        else
+        {
+            PWM = (p->value_int*5);
+        }
+
+
+    
+        if(p->key_id == DPK_SETFAN_FAN1)
+        {
+
+
+            Max31790_Pwm_Set(&Fan25_30,0,PWM);
+            Max31790_Pwm_Set(&Fan25_30,1,PWM);
+            Max31790_Pwm_Set(&Fan25_30,2,PWM);
+
+            for(i=0;i < 6;i++)
+            {
+            Max31790_Pwm_Set(&Fan1_6,i,PWM);
+            Max31790_Pwm_Set(&Fan7_12,i,PWM);
+            Max31790_Pwm_Set(&Fan13_18,i,PWM);
+            Max31790_Pwm_Set(&Fan19_24,i,PWM);
+            }
+
+        }
+
+        else if(p->key_id == DPK_SETFAN_FAN2)
+        {
+            Max31790_Pwm_Set(&Fan25_30,3,PWM);
+            Max31790_Pwm_Set(&Fan25_30,4,PWM);
+            Max31790_Pwm_Set(&Fan25_30,5,PWM);
+            Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,0,PWM);
+        }
+        
+    }
+
+}
+
+
 
 
 void Do_Set_Msg(pONE_ELEMENT p)
@@ -204,7 +232,7 @@ void Do_Set_Msg(pONE_ELEMENT p)
         {
             On_Set_TestPattern(p);
         }      
- 
+
 
 
 

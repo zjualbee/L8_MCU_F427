@@ -205,7 +205,7 @@ static portTASK_FUNCTION(appo_power_task, pvParameters)
 *******************************************************************************/
 portBASE_TYPE appo_power_task_create(void)
 {
-    return xTaskCreate(appo_power_task, "appo_power_task", 128, NULL, TASK_PRIORITY+1, &g_xTaskHandle_appo_power);
+    return xTaskCreate(appo_power_task, "appo_power_task", 256, NULL, TASK_PRIORITY+1, &g_xTaskHandle_appo_power);
 }
 
 

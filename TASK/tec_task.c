@@ -131,7 +131,7 @@ static portTASK_FUNCTION(tec_task, pvParameters)
 *******************************************************************************/
 portBASE_TYPE tec_task_create(void)
 {
-    return xTaskCreate(tec_task, "tec", TASK_STACK_SIZE, NULL, TASK_PRIORITY + 1, &g_xTaskHandle_tec);
+    return xTaskCreate(tec_task, "tec", 512, NULL, TASK_PRIORITY + 1, &g_xTaskHandle_tec);
 }
 
 /******************* (C) COPYRIGHT 2014 APPOTRONICS ************END OF FILE****/

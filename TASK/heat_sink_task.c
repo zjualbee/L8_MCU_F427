@@ -18,11 +18,13 @@
 //#include "FreeRTOS.h"
 //#include "task.h"
 #include "cmsis_os.h"
+#include "MAX31790.h"
 
 #include "main.h"
 
 /* Private typedef -----------------------------------------------------------*/
 #include "heat_sink_task.h"
+
 
 /* Private define ------------------------------------------------------------*/
 
@@ -36,53 +38,69 @@
 // ÈÎÎñ¾ä±ú
 xTaskHandle g_xTaskHandle_heat_sink = NULL;
 
+
+MAX31790_OBJ Fan1_6;     //0x40 
+MAX31790_OBJ Fan7_12;    //0x5E
+MAX31790_OBJ Fan13_18;    //0x58
+
+MAX31790_OBJ Fan19_24;   //0x48
+MAX31790_OBJ Fan25_30;   //0x50
+MAX31790_OBJ Fan31_32_And_Bump1_4;  //0x56
+
+
+
+
+
+
+
+
+
+
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
 
-
-uint8_t Bsp_I2c1_Read(uint8_t dev_addr , uint8_t reg)
+static uint8_t Bsp_I2c5_Read(uint8_t dev_addr , uint8_t reg)
 {
 
     uint8_t databuff[2]={0};
-    if(HAL_OK != HAL_I2C_Master_Transmit(&hi2c1, dev_addr, &reg, 1,100))
+    databuff[0] = reg;
+    if(HAL_OK != g_i2c5.transmit(&g_i2c5, dev_addr&0x00ff, databuff, 1,150))
     {
         printf("iic error %02X\r\n",dev_addr);
         return 0xff;
     }
     else
     {
-        printf("iic ok %02X\r\n",dev_addr);
-        HAL_I2C_Master_Receive(&hi2c1, dev_addr, databuff+1, 1,100);
-
+       ;// printf("iic ok %02X\r\n",dev_addr);
+        g_i2c5.receive(&g_i2c5, dev_addr&0x00ff, databuff+1, 1,150);
     }
     return databuff[1];
 }
 
 
 
-uint8_t Bsp_I2c1_Write(uint8_t dev_addr , uint8_t reg , uint8_t value)
+static uint8_t Bsp_I2c5_Write(uint8_t dev_addr , uint8_t reg , uint8_t value)
 {   
     uint8_t databuff[2]={reg,value};
-    HAL_StatusTypeDef W_Result=HAL_BUSY;
+    int W_Result=HAL_BUSY;
 
-    W_Result=HAL_I2C_Master_Transmit(&hi2c1, dev_addr, databuff, 2,100);
+    W_Result=g_i2c5.transmit(&g_i2c5, dev_addr, databuff, 2,150);
     if(W_Result==HAL_OK)
         {
-            printf("iic ok %02X\r\n",dev_addr);
-           
+           ;// printf("iic ok %02X\r\n",dev_addr);
+     
         }
     else
         {
-            printf("iic write error %02X\r\n",dev_addr);
+           printf("iic write error %02X\r\n",dev_addr);
         }
-    //osDelay(1);
   
     return W_Result;
 }
 
 
-uint8_t Bsp_I2c2_Read(uint8_t dev_addr , uint8_t reg)
+static uint8_t Bsp_I2c2_Read(uint8_t dev_addr , uint8_t reg)
 {
 
     uint8_t databuff[2]={0};
@@ -102,7 +120,7 @@ uint8_t Bsp_I2c2_Read(uint8_t dev_addr , uint8_t reg)
 
 
 
-uint8_t Bsp_I2c2_Write(uint8_t dev_addr , uint8_t reg , uint8_t value)
+static uint8_t Bsp_I2c2_Write(uint8_t dev_addr , uint8_t reg , uint8_t value)
 {   
     uint8_t databuff[2]={reg,value};
     HAL_StatusTypeDef W_Result=HAL_BUSY;
@@ -122,40 +140,38 @@ uint8_t Bsp_I2c2_Write(uint8_t dev_addr , uint8_t reg , uint8_t value)
 }
 
 
-MAX31790_OBJ Fan1_6;    //0x40 
-MAX31790_OBJ Fan7_12;  //0x5E
-MAX31790_OBJ Fan3_18;    //0x58
-
-MAX31790_OBJ Fan19_24;   //0x48
-MAX31790_OBJ Fan25_30;   //0x50
-MAX31790_OBJ Fan31_32_And_Bump1_4;  //0x56
-
 
 
 
 void Init_Heat_Sink(void)
 {
 
-//Max31790_Init(&Fan1_6,0x40,Bsp_I2c1_Read,Bsp_I2c1_Write);
-//Max31790_Init(&Fan7_12,0x5e,Bsp_I2c2_Read,Bsp_I2c2_Write);
-//Max31790_Init(&Fan3_18,0x58,Bsp_I2c2_Read,Bsp_I2c2_Write);
+#if 1
+    Max31790_Init(&Fan1_6,0x40,Bsp_I2c5_Read,Bsp_I2c5_Write);
+    Max31790_Init(&Fan7_12,0x5e,Bsp_I2c5_Read,Bsp_I2c5_Write);
+    Max31790_Init(&Fan13_18,0x58,Bsp_I2c5_Read,Bsp_I2c5_Write);
 
-    
+    Max31790_On(&Fan1_6);
+    Max31790_On(&Fan7_12);
+    Max31790_On(&Fan13_18);
+
+    Max31790_List_Reg(&Fan1_6);
+    Max31790_List_Reg(&Fan7_12);
+    Max31790_List_Reg(&Fan13_18);
+#endif
+
+
+
+ 
     Max31790_Init(&Fan19_24,0x48,Bsp_I2c2_Read,Bsp_I2c2_Write);
     Max31790_Init(&Fan25_30,0x50,Bsp_I2c2_Read,Bsp_I2c2_Write);
     Max31790_Init(&Fan31_32_And_Bump1_4,0x56,Bsp_I2c2_Read,Bsp_I2c2_Write);
-
-
     Max31790_On(&Fan19_24);
     Max31790_On(&Fan25_30);
     Max31790_On(&Fan31_32_And_Bump1_4);
-
-
-    Max31790_Full_Speed(&Fan19_24);
-    Max31790_Full_Speed(&Fan25_30);
-    Max31790_Full_Speed(&Fan31_32_And_Bump1_4);
-
-
+   // Max31790_Full_Speed(&Fan19_24);
+   // Max31790_Full_Speed(&Fan25_30);
+   // Max31790_Full_Speed(&Fan31_32_And_Bump1_4);
     Max31790_List_Reg(&Fan19_24);
     Max31790_List_Reg(&Fan25_30);
     Max31790_List_Reg(&Fan31_32_And_Bump1_4);
@@ -184,11 +200,35 @@ static portTASK_FUNCTION(heat_sink_task, pvParameters)
     //HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_RESET);
     Init_Heat_Sink();
     // MAX31790_on_full_speed();
+    Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,0,511);
+    Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,1,511);
 
     Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,2,511);
     Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,3,511);
     Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,4,511);
     Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,5,511);
+
+#if 1
+    for(i=0;i < 6;i++)
+    {
+    Max31790_Pwm_Set(&Fan1_6,i,300);
+    Max31790_Pwm_Set(&Fan7_12,i,300);
+    Max31790_Pwm_Set(&Fan13_18,i,300);
+    }
+#endif
+
+    for(i=0;i < 6;i++)
+    {
+    Max31790_Pwm_Set(&Fan19_24,i,300);
+    Max31790_Pwm_Set(&Fan25_30,i,300);
+    }
+    
+
+
+
+
+
+
 
    while(1)
     {
@@ -232,7 +272,7 @@ static portTASK_FUNCTION(heat_sink_task, pvParameters)
 *******************************************************************************/
 portBASE_TYPE heat_sink_task_create(void)
 {
-    return xTaskCreate(heat_sink_task, "heat_sink_task", 128, NULL, TASK_PRIORITY+1, &g_xTaskHandle_heat_sink);
+    return xTaskCreate(heat_sink_task, "heat_sink_task", 256, NULL, TASK_PRIORITY+1, &g_xTaskHandle_heat_sink);
 }
 
 
