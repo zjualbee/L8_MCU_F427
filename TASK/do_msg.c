@@ -168,12 +168,8 @@ void On_Set_SetFan(pONE_ELEMENT p)
             PWM = (p->value_int*5);
         }
 
-
-    
         if(p->key_id == DPK_SETFAN_FAN1)
         {
-
-
             Max31790_Pwm_Set(&Fan25_30,0,PWM);
             Max31790_Pwm_Set(&Fan25_30,1,PWM);
             Max31790_Pwm_Set(&Fan25_30,2,PWM);
@@ -185,7 +181,6 @@ void On_Set_SetFan(pONE_ELEMENT p)
             Max31790_Pwm_Set(&Fan13_18,i,PWM);
             Max31790_Pwm_Set(&Fan19_24,i,PWM);
             }
-
         }
 
         else if(p->key_id == DPK_SETFAN_FAN2)
@@ -195,9 +190,7 @@ void On_Set_SetFan(pONE_ELEMENT p)
             Max31790_Pwm_Set(&Fan25_30,5,PWM);
             Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,0,PWM);
         }
-        
     }
-
 }
 
 
@@ -234,12 +227,6 @@ void Do_Set_Msg(pONE_ELEMENT p)
         }      
 
 
-
-
-
-
-
-    
 }
 
 
@@ -377,7 +364,7 @@ uint32_t Do_Data_End_Msg_Func(pONE_ELEMENT p)
         {
     cmd_index = Get_Cmd_Index_By_Id(p->cmd_id);
     if(cmd_index==-1)return 0xff;
-    printf("AT+%s=Ok\r\n",Get_Cmd_String_By_Index(cmd_index));
+    printf("AT+%s#Ok\r\n",Get_Cmd_String_By_Index(cmd_index));
     }
 
     return 0;

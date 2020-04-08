@@ -448,6 +448,8 @@ static void MX_SPI4_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN SPI4_Init 2 */
+  
+   HAL_SPI_Transmit(&hspi4,"A",1,50);
 
   /* USER CODE END SPI4_Init 2 */
 
@@ -900,13 +902,6 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
 
-  
-
-
-
-
-
-
   HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_SET);
 
 
@@ -932,6 +927,10 @@ void StartDefaultTask(void const * argument)
 {
     
   /* USER CODE BEGIN 5 */
+  
+
+
+#if 1
     i2c5_init();
     dlp4422_task_create();
     appo_power_task_create();
@@ -941,6 +940,11 @@ void StartDefaultTask(void const * argument)
     heat_sink_task_create();
     temprature_task_create();
     tec_task_create();
+#else
+    led_task_create();
+    uart_task_create();
+
+#endif
 
   /* Infinite loop */
   for(;;)

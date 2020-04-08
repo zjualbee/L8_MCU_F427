@@ -125,7 +125,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>ST-LINKIII-KEIL_SWO</Key>
-          <Name>-U5&amp;3777C8C2&amp;0&amp;2 -O206 -SF4000 -C0 -A0 -I0 -HNlocalhost -HP7184 -P1 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(0) -TO65554 -TC10000000 -TP21 -TDS8004 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO11 -FD20000000 -FC1000 -FN1 -FF0STM32F4xx_1024.FLM -FS08000000 -FL0100000 -FP0($$Device:STM32F427ZG$Flash\STM32F4xx_1024.FLM)</Name>
+          <Name>-U52FF71065185505550221187 -O206 -SF1800 -C0 -A0 -I0 -HNlocalhost -HP7184 -P1 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(0) -TO65554 -TC10000000 -TP21 -TDS8004 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO11 -FD20000000 -FC1000 -FN1 -FF0STM32F4xx_1024.FLM -FS08000000 -FL0100000 -FP0($$Device:STM32F427ZG$Flash\STM32F4xx_1024.FLM)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -154,7 +154,7 @@
           <Type>0</Type>
           <LineNumber>3028</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134232510</Address>
+          <Address>134243190</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -170,7 +170,7 @@
           <Type>0</Type>
           <LineNumber>3032</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134232526</Address>
+          <Address>134243206</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -186,7 +186,7 @@
           <Type>0</Type>
           <LineNumber>3036</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134232542</Address>
+          <Address>134243222</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -196,6 +196,38 @@
           <Filename>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\L8_PMU\../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c\3036</Expression>
+        </Bp>
+        <Bp>
+          <Number>3</Number>
+          <Type>0</Type>
+          <LineNumber>101</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134251964</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\TASK\motor_task.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\L8_PMU\../TASK/motor_task.c\101</Expression>
+        </Bp>
+        <Bp>
+          <Number>4</Number>
+          <Type>0</Type>
+          <LineNumber>310</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134220442</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\BSP\A4960_36V.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\L8_PMU\../BSP/A4960_36V.c\310</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
