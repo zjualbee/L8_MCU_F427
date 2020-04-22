@@ -167,7 +167,155 @@ void On_Set_SetFan(pONE_ELEMENT p)
         {
             PWM = (p->value_int*5);
         }
+        if(p->key_id == DPK_SETFAN_ALL)
+        {
+            Max31790_Pwm_Set_All(&Fan1_6,PWM);
+            Max31790_Pwm_Set_All(&Fan7_12,PWM);
+            Max31790_Pwm_Set_All(&Fan13_18,PWM);
+            Max31790_Pwm_Set_All(&Fan19_24,PWM);
+            Max31790_Pwm_Set_All(&Fan25_30,PWM);
+            Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,0,PWM);
+            Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,1,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN1)
+        {
+           Max31790_Pwm_Set(&Fan1_6,0,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN2)
+        {
+            Max31790_Pwm_Set(&Fan1_6,1,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN3)
+        {
+            Max31790_Pwm_Set(&Fan1_6,2,PWM);
+        }        
+        else if(p->key_id == DPK_SETFAN_FAN4)
+        {
+            Max31790_Pwm_Set(&Fan1_6,3,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN5)
+        {
+            Max31790_Pwm_Set(&Fan1_6,4,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN6)
+        {
+            Max31790_Pwm_Set(&Fan1_6,5,PWM);
+        }
 
+        
+        else if(p->key_id == DPK_SETFAN_FAN7)
+        {
+           Max31790_Pwm_Set(&Fan7_12,0,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN8)
+        {
+            Max31790_Pwm_Set(&Fan7_12,1,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN9)
+        {
+            Max31790_Pwm_Set(&Fan7_12,2,PWM);
+        }        
+        else if(p->key_id == DPK_SETFAN_FAN10)
+        {
+            Max31790_Pwm_Set(&Fan7_12,3,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN11)
+        {
+            Max31790_Pwm_Set(&Fan7_12,4,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN12)
+        {
+            Max31790_Pwm_Set(&Fan7_12,5,PWM);
+        }
+
+        
+        else if(p->key_id == DPK_SETFAN_FAN13)
+        {
+           Max31790_Pwm_Set(&Fan13_18,0,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN14)
+        {
+            Max31790_Pwm_Set(&Fan13_18,1,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN15)
+        {
+            Max31790_Pwm_Set(&Fan13_18,2,PWM);
+        }        
+        else if(p->key_id == DPK_SETFAN_FAN16)
+        {
+            Max31790_Pwm_Set(&Fan13_18,3,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN17)
+        {
+            Max31790_Pwm_Set(&Fan13_18,4,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN18)
+        {
+            Max31790_Pwm_Set(&Fan13_18,5,PWM);
+        }
+
+        
+        else if(p->key_id == DPK_SETFAN_FAN19)
+        {
+           Max31790_Pwm_Set(&Fan19_24,0,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN20)
+        {
+            Max31790_Pwm_Set(&Fan19_24,1,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN21)
+        {
+            Max31790_Pwm_Set(&Fan19_24,2,PWM);
+        }        
+        else if(p->key_id == DPK_SETFAN_FAN22)
+        {
+            Max31790_Pwm_Set(&Fan19_24,3,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN23)
+        {
+            Max31790_Pwm_Set(&Fan19_24,4,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN24)
+        {
+            Max31790_Pwm_Set(&Fan19_24,5,PWM);
+        }
+
+        else if(p->key_id == DPK_SETFAN_FAN25)
+        {
+           Max31790_Pwm_Set(&Fan25_30,0,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN26)
+        {
+            Max31790_Pwm_Set(&Fan25_30,1,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN27)
+        {
+            Max31790_Pwm_Set(&Fan25_30,2,PWM);
+        }        
+        else if(p->key_id == DPK_SETFAN_FAN28)
+        {
+            Max31790_Pwm_Set(&Fan25_30,3,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN29)
+        {
+            Max31790_Pwm_Set(&Fan25_30,4,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN30)
+        {
+            Max31790_Pwm_Set(&Fan25_30,5,PWM);
+        }
+
+        else if(p->key_id == DPK_SETFAN_FAN31)
+        {
+           Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,0,PWM);
+        }
+        else if(p->key_id == DPK_SETFAN_FAN32)
+        {
+            Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,1,PWM);
+        }
+
+     
+        #if 0
         if(p->key_id == DPK_SETFAN_FAN1)
         {
             Max31790_Pwm_Set(&Fan25_30,0,PWM);
@@ -190,6 +338,8 @@ void On_Set_SetFan(pONE_ELEMENT p)
             Max31790_Pwm_Set(&Fan25_30,5,PWM);
             Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,0,PWM);
         }
+        #endif
+        
     }
 }
 

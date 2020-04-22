@@ -42,17 +42,7 @@ xTaskHandle g_xTaskHandle_led = NULL;
 int led_speed=0;
 
 
-static int Uart7_Send_Buf(uint8_t* buf,int len)
-{
-    int i=0;
 
-    for(i=0;i<len;i++)
-    {
-        huart7.Instance->DR = buf[i];
-        while((huart7.Instance->SR&USART_SR_TXE)==0);
-    }
-    return len;
-}
 
 /*******************************************************************************
 * Function Name  : msg_task
@@ -68,7 +58,6 @@ static portTASK_FUNCTION(led_task, pvParameters)
         while(1)
         {
 
-       //Uart7_Send_Buf(send_buf,9);
         HAL_GPIO_TogglePin(GPIOF,GPIO_PIN_10);
         osDelay(2000-led_speed);
         }

@@ -28,6 +28,7 @@
 #include "stdlib.h"
 #include "string.h"
 #include "stdint.h"
+#include "hardware_version.h"
 
 /* USER CODE END Includes */
 
@@ -210,9 +211,11 @@ int main(void)
     HAL_UART_Receive_IT(&huart5, uart1_recv_buf,50);
     HAL_UART_Receive_IT(&huart8, uart1_recv_buf,50);
     HAL_UART_Receive_IT(&huart7, uart1_recv_buf,50);
+    
+    
+    init_hardware_version();
 
-
-    printf("hello YSW\r\n");
+    printf("HARDWARE VERSION:%d\r\n",get_hardware_version());
     HAL_GPIO_WritePin(GPIOF,GPIO_PIN_10,GPIO_PIN_RESET);
 
     HAL_TIM_Base_Start(&htim1);

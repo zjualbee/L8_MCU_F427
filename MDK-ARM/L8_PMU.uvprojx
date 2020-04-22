@@ -688,6 +688,11 @@
               <FileType>1</FileType>
               <FilePath>..\BSP\i2c_gpio.c</FilePath>
             </File>
+            <File>
+              <FileName>hardware_version.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\hardware_version.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

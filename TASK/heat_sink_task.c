@@ -192,10 +192,16 @@ void Init_Heat_Sink(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
+
+
+
+
+
 static portTASK_FUNCTION(heat_sink_task, pvParameters)
 {
     uint8_t temp=0;
     int i=0;
+    uint8_t recv_rpm[10]={0};
     HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_SET);
     //HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_RESET);
     Init_Heat_Sink();
@@ -211,16 +217,16 @@ static portTASK_FUNCTION(heat_sink_task, pvParameters)
 #if 1
     for(i=0;i < 6;i++)
     {
-    Max31790_Pwm_Set(&Fan1_6,i,300);
-    Max31790_Pwm_Set(&Fan7_12,i,300);
-    Max31790_Pwm_Set(&Fan13_18,i,300);
+    Max31790_Pwm_Set(&Fan1_6,i,511);
+    Max31790_Pwm_Set(&Fan7_12,i,511);
+    Max31790_Pwm_Set(&Fan13_18,i,511);
     }
 #endif
 
     for(i=0;i < 6;i++)
     {
-    Max31790_Pwm_Set(&Fan19_24,i,300);
-    Max31790_Pwm_Set(&Fan25_30,i,300);
+    Max31790_Pwm_Set(&Fan19_24,i,511);
+    Max31790_Pwm_Set(&Fan25_30,i,511);
     }
     
 
@@ -230,9 +236,36 @@ static portTASK_FUNCTION(heat_sink_task, pvParameters)
 
 
 
-   while(1)
+    while(1)
     {
-       osDelay(1000);
+
+        Max31790_Update(&Fan1_6);
+        Max31790_Update(&Fan7_12);
+        Max31790_Update(&Fan13_18);
+        Max31790_Update(&Fan19_24);
+        Max31790_Update(&Fan25_30);
+        Max31790_Update(&Fan31_32_And_Bump1_4);
+
+
+        printf("===========channel  1===============\r\n");
+        print_max31790_fan_rpm(&Fan1_6);
+        
+        printf("===========channel 2===============\r\n");
+        print_max31790_fan_rpm(&Fan7_12);
+        
+        printf("===========channel  3===============\r\n");
+        print_max31790_fan_rpm(&Fan13_18);
+        
+        printf("===========channel  4===============\r\n");
+        print_max31790_fan_rpm(&Fan19_24);
+        
+        printf("===========channel  5===============\r\n");
+        print_max31790_fan_rpm(&Fan25_30);
+        
+        printf("===========pump ===============\r\n");
+        print_max31790_fan_rpm(&Fan31_32_And_Bump1_4);
+
+        osDelay(4000);
     }
 
    
@@ -249,16 +282,6 @@ static portTASK_FUNCTION(heat_sink_task, pvParameters)
     }
 
 
-
-    while(1);
-        {
-        for(i=0;i<255;i++)
-            {
-            HAL_I2C_Master_Transmit(&hi2c2, i, "a", 1,100);
-            HAL_I2C_Master_Transmit(&hi2c1, i, "a", 1,100);
-            }
-            osDelay(2000);
-        }
 }
 
 
