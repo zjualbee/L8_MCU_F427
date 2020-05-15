@@ -889,8 +889,6 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
 
-
-
   /*Configure GPIO pin : PE8  E9*/
   GPIO_InitStruct.Pin = GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
@@ -904,10 +902,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-
   HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_SET);
-
-
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI0_IRQn, 5, 0);
@@ -931,8 +926,6 @@ void StartDefaultTask(void const * argument)
     
   /* USER CODE BEGIN 5 */
   
-
-
 #if 1
     i2c5_init();
     dlp4422_task_create();
