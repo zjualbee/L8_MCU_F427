@@ -645,7 +645,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\appo_lib\at_protocol\at_cmd.c</PathWithFileName>
+      <PathWithFileName>..\protocol\at_protocol\at_cmd.c</PathWithFileName>
       <FilenameWithoutPath>at_cmd.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -657,7 +657,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\appo_lib\at_protocol\at_decode.c</PathWithFileName>
+      <PathWithFileName>..\protocol\at_protocol\at_decode.c</PathWithFileName>
       <FilenameWithoutPath>at_decode.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -669,7 +669,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\appo_lib\at_protocol\at_encode.c</PathWithFileName>
+      <PathWithFileName>..\protocol\at_protocol\at_encode.c</PathWithFileName>
       <FilenameWithoutPath>at_encode.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

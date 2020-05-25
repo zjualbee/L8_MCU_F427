@@ -167,6 +167,7 @@ void On_Set_SetFan(pONE_ELEMENT p)
         {
             PWM = (p->value_int*5);
         }
+				#if 0
         if(p->key_id == DPK_SETFAN_ALL)
         {
             Max31790_Pwm_Set_All(&Fan1_6,PWM);
@@ -313,7 +314,7 @@ void On_Set_SetFan(pONE_ELEMENT p)
         {
             Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,1,PWM);
         }
-
+#endif
      
         #if 0
         if(p->key_id == DPK_SETFAN_FAN1)
