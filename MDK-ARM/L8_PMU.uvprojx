@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F427xx,USE_HAL_DRIVER,STM32F427xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;..\TASK;..\BSP;..\Src;..\..\appo_lib\at_protocol;..\..\appo_lib\at_protocol\gtest;..\vdebug;..\protocol;..\protocol\at_protocol</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;..\TASK;..\BSP;..\Src;..\vdebug;..\protocol;..\protocol\at_protocol;..\protocol\at_protocol\gtest</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -701,7 +701,7 @@
             <File>
               <FileName>at_gtest.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\appo_lib\at_protocol\gtest\at_gtest.c</FilePath>
+              <FilePath>..\protocol\at_protocol\gtest\at_gtest.c</FilePath>
             </File>
           </Files>
         </Group>
