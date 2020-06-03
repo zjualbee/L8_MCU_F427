@@ -115,10 +115,10 @@ static portTASK_FUNCTION(auto_power_task, pvParameters)
 {
     while(1)
 		{
-				Appo_Power_On(2900,2900,0);
-				delay_ms(1000*15);
+				Appo_Set_Current(2900,2900,0);
+				delay_ms(1000*60*30);
 				Appo_Set_Current(0, 0, 0);
-				delay_ms(1000*5);
+				delay_ms(1000*60*250);
 		}
     
 }

@@ -157,12 +157,14 @@ static portTASK_FUNCTION(appo_power_task, pvParameters)
     protocol_power_init();
 
 	//开机小电流设置
+		#if 0
     g_Power_Status.on_off_flag=1;
-	g_Power_Status.current_b=1000;
-	g_Power_Status.current_g=1000;
-	g_Power_Status.current_r=1000;
-	printf("set current light 1000 mA\r\n");
+	  g_Power_Status.current_b=1000;
+	  g_Power_Status.current_g=1000;
+	  g_Power_Status.current_r=1000;
+	  printf("set current light 1000 mA\r\n");
     Appo_Power_Set_Current(&g_Power_Status);
+		#endif
 
     while(1)
         {
