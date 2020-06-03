@@ -134,3 +134,7 @@
 /L8_PMU-1.7z
 /*.mxproject
 /MDK-ARM/*.lst
+/MDK-ARM/*.caoting
+/MDK-ARM/*.appo
+/MDK-ARM/*.scvd
+
