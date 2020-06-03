@@ -648,6 +648,11 @@
               <FileType>1</FileType>
               <FilePath>..\TASK\dlp4422_task.c</FilePath>
             </File>
+            <File>
+              <FileName>auto_power_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TASK\auto_power_task.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

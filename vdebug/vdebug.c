@@ -11,6 +11,26 @@
 int vdebug_buf_len=0;
 uint8_t vdebug_buf[VDEBUG_BUF_LEN]={0};
 
+/*******************************************************************************
+* Function Name  : delay_ms
+* Description    : —” ±,∫¡√Îº∂.
+* Input          : None
+* Output         : None
+* Return         : None
+*******************************************************************************/
+void delay_ms(uint32_t Nms)
+{
+#if 0
+    uint32_t i = 0;
+    
+    while(Nms--)
+    {
+        for (i = 0; i < DELAY_1MS_COUNTER; i++);    // 1ms
+    }
+#else
+    vTaskDelay(Nms / portTICK_RATE_MS);
+#endif
+}
 
 
 void vdebug_buf_in(uint8_t chr)

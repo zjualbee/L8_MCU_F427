@@ -1,49 +1,27 @@
-
-
-
-
-
-
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __V_DEBUG_H__
-#define __V_DEBUG_H__
+#ifndef __AUTO_POWER_TASK_H__
+#define __AUTO_POWER_TASK_H__
 
 /* Includes ------------------------------------------------------------------*/
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
-#include "stdint.h"
-
-#include "main.h"
+#include "stm32f4xx_hal.h"
 #include "cmsis_os.h"
 
+//#include "motor_36V.h"
 
 
-#define VDEBUG_BUF_LEN  50
+uint32_t Appo_Power_On(uint16_t b,uint16_t g,uint16_t r);
+uint32_t Appo_Set_Current(uint16_t b,uint16_t g,uint16_t r);
+
 
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
+/* Exported functions --------------------------------------------------------*/
 
-
-void delay_ms(uint32_t Nms);
-
-
-void print_buf(uint8_t* buf,int len);
-
-void print_buf_c(uint8_t* buf,int len);
-
-
-
-
-
-
+// 建立任务
+portBASE_TYPE auto_power_task_create(void);
 
 #endif
-
-
-
-
-
+/******************* (C) COPYRIGHT 2017 APPOTRONICS ************END OF FILE****/

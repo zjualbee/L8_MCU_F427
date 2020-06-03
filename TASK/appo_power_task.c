@@ -22,6 +22,7 @@
 #include "vdebug.h"
 /* Private typedef -----------------------------------------------------------*/
 #include "appo_power_task.h"
+#include "auto_power_task.h"
 #include "appo_power_protocol.h"
 
 /* Private define ------------------------------------------------------------*/
@@ -123,27 +124,19 @@ uint32_t Appo_Power_Set_Current(pG_POWER_STATUS p)
     printf("R:%d ,G:%d ,B:%d \r\n",p->current_r,p->current_g,p->current_b);
 
     protocol_power_frame_cmd_send_to_uart(0x20,POWER_CMD_ID_ONOFF_POWER,send_buf,7);
-    osDelay(100);
+	osDelay(100);
     protocol_power_frame_cmd_send_to_uart(0x21,POWER_CMD_ID_ONOFF_POWER,send_buf,7);
-    osDelay(100);
+	osDelay(100);
     protocol_power_frame_cmd_send_to_uart(0x22,POWER_CMD_ID_ONOFF_POWER,send_buf,7);
+	osDelay(100);
 
     return 0;
 }
 
 
 
-
-
-
-
-
-
-
-
-
 /*******************************************************************************
-* Function Name  : msg_task
+* Function Name  : appo_power_task
 * Description    : 任务处理入口
 * Input          : None
 * Output         : None
@@ -162,8 +155,14 @@ static portTASK_FUNCTION(appo_power_task, pvParameters)
     //uint8_t send_buf[20]={0x5a ,0x20 ,0x00 ,0x00 ,0x22 ,0x07 ,0xe1 ,0xC4 ,0x09,0xC4,0x09,0xF2,0xB1,0x70};
     //  5a 20 00 00 22 07 01 C4 09 C4 09 C4 09 f2 b1 70
     protocol_power_init();
-   
 
+	//开机小电流设置
+    g_Power_Status.on_off_flag=1;
+	g_Power_Status.current_b=1000;
+	g_Power_Status.current_g=1000;
+	g_Power_Status.current_r=1000;
+	printf("set current light 1000 mA\r\n");
+    Appo_Power_Set_Current(&g_Power_Status);
 
     while(1)
         {
@@ -171,14 +170,7 @@ static portTASK_FUNCTION(appo_power_task, pvParameters)
         xQueueReceive(Q_Power_Ack,cmd_ack_buf,portMAX_DELAY);
 
         print_frame(pframe);
-
-
-        //printf("Recv Ack\r\n");
         }
-
-
-
-
 
     while(1)
     {
