@@ -115,10 +115,12 @@ static portTASK_FUNCTION(auto_power_task, pvParameters)
 {
     while(1)
 		{
-				Appo_Set_Current(2900,2900,0);
+			   HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
+				Appo_Power_On(2900,2900,0);
 				delay_ms(1000*60*30);
 				Appo_Set_Current(0, 0, 0);
-				delay_ms(1000*60*250);
+				delay_ms(1000*60*90);
+				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 		}
     
 }
