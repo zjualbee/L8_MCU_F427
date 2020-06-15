@@ -3,7 +3,7 @@
 #include "io_defined.h"
 #include "stm32f0xx_hal.h"
 
-DECODE_TABLE Decode_Signal;
+DECODE_TABLE Decode_PMU;
 DECODE_TABLE Decode_DLP;
 
 //---------------------------------------------------------------------------------------------------

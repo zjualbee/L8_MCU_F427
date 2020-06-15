@@ -9,6 +9,8 @@ uint8_t Route_Len2[4] = {0};
 uint8_t Route_RxBuffer1[30] = {0};
 uint8_t Route_RxBuffer2[30] = {0};
 
+uint16_t g_CurrentValue=1000;
+
 /*开机标志*/
 uint8_t PC_POWER_FLAG = 0;
 
@@ -69,38 +71,35 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
 //	Route_Len2[2] = 0;
 //	Route_Len2[3] = 17;
    // memcpy(Route_RxBuffer2,decode_table->cmd_buf,128);
-	MCU_IRQ_ON;
+	//MCU_IRQ_ON;
 
     return len+7;
 
 }
 
-int On_Set_Power_Ctr(pPower_Ctr p)
+
+
+int On_Set_Current_Ctr(pCurrent_Ctr p)
 {
-    pPower_Ctr temp={0};
-	temp.command=D_POWER_W_CTR_CMD;
-	temp.current_b=CURRENT_B;
-	temp.current_g=CURRENT_G;
-	temp.current_r=CURRENT_R;
-	g_Power_Status.current_r = temp.current_r;
-    g_Power_Status.current_g = temp.current_g;
-    g_Power_Status.current_b = temp.current_b;
+   // pCurrent_Ctr temp={0};
+	//temp.command=D_POWER_W_CTR_CMD;
+
+    g_Power_Status.on_off_flag=1;
+	g_Power_Status.current_r = g_CurrentValue;
+    g_Power_Status.current_g = g_CurrentValue;
+    g_Power_Status.current_b = g_CurrentValue;
     Appo_Power_Set_Current(&g_Power_Status);
 
-    L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,POWER_CTR_CNT);
+    //L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,POWER_CTR_CNT);
 
     return 0;
 }
 
-int On_Get_Power_Ctr(pPower_Ctr p)
+int On_Get_Current_Ctr()
 {
-    pPower_Ctr temp={0};
-	temp.command=D_POWER_R_CTR_CMD;
-	temp.current_b=g_Power_Status.current_b;
-	temp.current_g=g_Power_Status.current_g;
-	temp.current_r=g_Power_Status.current_r;
+    
 	
-	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,POWER_CTR_CNT);
+	//L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,POWER_CTR_CNT);
 	return 0;
 }
 
@@ -165,19 +164,38 @@ void Do_Message(pDECODE_TABLE decode_table)
             cmd = (decode_table->cmd_buf[8]<<8) |decode_table->cmd_buf[9];
 
 			recv = &(p->packet_route_from);
-			
          //   printf("CMD:%04X\r\n",cmd);
             
-			if(to == UART_ADDR_ANDROID)
+			if(to == UART_ADDR_DLP)
 			{
-				Route_Len1[2] = decode_table->cmd_buf[2];
-				Route_Len1[3] = decode_table->cmd_buf[3];
-			    memcpy(Route_RxBuffer1,decode_table->cmd_buf,128);
-				//MCU_IRQ_ON;
+				Do_Pmu_Route((pCMD_PACKET)decode_table->cmd_buf, len);
+			  
 			}
-			else if(to == UART_ADDR_PC)
+			else if(to == UART_ADDR_PMU)
 			{
                Do_Pmu_Route((pCMD_PACKET)decode_table->cmd_buf, len);
+			}
+			else if(to == UART_ADDR_MCU)
+			{
+                switch(cmd)
+                {
+                    case D_CURRENT_W_CTR_CMD:
+                    {
+                         uint8_t current_h, current_l;
+						 current_h = decode_table->cmd_buf[10];	
+					     current_l = decode_table->cmd_buf[11];
+						 g_CurrentValue = current_h*1000+current_l*10;
+						 On_Set_Current_Ctr((pCurrent_Ctr)recv);
+                        break;		
+                    }
+					case D_CURRENT_R_CTR_CMD:
+                    {
+						 On_Get_Current_Ctr();
+                        break;		
+                    }
+					default:
+                    break;
+                }
 			}
 			
 			HAL_Delay(1);

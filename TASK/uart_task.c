@@ -81,8 +81,8 @@ static portTASK_FUNCTION(uart_task, pvParameters)
         At_Analyze_Handle(&at_decode);
         osDelay(1);
 
-		Decode_Handle(&Decode_Signal);		
-	    Do_Message(&Decode_Signal);
+		Decode_Handle(&Decode_PMU);		
+	    Do_Message(&Decode_PMU);
 		
 		Decode_Handle(&Decode_DLP);		
 	    Do_Message(&Decode_DLP);

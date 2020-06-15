@@ -9,23 +9,23 @@
 #include "io_defined.h"
 
 //分段电流设置
-#define D_POWER_W_CTR_CMD  0x0803
-#define D_POWER_R_CTR_CMD  0x8803
+#define D_CURRENT_W_CTR_CMD  0x0803
+#define D_CURRENT_R_CTR_CMD  0x8803
 #define CURRENT_B 1000
 #define CURRENT_G 1000
 #define CURRENT_R 1000
-#define POWER_CTR_CNT 10
+#define CURRENT_CTR_CNT 10
+extern uint16_t g_CurrentValue;
 
-typedef struct tag_POWER_CTR
+typedef struct tag_CURRENT_CTR
 {
     uint8_t route_from;
     uint8_t route_to; 
-
-    uint16_t  command;
+    uint16_t command;
     uint16_t current_r;
     uint16_t current_g;
     uint16_t current_b; 
-}POWER_CTR, *pPower_Ctr;
+}CURRENT_CTR, *pCurrent_Ctr;
 
 
 

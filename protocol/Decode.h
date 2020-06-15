@@ -15,11 +15,11 @@
 #endif
 
 #define UART_ADDR_DLP   0X1
-#define UART_ADDR_PMU	0X2
+#define UART_ADDR_PMU	0X2  //730
 #define UART_ADDR_IDU	0X4
 #define UART_ADDR_PC	0X8	
-#define UART_ADDR_ANDROID	0X9
-#define UART_ADDR_MCU	0X0E
+#define UART_ADDR_MCU	0X0E //427
+#define UART_ADDR_IMX8	0X11 //imx8
 
 #define RECV_CHANNEL_A 1
 #define RECV_CHANNEL_B 0
@@ -70,7 +70,7 @@ typedef struct tag_CMD_PACKET
    //uint8_t   packet_check;
 }CMD_PACKET,*pCMD_PACKET;
 
-extern DECODE_TABLE Decode_Signal;
+extern DECODE_TABLE Decode_PMU;
 extern DECODE_TABLE Decode_DLP;
 
 #pragma pack ()

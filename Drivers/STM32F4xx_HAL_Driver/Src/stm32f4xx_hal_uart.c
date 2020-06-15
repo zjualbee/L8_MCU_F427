@@ -3003,7 +3003,7 @@ static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
 
    if(huart->Instance == USART1)
     {
-        ppfifo_in(&Decode_Signal,&temp,1);
+        ppfifo_in(&Decode_PMU,&temp,1);
 		ppfifo_in(&Decode_DLP,&temp,1);
         At_Fifo_In(&at_decode,temp);
     }
