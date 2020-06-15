@@ -53,7 +53,7 @@ extern "C" {
 #include "tec_task.h"
 #include "uart_task.h"
 #include "appo_power_task.h"
-#include "5aa5_task.h"
+#include "5AA5_task.h"
 #include "dlp4422_task.h"
 #include "i2c5.h"
 

@@ -937,7 +937,6 @@ void StartDefaultTask(void const * argument)
     temprature_task_create();
     tec_task_create();
 	  auto_power_task_create();
-	  5AA5_task_create();
 #else
     led_task_create();
     uart_task_create();

@@ -25,6 +25,10 @@
 #include "uart_task.h"
 #include "do_msg.h"
 #include "at_gtest.h"
+
+#include "Decode.h"
+#include "Do_message.h"
+
 /* Private define ------------------------------------------------------------*/
 
 // 任务参数
@@ -76,6 +80,12 @@ static portTASK_FUNCTION(uart_task, pvParameters)
     {
         At_Analyze_Handle(&at_decode);
         osDelay(1);
+
+		Decode_Handle(&Decode_Signal);		
+	    Do_Message(&Decode_Signal);
+		
+		Decode_Handle(&Decode_DLP);		
+	    Do_Message(&Decode_DLP);
     }
 
 

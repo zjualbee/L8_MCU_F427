@@ -11,7 +11,10 @@
 //分段电流设置
 #define D_POWER_W_CTR_CMD  0x0803
 #define D_POWER_R_CTR_CMD  0x8803
-
+#define CURRENT_B 1000
+#define CURRENT_G 1000
+#define CURRENT_R 1000
+#define POWER_CTR_CNT 10
 
 typedef struct tag_POWER_CTR
 {
@@ -30,10 +33,5 @@ void Do_Message(pDECODE_TABLE decode_table);
 
 int Do_Pmu_Route(pCMD_PACKET p,uint16_t len);
 
-int Do_Key_Cmd(void);
-
-int Do_Ir_Cmd(void);
-
-void Check_12V_Status(void);
 
 #endif

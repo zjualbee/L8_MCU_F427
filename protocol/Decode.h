@@ -70,8 +70,8 @@ typedef struct tag_CMD_PACKET
    //uint8_t   packet_check;
 }CMD_PACKET,*pCMD_PACKET;
 
-extern DECODE_TABLE Decode_PC;
-extern DECODE_TABLE Decode_Android;
+extern DECODE_TABLE Decode_Signal;
+extern DECODE_TABLE Decode_DLP;
 
 #pragma pack ()
 

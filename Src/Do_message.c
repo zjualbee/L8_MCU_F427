@@ -1,6 +1,7 @@
 #include "Do_message.h"
 #include "Decode.h"
 #include "io_defined.h"
+#include "appo_power_task.h"
 
 uint8_t power_st = 0;
 uint8_t Route_Len1[4] = {0};
@@ -74,22 +75,34 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
 
 }
 
-int On_Power_Ctr(pPower_Ctr p)
+int On_Set_Power_Ctr(pPower_Ctr p)
 {
     pPower_Ctr temp={0};
 	temp.command=D_POWER_W_CTR_CMD;
+	temp.current_b=CURRENT_B;
+	temp.current_g=CURRENT_G;
+	temp.current_r=CURRENT_R;
+	g_Power_Status.current_r = temp.current_r;
+    g_Power_Status.current_g = temp.current_g;
+    g_Power_Status.current_b = temp.current_b;
+    Appo_Power_Set_Current(&g_Power_Status);
 
-    temp.command = D_MCU_VERSION_CMD;
-    temp.version_h = VERSION_MAIN;
-    temp.version_l = VERSION_SLAVE;
-	temp.version_buildtime = VERSION_BUILDTIME;
-
-
-    E8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,MCU_GET_VERSION_CNT);
+    L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,POWER_CTR_CNT);
 
     return 0;
 }
 
+int On_Get_Power_Ctr(pPower_Ctr p)
+{
+    pPower_Ctr temp={0};
+	temp.command=D_POWER_R_CTR_CMD;
+	temp.current_b=g_Power_Status.current_b;
+	temp.current_g=g_Power_Status.current_g;
+	temp.current_r=g_Power_Status.current_r;
+	
+	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,POWER_CTR_CNT);
+	return 0;
+}
 
 
 
@@ -97,7 +110,8 @@ int Do_Pmu_Route(pCMD_PACKET p,uint16_t len)
 {
     if(p->packet_route_to==UART_ADDR_PC)
 	{	 	 
-		UART_Transmit(&huart1,(uint8_t*)p,len);
+		//UART_Transmit(&huart1,(uint8_t*)p,len);
+		HAL_UART_Transmit(&huart1,(uint8_t*)p,len);
 	}
 	
 	return 0;		
@@ -107,7 +121,7 @@ int Do_Pmu_Route(pCMD_PACKET p,uint16_t len)
 void Do_Message(pDECODE_TABLE decode_table)
 {
     static int x=1;
-	  void * recv = 0;
+	void * recv = 0;
 	
     if(decode_table->cmd_flag == 1)
         {
@@ -146,153 +160,20 @@ void Do_Message(pDECODE_TABLE decode_table)
 						//pCMD_PACKET recv = (pCMD_PACKET)(decode_table->cmd_buf);
 						//Do_Idu_Route(recv,decode_table->cmd_len);
             
-            // C  M  D
+            //CMD
             uint16_t cmd=0;
             cmd = (decode_table->cmd_buf[8]<<8) |decode_table->cmd_buf[9];
 
 			recv = &(p->packet_route_from);
 			
          //   printf("CMD:%04X\r\n",cmd);
-            if(to == UART_ADDR_MCU)
-			{
-                switch(cmd)
-                {
-                    case D_PC_POWER_CTR:
-                    {
-						if(decode_table->cmd_buf[10] == 1)
-						{ 
-							 PC_POWER_FLAG = 1;
-//							 if(Normal_Mode == 0)
-//							 {
-//								 W_Flash_Power_ON = 0;
-//                 W_FLASH_StandbyTim = StandbyTim;
-//								 writeFlash();
-//								 readFlash();
-//							 }
-//                             else;												 
-						}
-						else if(decode_table->cmd_buf[10] == 0)
-						{
-						   PowerOff_5V_Flag = 1;
-						   PowerOff_5V_CNT = decode_table->cmd_buf[11]<<24 | decode_table->cmd_buf[12]<<16 | decode_table->cmd_buf[13]<<8 | decode_table->cmd_buf[14];
-						   readFlash();
-						   W_Flash_NormalPowerOff = 1;
-						   if(StandbyFlag_CTR == 1)
-						   {
-								W_Flash_Power_CTR = 1;
-								HAL_Delay(50);
-								writeFlash();
-								HAL_Delay(50);
-						   }
-						   else
-						   {
-								W_Flash_Power_CTR = 0xff;
-								HAL_Delay(50);
-								writeFlash();
-								HAL_Delay(50);
-						   }			
-						  // readFlash();
-						}
-                        break;
-                    }
-					case D_HeartBeat_CTR:
-					{
-//						W_FLASH_StandbyTim = 0x5ff;
-                    	if(decode_table->cmd_buf[10] == 1)
-						{
-						   printf("HB_ON\r\n");
-						   W_Flash_Heartbeat_CTR = 1;
-						 //  W_FLASH_StandbyTim = StandbyTim;
-						   writeFlash();
-						   readFlash();						  
-						}
-					    else
-						{
-													printf("HB_OFF\r\n");
-						   W_Flash_Heartbeat_CTR = 0xff;
-							// W_FLASH_StandbyTim = StandbyTim;
-						   writeFlash();
-						   readFlash();	
-						}	
-						HeartBeatflag = 0;
-						HeartBeat_CNT = decode_table->cmd_buf[11]<<24 | decode_table->cmd_buf[12]<<16 | decode_table->cmd_buf[13]<<8 | decode_table->cmd_buf[14];   
-      //      printf("CMD:%04X\r\n",HeartBeat_CNT);						
-						break;
-					}
-				    case D_Android_POWER_12V_CTR:
-            {
-						if(decode_table->cmd_buf[10] == 1)
-							{
-							   V12_POWER_ON;
-							   V12_Start_Flag = 1;
-								 
-                 printf("V12_POWER_ON\r\n");
-						}
-						else
-							{
-							   V12_POWER_OFF;
-							   V12_Start_Flag = 0;
-								
-							   printf("V12_POWER_OFF\r\n");
-							}
-					    power_st = 0;				
-						
-                        break;
-            }
-					case D__POWER_ON_BOOT_CTR:
-                    {
-						W_Flash_Power_CTR = decode_table->cmd_buf[10];
-					//	W_FLASH_StandbyTim = StandbyTim;
-						writeFlash();
-						readFlash();
-						if(StandbyFlag_CTR == 1)
-						{
-							 W_Flash_Power_ON = 1;
-						//	 W_FLASH_StandbyTim = StandbyTim;
-							 writeFlash();
-						}
-						else
-						{
-							 W_Flash_Power_ON = 0xff;
-					//		 W_FLASH_StandbyTim = StandbyTim;
-							 writeFlash();
-						}	
-                        break;
-                    }
-					
-					case D_MCU_GET_VERSION:
-                    {
-						OnMCU_GET_VERSION((pMCU_GET_VERSION)recv);
-                        break;
-                    }	
-                    
-                    case D_MCU_GET_STANDBYTIM:
-                    {
-						OnMCU_GET_STANDBYTIM((pMCU_GET_STANDBYTIM)recv);
-                        break;
-                    }
-                    case D_LED_STATE_CTR:
-                    {
-						if(decode_table->cmd_buf[10] == 1)
-						{
-                            LED_ON;
-						}
-						if(decode_table->cmd_buf[10] == 0)
-						{
-                            LED_OFF;
-						}						
-                        break;
-                    }
-                    default:
-                    break;
-                }
-			}
-			else if(to == UART_ADDR_ANDROID)
+            
+			if(to == UART_ADDR_ANDROID)
 			{
 				Route_Len1[2] = decode_table->cmd_buf[2];
 				Route_Len1[3] = decode_table->cmd_buf[3];
 			    memcpy(Route_RxBuffer1,decode_table->cmd_buf,128);
-				MCU_IRQ_ON;
+				//MCU_IRQ_ON;
 			}
 			else if(to == UART_ADDR_PC)
 			{

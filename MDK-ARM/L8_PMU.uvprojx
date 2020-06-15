@@ -413,6 +413,11 @@
               <FileType>1</FileType>
               <FilePath>../Src/stm32f4xx_hal_msp.c</FilePath>
             </File>
+            <File>
+              <FileName>Do_message.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\Do_message.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -727,6 +732,11 @@
               <FileName>appo_power_protocol.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\protocol\appo_power_protocol.c</FilePath>
+            </File>
+            <File>
+              <FileName>Decode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\Decode.c</FilePath>
             </File>
           </Files>
         </Group>

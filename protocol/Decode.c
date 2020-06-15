@@ -3,8 +3,8 @@
 #include "io_defined.h"
 #include "stm32f0xx_hal.h"
 
-DECODE_TABLE Decode_PC;
-DECODE_TABLE Decode_Android;
+DECODE_TABLE Decode_Signal;
+DECODE_TABLE Decode_DLP;
 
 //---------------------------------------------------------------------------------------------------
 //      chr        : ???????????(???FIFO???????)
