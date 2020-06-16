@@ -28,6 +28,9 @@
 #define DEVICE_ID_POWER2    (0x21)
 #define DEVICE_ID_POWER3    (0x22)
 
+#define LD_MAX 18
+uint16_t power_current[LD_MAX];
+
 
 
 /* Private variables ---------------------------------------------------------*/
@@ -127,12 +130,20 @@ uint32_t onoff_laser_off()
 
 uint32_t laser_current_get()
 {
+    
+	uint16_t i=0;
     g_power1.laser_current_update(&g_power1);
+	for (i = 0; i < POWER_CURRENT_USER; i++)
+            power_current[i] = g_power1.laser_current[i];
 	#if POWER2_EN
-	g_power1.laser_current_update(&g_power1);
+	g_power2.laser_current_update(&g_power2);
+	for (i = 6; i < POWER_CURRENT_USER; i++)
+            power_current[i] = g_power2.laser_current[i];
 	#endif
 	#if POWER3_EN
-	g_power1.laser_current_update(&g_power1);
+	g_power3.laser_current_update(&g_power3);
+	for (i = 12; i < POWER_CURRENT_USER; i++)
+            power_current[i] = g_power3.laser_current[i];
 	#endif
 	return 1;
 }

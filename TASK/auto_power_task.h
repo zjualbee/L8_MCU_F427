@@ -8,6 +8,7 @@
 #include "cmsis_os.h"
 
 //#include "motor_36V.h"
+extern uint16_t power_current[LD_MAX];
 
 
 //uint32_t Appo_Power_On(uint16_t b,uint16_t g,uint16_t r);

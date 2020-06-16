@@ -33,17 +33,17 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
     Route_RxBuffer2[5]   = 0;
     Route_RxBuffer2[6]   = route_from;
     Route_RxBuffer2[7]   = route_to;	
-	#if 0
-	if(len == 10)
+	
+	if(len == 40)
 	{
 	    Route_RxBuffer2[8]   = (D_MCU_VERSION_CMD&0xff00)>>8;
         Route_RxBuffer2[9]   = (D_MCU_VERSION_CMD&0xff);
-	    Route_RxBuffer2[10]  = VERSION_MAIN;
-	    Route_RxBuffer2[11]  = VERSION_SLAVE;
-	    Route_RxBuffer2[12]  = (VERSION_BUILDTIME&0xff000000)>>24;	
-	    Route_RxBuffer2[13]  = (VERSION_BUILDTIME&0x00ff0000)>>16;    
-		Route_RxBuffer2[14]  = (VERSION_BUILDTIME&0x0000ff00)>>8;
-	    Route_RxBuffer2[15]  = (VERSION_BUILDTIME&0x000000ff);	
+	    int i=0;
+		for(i=0;i<18;i++)
+		{
+		    Route_RxBuffer2[10+i*2] = (buf[i]&0xff)>>8;
+			Route_RxBuffer2[10+i*2+1] = (buf[i]&0xff);
+		}
 	   // sum_byte=Make_EB90_Sum_Ext(0,(unsigned char *)&send_packet,len);    
 	   sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&Route_RxBuffer2,len+7-1);    
 	 //  sum_byte=Make_5AA5_Sum_Ext(sum_byte,buf+2,len-2);    
@@ -52,6 +52,7 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
 	   //sum_byte=0;
 	    Route_RxBuffer2[16]   = sum_byte;
 	}
+	#if 0
 	else if (len == 8)
 	{
 	    Route_RxBuffer2[8]   = (D_MCU_STANDBYTIM_CMD&0xff00)>>8;
@@ -89,17 +90,22 @@ int On_Set_Current_Ctr()
 
     onoff_laser_on(g_CurrentValue, g_CurrentValue, g_CurrentValue);
     
-
-    //L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,POWER_CTR_CNT);
+    L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,POWER_CTR_CNT);
 
     return 0;
 }
 
-int On_Get_Current_Ctr()
+int On_Get_Current_Ctr(pPOWER_GET_CURRENT p)
 {
-    
 	laser_current_get();
-	//L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,POWER_CTR_CNT);
+
+    POWER_GET_CURRENT temp={0};
+	temp.command = D_CURRENT_R_CTR_CMD;
+	uint16_t int =0;
+	for(i=0;i<18;i++)
+	   temp.p_current[i] = power_current[i];
+	
+	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,D_CURRENT_GET_CNT);
 	return 0;
 }
 
