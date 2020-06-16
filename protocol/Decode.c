@@ -1,7 +1,5 @@
 #include "Decode.h"
-#include "motor_cmd.h"
 #include "io_defined.h"
-#include "stm32f0xx_hal.h"
 
 DECODE_TABLE Decode_PMU;
 DECODE_TABLE Decode_DLP;

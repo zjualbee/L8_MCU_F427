@@ -7,8 +7,10 @@
 #include "vdebug.h"
 /* Private typedef -----------------------------------------------------------*/
 #include "auto_power_task.h"
-#include "appo_power_task.h"
+#include "power_cmd_task.h"
 #include "appo_power_protocol.h"
+#include "io_defined.h"
+#include "power.h"
 
 /* Private define ------------------------------------------------------------*/
 
@@ -20,6 +22,11 @@
 
 
 #define POWER_ACK_BUF_SIZE  260
+// **************** 设备ID ****************
+#define POWER_CTRL_STM32    (0x01)
+#define DEVICE_ID_POWER1    (0x20)
+#define DEVICE_ID_POWER2    (0x21)
+#define DEVICE_ID_POWER3    (0x22)
 
 
 
@@ -30,21 +37,7 @@ xTaskHandle g_xTaskHandle_auto_power = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-
-
-static int Uart7_Send_Buf(uint8_t* buf,int len)
-{
-    int i=0;
-
-    for(i=0;i<len;i++)
-    {
-        huart7.Instance->DR = buf[i];
-        while((huart7.Instance->SR&USART_SR_TXE)==0);
-    }
-    return len;
-}
-
-
+#if 0
 uint32_t Appo_Power_On(uint16_t b,uint16_t g,uint16_t r)
 {
     uint8_t param[POWER_MAX_PARAM_LEN] = {0};
@@ -102,8 +95,47 @@ uint32_t Appo_Set_Current(uint16_t b,uint16_t g,uint16_t r)
 	return 1;
 
 }
+#endif
+uint32_t onoff_laser_on(uint16_t b,uint16_t g,uint16_t r)
+{
+	POWER_ON;
 
+    g_power1.power_on(&g_power1,b,g,r,0,0);
+	#if POWER2_EN
+	g_power2.power_on(&g_power2,b,g,r,0,0);
+	#endif
+	#if POWER3_EN
+	g_power3.power_on(&g_power3,b,g,r,0,0);
+	#endif
 
+	return 1;
+}
+
+uint32_t onoff_laser_off()
+{
+	g_power1.power_off(&g_power1);
+	#if POWER2_EN
+	g_power2.power_off(&g_power2);
+	#endif
+	#if POWER3_EN
+	g_power3.power_off(&g_power3);
+	#endif
+
+	POWER_OFF;
+	return 1;
+}
+
+uint32_t laser_current_get()
+{
+    g_power1.laser_current_update(&g_power1);
+	#if POWER2_EN
+	g_power1.laser_current_update(&g_power1);
+	#endif
+	#if POWER3_EN
+	g_power1.laser_current_update(&g_power1);
+	#endif
+	return 1;
+}
 /*******************************************************************************
 * Function Name  : msg_task
 * Description    : 任务处理入口
@@ -113,14 +145,51 @@ uint32_t Appo_Set_Current(uint16_t b,uint16_t g,uint16_t r)
 *******************************************************************************/
 static portTASK_FUNCTION(auto_power_task, pvParameters)
 {
-    while(1)
-		{
-			    HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
-				Appo_Power_On(2900,2900,0);
-				delay_ms(1000*60*30);
-				Appo_Set_Current(0, 0, 0);
-				delay_ms(1000*60*90);
-				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+	    int i = 0;
+		int index = 0;
+		uint32_t tick_cur = xTaskGetTickCount();
+		uint32_t tick_last = xTaskGetTickCount();
+		//struct_LightFrame frame_light = {0};
+
+		power_init(&g_power1, DEVICE_ID_POWER1);
+        #ifdef POWER2_EN
+		power_init(&g_power2, DEVICE_ID_POWER2);
+        #endif
+		#ifdef POWER3_EN
+		power_init(&g_power3, DEVICE_ID_POWER3);
+        #endif
+		power_cmd_task_create();
+        
+		while(1){
+			delay_ms(100);
+
+			tick_cur = xTaskGetTickCount();
+			if ((tick_cur>tick_last) && ((tick_cur-tick_last)>=1000)){
+				tick_last = xTaskGetTickCount();
+	        #ifdef POWER_CTRL_STM32
+				g_power1.power_read_ver(&g_power1);
+				g_power1.laser_current_update(&g_power1);
+				g_power1.fan_speed_update(&g_power1);
+				g_power1.power_temp_update(&g_power1);
+	        #ifdef POWER2_EN
+				g_power2.power_read_ver(&g_power2);
+				g_power2.laser_current_update(&g_power2);
+				g_power2.fan_speed_update(&g_power2);
+				g_power2.power_temp_update(&g_power2);
+	        #endif
+			#ifdef POWER2_EN
+				g_power3.power_read_ver(&g_power3);
+				g_power3.laser_current_update(&g_power3);
+				g_power3.fan_speed_update(&g_power3);
+				g_power3.power_temp_update(&g_power3);
+	        #endif
+	        #endif
+
+			onoff_laser_on(2900,2900,2900);
+			delay_ms(1000*5);
+			onoff_laser_off();
+			delay_ms(1000*10);
+			}
 		}
     
 }

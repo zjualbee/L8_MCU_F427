@@ -1,7 +1,8 @@
 #include "Do_message.h"
 #include "Decode.h"
 #include "io_defined.h"
-#include "appo_power_task.h"
+#include "main.h"
+#include "auto_power_task.h"
 
 uint8_t power_st = 0;
 uint8_t Route_Len1[4] = {0};
@@ -32,6 +33,7 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
     Route_RxBuffer2[5]   = 0;
     Route_RxBuffer2[6]   = route_from;
     Route_RxBuffer2[7]   = route_to;	
+	#if 0
 	if(len == 10)
 	{
 	    Route_RxBuffer2[8]   = (D_MCU_VERSION_CMD&0xff00)>>8;
@@ -66,6 +68,7 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
 	   //sum_byte=0;
 	    Route_RxBuffer2[14]   = sum_byte;	
 	}
+	#endif
 	Route_Len2[2] = ((len+7)&0xff00)>>8;
 	Route_Len2[3] = ((len+7)&0xff);
 //	Route_Len2[2] = 0;
@@ -79,16 +82,13 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
 
 
 
-int On_Set_Current_Ctr(pCurrent_Ctr p)
+int On_Set_Current_Ctr()
 {
    // pCurrent_Ctr temp={0};
 	//temp.command=D_POWER_W_CTR_CMD;
 
-    g_Power_Status.on_off_flag=1;
-	g_Power_Status.current_r = g_CurrentValue;
-    g_Power_Status.current_g = g_CurrentValue;
-    g_Power_Status.current_b = g_CurrentValue;
-    Appo_Power_Set_Current(&g_Power_Status);
+    onoff_laser_on(g_CurrentValue, g_CurrentValue, g_CurrentValue);
+    
 
     //L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,POWER_CTR_CNT);
 
@@ -98,7 +98,7 @@ int On_Set_Current_Ctr(pCurrent_Ctr p)
 int On_Get_Current_Ctr()
 {
     
-	
+	laser_current_get();
 	//L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,POWER_CTR_CNT);
 	return 0;
 }
@@ -110,7 +110,7 @@ int Do_Pmu_Route(pCMD_PACKET p,uint16_t len)
     if(p->packet_route_to==UART_ADDR_PC)
 	{	 	 
 		//UART_Transmit(&huart1,(uint8_t*)p,len);
-		HAL_UART_Transmit(&huart1,(uint8_t*)p,len);
+		HAL_UART_Transmit(&huart1,(uint8_t*)p,len, 100);
 	}
 	
 	return 0;		
@@ -185,13 +185,13 @@ void Do_Message(pDECODE_TABLE decode_table)
 						 current_h = decode_table->cmd_buf[10];	
 					     current_l = decode_table->cmd_buf[11];
 						 g_CurrentValue = current_h*1000+current_l*10;
-						 On_Set_Current_Ctr((pCurrent_Ctr)recv);
+						 On_Set_Current_Ctr();
                         break;		
                     }
 					case D_CURRENT_R_CTR_CMD:
                     {
 						 On_Get_Current_Ctr();
-                        break;		
+                         break;		
                     }
 					default:
                     break;

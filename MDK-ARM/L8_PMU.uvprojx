@@ -418,6 +418,16 @@
               <FileType>1</FileType>
               <FilePath>..\Src\Do_message.c</FilePath>
             </File>
+            <File>
+              <FileName>power.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\power.c</FilePath>
+            </File>
+            <File>
+              <FileName>power_cmd_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\power_cmd_task.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

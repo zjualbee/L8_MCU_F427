@@ -1,11 +1,4 @@
-
-
-
-
-
 #include "vdebug.h"
-
-
 
 
 int vdebug_buf_len=0;
@@ -52,6 +45,32 @@ uint32_t vdebug_buf_handle(void)
     }
 }
 
+/*******************************************************************************
+* Function Name  : bubble_sort
+* Description    : 冒泡算法,冒泡完成后数据排列小在前大在后
+* Input          : None
+* Output         : None
+* Return         : None
+*******************************************************************************/
+void bubble_sort(int *pData, unsigned int Count) 
+{ 
+    int iTemp = 0; 
+    unsigned int i = 0;
+    unsigned int j = 0;
+
+    if (NULL == pData)
+        return;
+    
+    for(i = 1; i < Count;i++) { 
+        for(j = Count - 1; j >= i; j--) { 
+            if(pData[j] < pData[j-1]) { 
+                iTemp = pData[j-1]; 
+                pData[j-1] = pData[j]; 
+                pData[j] = iTemp; 
+            } 
+        } 
+    } 
+}
 
 
 

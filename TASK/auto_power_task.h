@@ -4,13 +4,14 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx.h"
 #include "cmsis_os.h"
 
 //#include "motor_36V.h"
 
 
-uint32_t Appo_Power_On(uint16_t b,uint16_t g,uint16_t r);
-uint32_t Appo_Set_Current(uint16_t b,uint16_t g,uint16_t r);
+//uint32_t Appo_Power_On(uint16_t b,uint16_t g,uint16_t r);
+//uint32_t Appo_Set_Current(uint16_t b,uint16_t g,uint16_t r);
 
 
 

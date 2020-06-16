@@ -30,6 +30,7 @@
 
 void delay_ms(uint32_t Nms);
 
+void bubble_sort(int *pData, unsigned int Count);
 
 void print_buf(uint8_t* buf,int len);
 
