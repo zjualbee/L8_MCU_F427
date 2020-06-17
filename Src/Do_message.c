@@ -36,21 +36,16 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
 	
 	if(len == 40)
 	{
-	    Route_RxBuffer2[8]   = (D_MCU_VERSION_CMD&0xff00)>>8;
-        Route_RxBuffer2[9]   = (D_MCU_VERSION_CMD&0xff);
+	    Route_RxBuffer2[8]   = (D_CURRENT_R_CTR_CMD&0xff00)>>8;
+        Route_RxBuffer2[9]   = (D_CURRENT_R_CTR_CMD&0xff);
 	    int i=0;
 		for(i=0;i<18;i++)
 		{
-		    Route_RxBuffer2[10+i*2] = (buf[i]&0xff)>>8;
-			Route_RxBuffer2[10+i*2+1] = (buf[i]&0xff);
-		}
-	   // sum_byte=Make_EB90_Sum_Ext(0,(unsigned char *)&send_packet,len);    
-	   sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&Route_RxBuffer2,len+7-1);    
-	 //  sum_byte=Make_5AA5_Sum_Ext(sum_byte,buf+2,len-2);    
-	  // ab = sum_byte;
-
-	   //sum_byte=0;
-	    Route_RxBuffer2[16]   = sum_byte;
+		    Route_RxBuffer2[10+i*2] = (buf[i]&0xff)/1000;
+			Route_RxBuffer2[10+i*2+1] = ((buf[i]&0xff)%1000)/10;
+		}   
+	    sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&Route_RxBuffer2,len+7-1);    
+	    Route_RxBuffer2[46]   = sum_byte;
 	}
 	#if 0
 	else if (len == 8)
@@ -83,14 +78,14 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
 
 
 
-int On_Set_Current_Ctr()
+int On_Set_Current_Ctr(uint16_t g_cur)
 {
    // pCurrent_Ctr temp={0};
 	//temp.command=D_POWER_W_CTR_CMD;
 
-    onoff_laser_on(g_CurrentValue, g_CurrentValue, g_CurrentValue);
+    onoff_laser_on(g_cur, g_cur, g_cur);
     
-    L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,POWER_CTR_CNT);
+    //L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,D_CURRENT_GET_CNT);
 
     return 0;
 }
@@ -101,7 +96,7 @@ int On_Get_Current_Ctr(pPOWER_GET_CURRENT p)
 
     POWER_GET_CURRENT temp={0};
 	temp.command = D_CURRENT_R_CTR_CMD;
-	uint16_t int =0;
+	uint16_t i =0;
 	for(i=0;i<18;i++)
 	   temp.p_current[i] = power_current[i];
 	
@@ -171,17 +166,7 @@ void Do_Message(pDECODE_TABLE decode_table)
 
 			recv = &(p->packet_route_from);
          //   printf("CMD:%04X\r\n",cmd);
-            
-			if(to == UART_ADDR_DLP)
-			{
-				Do_Pmu_Route((pCMD_PACKET)decode_table->cmd_buf, len);
-			  
-			}
-			else if(to == UART_ADDR_PMU)
-			{
-               Do_Pmu_Route((pCMD_PACKET)decode_table->cmd_buf, len);
-			}
-			else if(to == UART_ADDR_MCU)
+            if(to == UART_ADDR_MCU)
 			{
                 switch(cmd)
                 {
@@ -191,18 +176,29 @@ void Do_Message(pDECODE_TABLE decode_table)
 						 current_h = decode_table->cmd_buf[10];	
 					     current_l = decode_table->cmd_buf[11];
 						 g_CurrentValue = current_h*1000+current_l*10;
-						 On_Set_Current_Ctr();
+						 On_Set_Current_Ctr(g_CurrentValue);
                         break;		
                     }
 					case D_CURRENT_R_CTR_CMD:
                     {
-						 On_Get_Current_Ctr();
+						 On_Get_Current_Ctr((pPOWER_GET_CURRENT)recv);
                          break;		
                     }
 					default:
                     break;
                 }
 			}
+            
+			else if(to == UART_ADDR_DLP)
+			{
+				Do_Pmu_Route((pCMD_PACKET)decode_table->cmd_buf, len);
+			  
+			}
+			else if(to == UART_ADDR_PMU)
+			{
+               Do_Pmu_Route((pCMD_PACKET)decode_table->cmd_buf, len);
+			}
+			
 			
 			HAL_Delay(1);
 		    memset(decode_table,0x00, sizeof(DECODE_TABLE));

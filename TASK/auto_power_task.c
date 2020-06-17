@@ -28,8 +28,8 @@
 #define DEVICE_ID_POWER2    (0x21)
 #define DEVICE_ID_POWER3    (0x22)
 
-#define LD_MAX 18
-uint16_t power_current[LD_MAX];
+
+uint16_t power_current[18];
 
 
 
