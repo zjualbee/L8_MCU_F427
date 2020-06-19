@@ -28,6 +28,10 @@
 /* Exported functions --------------------------------------------------------*/
 
 // 建立任务
+extern ADS7830_OBJ  Ntc_1_8={0};
+extern ADS7830_OBJ  Ntc_9_16={0};
+extern ADS7830_OBJ  Ntc_17_24={0};
+
 portBASE_TYPE temprature_task_create(void);
 
 #endif

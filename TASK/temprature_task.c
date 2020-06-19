@@ -79,9 +79,9 @@ uint8_t I2c_Transmit(uint8_t dev_addr ,uint8_t * pBuf_in,uint16_t len)
 
 void  Task_Init_Ads7830(void)
 {
-    Ads8730_Init(&Ntc_1_8,0x90,I2c_Recv,I2c_Transmit,osDelay);
-    Ads8730_Init(&Ntc_9_16,0x96,I2c_Recv,I2c_Transmit,osDelay);
-    Ads8730_Init(&Ntc_17_24,0x92,I2c_Recv,I2c_Transmit,osDelay);
+    Ads8730_Init(&Ntc_1_8,0x90,I2c_Recv,I2c_Transmit,osDelay); //色轮温度3x
+    Ads8730_Init(&Ntc_9_16,0x96,I2c_Recv,I2c_Transmit,osDelay); //光源温度4x
+    Ads8730_Init(&Ntc_17_24,0x92,I2c_Recv,I2c_Transmit,osDelay); //环境温度1x
 }
 
 

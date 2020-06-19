@@ -3,6 +3,10 @@
 #include "io_defined.h"
 #include "main.h"
 #include "auto_power_task.h"
+#include "uart_tec.h"
+#include "temprature_task.h"
+#include "ADS7830.h"
+
 
 uint8_t power_st = 0;
 uint8_t Route_Len1[4] = {0};
@@ -14,6 +18,9 @@ uint16_t g_CurrentValue=1000;
 
 /*开机标志*/
 uint8_t PC_POWER_FLAG = 0;
+
+
+
 
 
 int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
@@ -34,6 +41,7 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
     Route_RxBuffer2[6]   = route_from;
     Route_RxBuffer2[7]   = route_to;	
 	
+	
 	if(len == 40)
 	{
 	    Route_RxBuffer2[8]   = (D_CURRENT_R_CTR_CMD&0xff00)>>8;
@@ -41,34 +49,29 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
 	    int i=0;
 		for(i=0;i<18;i++)
 		{
-		    Route_RxBuffer2[10+i*2] = (buf[i]&0xff)/1000;
-			Route_RxBuffer2[10+i*2+1] = ((buf[i]&0xff)%1000)/10;
+		    Route_RxBuffer2[10+i*2] = (buf[4+i]&0xff)/1000;
+			Route_RxBuffer2[10+i*2+1] = ((buf[5+i]&0xff)%1000)/10;
 		}   
 	    sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&Route_RxBuffer2,len+7-1);    
 	    Route_RxBuffer2[46]   = sum_byte;
 	}
-	#if 0
-	else if (len == 8)
+	
+	else if (len == 52)
 	{
-	    Route_RxBuffer2[8]   = (D_MCU_STANDBYTIM_CMD&0xff00)>>8;
-        Route_RxBuffer2[9]   = (D_MCU_STANDBYTIM_CMD&0xff);	
-	    Route_RxBuffer2[10]  = (StandbyTim&0xff000000)>>24;	
-	    Route_RxBuffer2[11]  = (StandbyTim&0x00ff0000)>>16;    
-		Route_RxBuffer2[12]  = (StandbyTim&0x0000ff00)>>8;
-	    Route_RxBuffer2[13]  = (StandbyTim&0x000000ff);	
-	   // sum_byte=Make_EB90_Sum_Ext(0,(unsigned char *)&send_packet,len);    
-	   sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&Route_RxBuffer2,len+7-1);    
-	  // sum_byte=Make_5AA5_Sum_Ext(sum_byte,buf+2,len-2);    
-	  // ab = sum_byte;
-
-	   //sum_byte=0;
-	    Route_RxBuffer2[14]   = sum_byte;	
+	    Route_RxBuffer2[8]   = (D_NTC_R_CMD&0xff00)>>8;
+        Route_RxBuffer2[9]   = (D_NTC_R_CMD&0xff);
+	    int i=0;
+		for(i=0;i<24;i++)
+		{
+		    Route_RxBuffer2[10+i*2] = buf[4+i];
+			Route_RxBuffer2[10+i*2+1] = buf[5+i];
+		}   
+	    sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&Route_RxBuffer2,len+7-1);    
+	    Route_RxBuffer2[58]   = sum_byte;	
 	}
-	#endif
 	Route_Len2[2] = ((len+7)&0xff00)>>8;
 	Route_Len2[3] = ((len+7)&0xff);
-//	Route_Len2[2] = 0;
-//	Route_Len2[3] = 17;
+
    // memcpy(Route_RxBuffer2,decode_table->cmd_buf,128);
 	//MCU_IRQ_ON;
 
@@ -96,14 +99,64 @@ int On_Get_Current_Ctr(pPOWER_GET_CURRENT p)
 
     POWER_GET_CURRENT temp={0};
 	temp.command = D_CURRENT_R_CTR_CMD;
-	uint16_t i =0;
+	uint8_t i =0;
 	for(i=0;i<18;i++)
 	   temp.p_current[i] = power_current[i];
 	
 	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,D_CURRENT_GET_CNT);
+	
 	return 0;
 }
 
+
+int On_TEC_SetTemprature()
+{
+}
+
+int On_NTC_GetTemperature(pNTC_GET_TEM p)
+{
+
+		uint8_t reg=0;
+		int16_t temprature=0;
+		uint8_t index=0;
+
+		pNTC_GET_TEM temp={0};
+		temp.command = D_NTC_R_CMD;
+		
+
+	    for(i=0;i<8;i++)
+	    {
+	       reg = Ads8730_Get_Raw_Adc(&Ntc_1_8,i);		   
+	       temprature = Transform_Reg_To_Temprature(reg,3.3);		  
+	       printf("Ntc_1_8 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
+		   
+		   p.id[index]=reg;
+		   p.temperature[index]=(temprature>>8)&&0xff;
+		   index++;
+	    }
+	    for(i=0;i<8;i++)
+	    {
+	       reg = Ads8730_Get_Raw_Adc(&Ntc_9_16,i);
+	       temprature = Transform_Reg_To_Temprature(reg,3.3);
+	       printf("Ntc_9_16 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
+
+		   p.id[index]=reg;
+		   p.temperature[index]=(temprature>>8)&&0xff;
+		   index++;
+	    }
+	    for(i=0;i<8;i++)
+	    {
+	       reg = Ads8730_Get_Raw_Adc(&Ntc_17_24,i);
+	       temprature = Transform_Reg_To_Temprature(reg,3.3);
+	       printf("Ntc_17_24 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
+
+		   p.id[index]=reg;
+		   p.temperature[index]=(temprature>>8)&&0xff;
+		   index++;
+	    }
+		L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,D_NTC_TEM_CNT);
+
+}
 
 
 int Do_Pmu_Route(pCMD_PACKET p,uint16_t len)
@@ -170,6 +223,7 @@ void Do_Message(pDECODE_TABLE decode_table)
 			{
                 switch(cmd)
                 {
+                    //电流处理命令
                     case D_CURRENT_W_CTR_CMD:
                     {
                          uint8_t current_h, current_l;
@@ -182,6 +236,13 @@ void Do_Message(pDECODE_TABLE decode_table)
 					case D_CURRENT_R_CTR_CMD:
                     {
 						 On_Get_Current_Ctr((pPOWER_GET_CURRENT)recv);
+                         break;		
+                    }
+
+					//NTC获取温度命令
+					case D_NTC_R_CMD:
+                    {
+						 On_NTC_GetTemperature((pNTC_GET_TEM)recv);
                          break;		
                     }
 					default:

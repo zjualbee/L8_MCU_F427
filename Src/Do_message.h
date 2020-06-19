@@ -14,6 +14,10 @@
 #define D_CURRENT_GET_CNT 40
 extern uint16_t g_CurrentValue;
 
+//NTCÎÂ¶È»ñÈ¡
+#define D_NTC_R_CMD 0x0812
+#define D_NTC_TEM_CNT 52
+
 typedef struct tag_POWER_GET_CURRENT
 {
     uint8_t route_from;
@@ -22,6 +26,16 @@ typedef struct tag_POWER_GET_CURRENT
     uint16_t  command;
     uint16_t p_current[18]; 
 }POWER_GET_CURRENT,*pPOWER_GET_CURRENT;
+
+typedef struct tag_NTC
+{
+    uint8_t route_from;
+    uint8_t route_to; 
+
+    uint16_t  command;
+    uint8_t id[24];
+	uint8_t temperature[24];
+}NTC_GET_TEM,*pNTC_GET_TEM;
 
 
 void Do_Message(pDECODE_TABLE decode_table);
