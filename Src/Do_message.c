@@ -8,6 +8,7 @@
 #include "tec_task.h"
 #include "temprature_task.h"
 #include "ADS7830.h"
+#include "vdebug.h"
 
 
 uint8_t power_st = 0;
@@ -112,6 +113,7 @@ int On_Set_Light(uint8_t onoff_flag)
 {
      g_Power_Status.on_off_flag = onoff_flag;
      Appo_Power_Set_Current(&g_Power_Status);
+	 printf("onoff_flag:%d\n",g_Power_Status.on_off_flag);
 	 return 0;
 }
 
