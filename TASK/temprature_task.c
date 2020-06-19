@@ -18,7 +18,7 @@
 #include "cmsis_os.h"
 #include "main.h"
 #include "temprature_task.h"
-#include "ADS7830.h"
+
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -42,9 +42,9 @@ xTaskHandle g_xTaskHandle_temprature = NULL;
 
 
 
-ADS7830_OBJ  Ntc_1_8={0};
-ADS7830_OBJ  Ntc_9_16={0};
-ADS7830_OBJ  Ntc_17_24={0};
+ADS7830_OBJ  Ntc_1_8;
+ADS7830_OBJ  Ntc_9_16;
+ADS7830_OBJ  Ntc_17_24;
 
 
 

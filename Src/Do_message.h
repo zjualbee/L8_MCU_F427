@@ -14,9 +14,18 @@
 #define D_CURRENT_GET_CNT 40
 extern uint16_t g_CurrentValue;
 
+//开关激光
+#define D_LIGHTSOURCE_W_CMD 0x0805
+#define D_LIGHTSOURCE_R_CMD 0x8805
+
 //NTC温度获取
 #define D_NTC_R_CMD 0x0812
 #define D_NTC_TEM_CNT 52
+
+//获取TEC状态
+#define D_TEC_R_CMD 0x8811
+#define D_TEC_W_CMD 0x0811
+#define D_TEC_GET_CNT 10
 
 typedef struct tag_POWER_GET_CURRENT
 {
@@ -36,6 +45,15 @@ typedef struct tag_NTC
     uint8_t id[24];
 	uint8_t temperature[24];
 }NTC_GET_TEM,*pNTC_GET_TEM;
+
+typedef struct tag_TEC
+{
+    uint8_t route_from;
+    uint8_t route_to; 
+
+    uint16_t  command;
+    int16_t temp[3];
+}TEC_GET_TEM,*pTEC_GET_TEM;
 
 
 void Do_Message(pDECODE_TABLE decode_table);

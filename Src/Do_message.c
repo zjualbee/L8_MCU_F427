@@ -3,7 +3,9 @@
 #include "io_defined.h"
 #include "main.h"
 #include "auto_power_task.h"
+#include "appo_power_task.h"
 #include "uart_tec.h"
+#include "tec_task.h"
 #include "temprature_task.h"
 #include "ADS7830.h"
 
@@ -16,9 +18,9 @@ uint8_t Route_RxBuffer2[30] = {0};
 
 uint16_t g_CurrentValue=1000;
 
+
 /*开机标志*/
 uint8_t PC_POWER_FLAG = 0;
-
 
 
 
@@ -69,6 +71,19 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
 	    sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&Route_RxBuffer2,len+7-1);    
 	    Route_RxBuffer2[58]   = sum_byte;	
 	}
+	else if(len==10)
+	{
+	    Route_RxBuffer2[8]   = (D_TEC_R_CMD&0xff00)>>8; 
+        Route_RxBuffer2[9]   = (D_TEC_R_CMD&0xff);
+		Route_RxBuffer2[10] = (Uart_Tec1.temp1&0xff00)>>8;
+		Route_RxBuffer2[11] = Uart_Tec1.temp1&0xff;
+		Route_RxBuffer2[12] = (Uart_Tec2.temp1&0xff00)>>8;
+		Route_RxBuffer2[13] = Uart_Tec2.temp1&0xff;
+		Route_RxBuffer2[14] = (Uart_Tec3.temp1&0xff00)>>8;
+		Route_RxBuffer2[15] = Uart_Tec3.temp1&0xff;
+		sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&Route_RxBuffer2,len+7-1);    
+	    Route_RxBuffer2[16]   = sum_byte;	
+	}
 	Route_Len2[2] = ((len+7)&0xff00)>>8;
 	Route_Len2[3] = ((len+7)&0xff);
 
@@ -93,6 +108,13 @@ int On_Set_Current_Ctr(uint16_t g_cur)
     return 0;
 }
 
+int On_Set_Light(uint8_t onoff_flag)
+{
+     g_Power_Status.on_off_flag = onoff_flag;
+     Appo_Power_Set_Current(&g_Power_Status);
+	 return 0;
+}
+
 int On_Get_Current_Ctr(pPOWER_GET_CURRENT p)
 {
 	laser_current_get();
@@ -109,10 +131,25 @@ int On_Get_Current_Ctr(pPOWER_GET_CURRENT p)
 }
 
 
-int On_TEC_SetTemprature()
+int On_TEC_SetTemprature(int16_t temp1,int16_t temp2)
 {
+    TEC_SetTemprature(&Uart_Tec1,temp1,temp2);
+	TEC_SetTemprature(&Uart_Tec2,temp1,temp2);
+	TEC_SetTemprature(&Uart_Tec3,temp1,temp2);
 }
 
+int On_TEC_GetTemperature(pTEC_GET_TEM p)
+{
+    TEC_Show(&Uart_Tec1);
+	TEC_Show(&Uart_Tec2);
+	TEC_Show(&Uart_Tec3);
+
+	TEC_GET_TEM temp={0};
+	temp.command = D_TEC_R_CMD;
+
+	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,D_TEC_GET_CNT);
+
+}
 int On_NTC_GetTemperature(pNTC_GET_TEM p)
 {
 
@@ -120,18 +157,18 @@ int On_NTC_GetTemperature(pNTC_GET_TEM p)
 		int16_t temprature=0;
 		uint8_t index=0;
 
-		pNTC_GET_TEM temp={0};
+		NTC_GET_TEM temp={0};
 		temp.command = D_NTC_R_CMD;
 		
-
+        uint8_t i;
 	    for(i=0;i<8;i++)
 	    {
 	       reg = Ads8730_Get_Raw_Adc(&Ntc_1_8,i);		   
 	       temprature = Transform_Reg_To_Temprature(reg,3.3);		  
 	       printf("Ntc_1_8 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
 		   
-		   p.id[index]=reg;
-		   p.temperature[index]=(temprature>>8)&&0xff;
+		   temp.id[index]=reg;
+		   temp.temperature[index]=(temprature>>8)&&0xff;
 		   index++;
 	    }
 	    for(i=0;i<8;i++)
@@ -140,9 +177,10 @@ int On_NTC_GetTemperature(pNTC_GET_TEM p)
 	       temprature = Transform_Reg_To_Temprature(reg,3.3);
 	       printf("Ntc_9_16 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
 
-		   p.id[index]=reg;
-		   p.temperature[index]=(temprature>>8)&&0xff;
+		   temp.id[index]=reg;
+		   temp.temperature[index]=(temprature>>8)&&0xff;
 		   index++;
+	
 	    }
 	    for(i=0;i<8;i++)
 	    {
@@ -150,8 +188,8 @@ int On_NTC_GetTemperature(pNTC_GET_TEM p)
 	       temprature = Transform_Reg_To_Temprature(reg,3.3);
 	       printf("Ntc_17_24 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
 
-		   p.id[index]=reg;
-		   p.temperature[index]=(temprature>>8)&&0xff;
+		   temp.id[index]=reg;
+		   temp.temperature[index]=(temprature>>8)&&0xff;
 		   index++;
 	    }
 		L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,D_NTC_TEM_CNT);
@@ -238,6 +276,12 @@ void Do_Message(pDECODE_TABLE decode_table)
 						 On_Get_Current_Ctr((pPOWER_GET_CURRENT)recv);
                          break;		
                     }
+					case D_LIGHTSOURCE_W_CMD:
+					{
+					    uint8_t onoff;
+						onoff = decode_table->cmd_buf[10];
+						On_Set_Light(onoff);
+					}
 
 					//NTC获取温度命令
 					case D_NTC_R_CMD:
@@ -245,6 +289,23 @@ void Do_Message(pDECODE_TABLE decode_table)
 						 On_NTC_GetTemperature((pNTC_GET_TEM)recv);
                          break;		
                     }
+
+					case D_TEC_W_CMD:
+                    {
+                         int8_t temp_h,temp_l;
+						 int16_t g_TecTemp=20;
+						 temp_h = decode_table->cmd_buf[10];
+						 temp_l = decode_table->cmd_buf[11];
+						 g_TecTemp = temp_h+temp_l/100;
+						 
+						 On_TEC_SetTemprature(g_TecTemp,g_TecTemp);
+                         break;		
+                    }
+					case D_TEC_R_CMD:
+					{
+					    On_TEC_GetTemperature((pTEC_GET_TEM)recv);
+					    break;
+					}
 					default:
                     break;
                 }

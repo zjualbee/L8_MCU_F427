@@ -19,6 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+#include "ADS7830.h"
 
 
 /* Exported types ------------------------------------------------------------*/
@@ -28,9 +29,9 @@
 /* Exported functions --------------------------------------------------------*/
 
 // 建立任务
-extern ADS7830_OBJ  Ntc_1_8={0};
-extern ADS7830_OBJ  Ntc_9_16={0};
-extern ADS7830_OBJ  Ntc_17_24={0};
+extern ADS7830_OBJ  Ntc_1_8;
+extern ADS7830_OBJ  Ntc_9_16;
+extern ADS7830_OBJ  Ntc_17_24;
 
 portBASE_TYPE temprature_task_create(void);
 
