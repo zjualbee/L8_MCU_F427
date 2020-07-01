@@ -14,11 +14,7 @@
 *******************************************************************************/
 
 /* Includes ------------------------------------------------------------------*/
-#include  "stdio.h"
-#include  "stdlib.h"
-#include  "string.h"
 #include "appo_power_protocol.h"
-#include "cmsis_os.h"
 #include "main.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -301,9 +297,6 @@ int protocol_power_frame_result_send_to_uart(struct_PowerFrame *pFrame, uint8_t 
 * Return         : 0正常，非0异常
 *******************************************************************************/
 
-extern   QueueHandle_t  Q_Power_Ack;
-
-
 static int protocol_power_ISR_send_msg(uint8_t *pBuf, uint16_t len)
 {
     int ret = 0;
@@ -312,8 +305,8 @@ static int protocol_power_ISR_send_msg(uint8_t *pBuf, uint16_t len)
 
     memcpy(frame.buf, pBuf, len);
     frame.len = len;
-    if (Q_Power_Ack != NULL)
-        ret = xQueueSendFromISR(Q_Power_Ack, &frame, &pxHigherPriorityTaskWoken);
+    if (g_queue_power_ack != NULL)
+        ret = xQueueSendFromISR(g_queue_power_ack, &frame, &pxHigherPriorityTaskWoken);
     portEND_SWITCHING_ISR(pxHigherPriorityTaskWoken);
     return ret;
 }

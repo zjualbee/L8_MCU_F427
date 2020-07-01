@@ -1,12 +1,5 @@
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
-#include "stdint.h" 
-#include "appo_power_protocol.h"
-#include "appo_power_cmd.h"
 #include "do_msg.h"
-#include "appo_power_task.h"
-#include "heat_sink_task.h"
+#include "main.h"
 
 #define PRINT_FUNCTION  // printf("%s\r\n",__FUNCTION__);
 
@@ -39,14 +32,14 @@ void On_Set_LightSource(pONE_ELEMENT p)
     {
     if(p->value_id == DPV_LIGHTSOURCE_STATUS_ON)
         {
-            g_Power_Status.on_off_flag = 1;
-            Appo_Power_Set_Current(&g_Power_Status);
+            g_Power.on_off_flag = 1;
+			Appo_Power_On(&g_Power);
 
         }
     else if(p->value_id == DPV_LIGHTSOURCE_STATUS_OFF)
         {
-        g_Power_Status.on_off_flag = 0;
-        Appo_Power_Set_Current(&g_Power_Status);
+        g_Power.on_off_flag = 0;
+        Appo_Power_On(&g_Power);
 
         }
     }
@@ -63,32 +56,32 @@ void On_Set_SetCurrent(pONE_ELEMENT p)
         if(p->key_id == DPK_SETCURRENT_ALL)
             {
             printf("DPK_SETCURRENT_ALL\r\n");
-            g_Power_Status.current_r = p->value_int&0xffff;
-            g_Power_Status.current_g = p->value_int&0xffff;
-            g_Power_Status.current_b = p->value_int&0xffff;
-            Appo_Power_Set_Current(&g_Power_Status);
+            g_Power.current_r = p->value_int&0xffff;
+            g_Power.current_g = p->value_int&0xffff;
+            g_Power.current_b = p->value_int&0xffff;
+			Appo_Set_Current(&g_Power);
             
             }
         else if(p->key_id == DPK_SETCURRENT_R)
             {
             printf("DPK_SETCURRENT_R\r\n");
-            g_Power_Status.current_r = p->value_int&0xffff;
-            Appo_Power_Set_Current(&g_Power_Status);
+            g_Power.current_r = p->value_int&0xffff;
+            Appo_Set_Current(&g_Power);
             }  
         else if(p->key_id == DPK_SETCURRENT_G)
             {
             
             printf("DPK_SETCURRENT_G\r\n");
-             g_Power_Status.current_g = p->value_int&0xffff;
-             Appo_Power_Set_Current(&g_Power_Status);
+             g_Power.current_g = p->value_int&0xffff;
+             Appo_Set_Current(&g_Power);
 
             }  
         else if(p->key_id == DPK_SETCURRENT_B)
             {
             
             printf("DPK_SETCURRENT_B\r\n");           
-            g_Power_Status.current_b = p->value_int&0xffff;
-            Appo_Power_Set_Current(&g_Power_Status);
+            g_Power.current_b = p->value_int&0xffff;
+            Appo_Set_Current(&g_Power);
             }  
 
 

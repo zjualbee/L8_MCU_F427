@@ -1,6 +1,5 @@
 #include "Decode.h"
-#include "io_defined.h"
-
+#include "main.h"
 DECODE_TABLE Decode_PMU;
 DECODE_TABLE Decode_DLP;
 

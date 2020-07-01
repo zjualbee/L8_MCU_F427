@@ -6,7 +6,6 @@
 #include "string.h"
 #include "stdint.h"
 #include "Decode.h"
-#include "io_defined.h"
 
 //分段电流设置
 #define D_CURRENT_W_CTR_CMD  0x0803

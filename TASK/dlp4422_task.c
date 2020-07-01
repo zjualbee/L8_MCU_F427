@@ -1,7 +1,3 @@
-
-
-
-
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dlp4422_task.h"
@@ -43,7 +39,7 @@ static portTASK_FUNCTION(dlp4422_task, pvParameters)
 
 // g_queue_dlp4422 = xQueueCreate(1,120);
 
-    uint8_t dlp_send_buf[100]={0x5a,0xa5,0,0x0b,0,0,0x08,0x01,0x84,0x02,0x7B,0x7B};
+    uint8_t dlp_send_buf[100]={0x5a,0xa5,0x00,0x0b,0,0,0x08,0x01,0x84,0x02,0x7B,0x7B};
 
     while(1)
     {

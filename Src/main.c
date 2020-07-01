@@ -929,14 +929,14 @@ void StartDefaultTask(void const * argument)
 #if 1
     i2c5_init();
     dlp4422_task_create();
-    appo_power_task_create();
+    //appo_power_task_create();
     led_task_create();
     uart_task_create();
     motor_task_create();
     heat_sink_task_create();
     temprature_task_create();
     tec_task_create();
-	 auto_power_task_create();
+	auto_power_task_create();
 #else
     led_task_create();
     uart_task_create();

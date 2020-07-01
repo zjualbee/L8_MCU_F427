@@ -30,6 +30,7 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -38,12 +39,12 @@ extern "C" {
 #include "string.h"
 #include "stdint.h"
 
-#include "cmsis_os.h"
-
 
 #include "at_decode.h"
 #include "at_encode.h"
 #include "system.h"
+
+#include "appo_power_protocol.h"
 
 
 #include "motor_task.h"
@@ -52,9 +53,17 @@ extern "C" {
 #include "temprature_task.h"
 #include "tec_task.h"
 #include "uart_task.h"
-#include "appo_power_task.h"
 #include "dlp4422_task.h"
 #include "i2c5.h"
+#include "auto_power_task.h"
+#include "power_cmd_task.h"
+
+
+#include "Do_message.h"
+#include "Decode.h"
+#include "ADS7830.h"
+#include "vdebug.h"
+
 
 
 

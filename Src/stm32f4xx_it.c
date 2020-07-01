@@ -282,10 +282,8 @@ void USART3_IRQHandler(void)
   /* USER CODE BEGIN USART3_IRQn 0 */
 
   /* USER CODE END USART3_IRQn 0 */
-  //HAL_UART_IRQHandler(&huart3);
-  uint8_t temp;
-  temp = (uint8_t)(huart3.Instance->DR &0xFF);
-  ppfifo_in(&Decode_DLP,&temp,1);
+  HAL_UART_IRQHandler(&huart3);
+  
   /* USER CODE BEGIN USART3_IRQn 1 */
 
   /* USER CODE END USART3_IRQn 1 */
@@ -299,10 +297,7 @@ void UART4_IRQHandler(void)
   /* USER CODE BEGIN UART4_IRQn 0 */
 
   /* USER CODE END UART4_IRQn 0 */
-  //HAL_UART_IRQHandler(&huart4);
-  uint8_t temp;
-  temp = (uint8_t)(huart4.Instance->DR &0xFF);
-  ppfifo_in(&Decode_DLP,&temp,1);
+  HAL_UART_IRQHandler(&huart4);
   /* USER CODE BEGIN UART4_IRQn 1 */
 
   /* USER CODE END UART4_IRQn 1 */
@@ -330,10 +325,7 @@ void USART6_IRQHandler(void)
   /* USER CODE BEGIN USART6_IRQn 0 */
 
   /* USER CODE END USART6_IRQn 0 */
-  //HAL_UART_IRQHandler(&huart6);
-  uint8_t temp;
-  temp = (uint8_t)(huart6.Instance->DR &0xFF);
-  ppfifo_in(&Decode_DLP,&temp,1);
+  HAL_UART_IRQHandler(&huart6);
   /* USER CODE BEGIN USART6_IRQn 1 */
 
   /* USER CODE END USART6_IRQn 1 */

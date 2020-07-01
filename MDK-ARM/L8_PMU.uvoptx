@@ -152,7 +152,7 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>251</LineNumber>
+          <LineNumber>224</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -161,57 +161,25 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
-          <Filename>../Src/stm32f4xx_it.c</Filename>
+          <Filename>..\TASK\auto_power_task.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>3028</LineNumber>
+          <LineNumber>223</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134245780</Address>
+          <Address>134250178</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</Filename>
+          <Filename>..\TASK\auto_power_task.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\L8_PMU\../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c\3028</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>3032</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134245798</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\L8_PMU\../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c\3032</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>3036</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134245816</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\L8_PMU\../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c\3036</Expression>
+          <Expression>\\L8_PMU\../TASK/auto_power_task.c\223</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -233,7 +201,22 @@
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>g_Power_Status</ItemText>
+          <ItemText>Q_Power_Ack</ItemText>
+        </Ww>
+        <Ww>
+          <count>4</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g_power1</ItemText>
+        </Ww>
+        <Ww>
+          <count>5</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g_power2</ItemText>
+        </Ww>
+        <Ww>
+          <count>6</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g_power3</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -311,7 +294,7 @@
 
   <Group>
     <GroupName>Application/User</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -926,18 +909,6 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\TASK\appo_power_task.c</PathWithFileName>
-      <FilenameWithoutPath>appo_power_task.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>50</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
       <PathWithFileName>..\TASK\dlp4422_task.c</PathWithFileName>
       <FilenameWithoutPath>dlp4422_task.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
@@ -945,7 +916,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>51</FileNumber>
+      <FileNumber>50</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -965,7 +936,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>52</FileNumber>
+      <FileNumber>51</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -977,7 +948,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>53</FileNumber>
+      <FileNumber>52</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -989,7 +960,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>54</FileNumber>
+      <FileNumber>53</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1001,7 +972,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>55</FileNumber>
+      <FileNumber>54</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1013,7 +984,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>56</FileNumber>
+      <FileNumber>55</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1025,7 +996,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>57</FileNumber>
+      <FileNumber>56</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1037,7 +1008,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>58</FileNumber>
+      <FileNumber>57</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1049,7 +1020,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>59</FileNumber>
+      <FileNumber>58</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1069,7 +1040,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>60</FileNumber>
+      <FileNumber>59</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1089,7 +1060,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>10</GroupNumber>
-      <FileNumber>61</FileNumber>
+      <FileNumber>60</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1109,7 +1080,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>62</FileNumber>
+      <FileNumber>61</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1121,7 +1092,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>63</FileNumber>
+      <FileNumber>62</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>

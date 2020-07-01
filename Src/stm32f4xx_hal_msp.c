@@ -56,7 +56,7 @@
 /* USER CODE END ExternalFunctions */
 
 /* USER CODE BEGIN 0 */
-
+#define UART1_SEL 1
 /* USER CODE END 0 */
                         
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
@@ -365,6 +365,7 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* htim_base)
 * @param huart: UART handle pointer
 * @retval None
 */
+
 void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -497,12 +498,24 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     PB6     ------> USART1_TX
     PB7     ------> USART1_RX 
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_10;
+    if(UART1_SEL)
+    	{
+    GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF7_USART1;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+    	}
+	else
+		{
+		GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_10;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF7_USART1;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+		}
 
     /* USART1 interrupt Init */
     HAL_NVIC_SetPriority(USART1_IRQn, 5, 0);
@@ -698,7 +711,14 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
     PB7     ------> USART1_RX 
     PA9, PA10
     */
+    if(UART1_SEL)
+    	{
+    	HAL_GPIO_DeInit(GPIOB, GPIO_PIN_6|GPIO_PIN_7);
+    	}
+	else
+		{
     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_9|GPIO_PIN_10);
+		}
 
     /* USART1 interrupt DeInit */
     HAL_NVIC_DisableIRQ(USART1_IRQn);

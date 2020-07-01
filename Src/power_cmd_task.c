@@ -186,6 +186,10 @@ int power_cmd_task_cmd_frame_capture(struct_PowerFrame *pFrame)
     else if (pFrame->buf[POWER_FRAME_DEVICE_ID] == g_power2.device_id)
         pPower = &g_power2;
     #endif
+	#ifdef POWER3_EN
+    else if (pFrame->buf[POWER_FRAME_DEVICE_ID] == g_power3.device_id)
+        pPower = &g_power3;
+    #endif
     else
         return 1;
         
@@ -224,6 +228,10 @@ int power_cmd_task_ack_frame_capture(struct_PowerFrame *pFrame)
     #ifdef POWER2_EN
     else if (pFrame->buf[POWER_FRAME_DEVICE_ID] == g_power2.device_id)
         pPower = &g_power2;
+    #endif
+	#ifdef POWER3_EN
+    else if (pFrame->buf[POWER_FRAME_DEVICE_ID] == g_power3.device_id)
+        pPower = &g_power3;
     #endif
     else
         return 1;
@@ -415,7 +423,7 @@ static portTASK_FUNCTION(power_cmd_task, pvParameters)
 {
     struct_PowerFrame frame = {0};
 
-    protocol_power_init();
+    // protocol_power_init();
 
     // 任务处理入口
     while(1){

@@ -3004,10 +3004,7 @@ static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
    if(huart->Instance == USART1)
     {
         ppfifo_in(&Decode_PMU,&temp,1);
-		ppfifo_in(&Decode_DLP,&temp,1);
         At_Fifo_In(&at_decode,temp);
-
-
     }
   else if(huart->Instance == UART8)  //   2  5  8
     {
@@ -3024,20 +3021,22 @@ static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
     }
   else if(huart->Instance == UART7)
     {
-        ;//;protocol_light_ISR_frame_get(temp);
         protocol_power_ISR_frame_get(temp);
     }
   else if(huart->Instance == USART6)
     {
-         vdebug_buf_in(temp);
+  		 ppfifo_in(&Decode_DLP,&temp,1);
+		 vdebug_buf_in(temp);
     }
   else if(huart->Instance == UART4)
     {
-      vdebug_buf_in(temp);
+  	  ppfifo_in(&Decode_DLP,&temp,1);
+	  vdebug_buf_in(temp);
     }
   else if(huart->Instance == USART3)
     {
-      vdebug_buf_in(temp);
+      ppfifo_in(&Decode_DLP,&temp,1);
+	  vdebug_buf_in(temp);
     }
 
 

@@ -17,13 +17,13 @@
 //#include "motor_task.h"
 //#include "FreeRTOS.h"
 //#include "task.h"
-#include "cmsis_os.h"
+
 #include "main.h"
 #include "vdebug.h"
 /* Private typedef -----------------------------------------------------------*/
-#include "appo_power_task.h"
-#include "auto_power_task.h"
-#include "appo_power_protocol.h"
+
+G_POWER_STATUS g_Power_Status;
+
 
 /* Private define ------------------------------------------------------------*/
 
@@ -38,6 +38,7 @@
 
 
 
+
 /* Private variables ---------------------------------------------------------*/
 
 // 任务句柄
@@ -45,7 +46,7 @@ xTaskHandle g_xTaskHandle_appo_power = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-QueueHandle_t  Q_Power_Ack;
+//QueueHandle_t  Q_Power_Ack;
 
 int U7_recv_len=0;
 uint8_t U7_recv_buf[MAX_U7_RECV_LEN]={0};
@@ -79,7 +80,17 @@ void print_frame(pPowerFrame p)
 
 }
 
-
+uint32_t Appo_Power_Read_Current()
+{
+    uint32_t len = 0;
+	uint8_t cmd=0;
+	uint8_t param[POWER_MAX_PARAM_LEN] = {0};
+    cmd = POWER_CMD_ID_READ_LASER_CURRENT;
+    protocol_power_frame_cmd_send_to_uart(0x20, cmd, param, len);
+	//protocol_power_frame_cmd_send_to_uart(0x21, cmd, param, len);
+	//protocol_power_frame_cmd_send_to_uart(0x22, cmd, param, len);
+	
+}
 
 uint32_t Appo_Power_Set_Current(pG_POWER_STATUS p)
 {
@@ -130,10 +141,8 @@ static portTASK_FUNCTION(appo_power_task, pvParameters)
 
     uint8_t send_buf[20]={0x5a ,0x20 ,0x00 ,0x00 ,0x20 ,0x00 ,0xe5 ,0x63 ,0x70};
 
-    Uart7_Send_Buf(send_buf,9);
-    //uint8_t send_buf[20]={0x5a ,0x20 ,0x00 ,0x00 ,0x22 ,0x07 ,0xe1 ,0xC4 ,0x09,0xC4,0x09,0xF2,0xB1,0x70};
-    //  5a 20 00 00 22 07 01 C4 09 C4 09 C4 09 f2 b1 70
-    protocol_power_init();
+    
+    //protocol_power_init();
 
 	//开机小电流设置
 		#if 0
@@ -148,23 +157,12 @@ static portTASK_FUNCTION(appo_power_task, pvParameters)
     while(1)
         {
         memset(cmd_ack_buf,0,sizeof(struct_PowerFrame));
+		Uart7_Send_Buf(send_buf,9);
         xQueueReceive(Q_Power_Ack,cmd_ack_buf,portMAX_DELAY);
-
-        print_frame(pframe);
+		
+        //print_frame(pframe);
         }
 
-    while(1)
-    {
-        Uart7_Send_Buf(send_buf,9);
-        if(U7_recv_len > 0)
-        {
-            print_buf(U7_recv_buf,U7_recv_len);
-            U7_recv_len = 0;
-        }
-        osDelay(2000);
-    }
-
-    
 }
 
 

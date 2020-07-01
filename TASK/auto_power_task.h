@@ -5,15 +5,22 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx.h"
-#include "cmsis_os.h"
 
 //#include "motor_36V.h"
 extern uint16_t power_current[18];
 
 
-//uint32_t Appo_Power_On(uint16_t b,uint16_t g,uint16_t r);
-//uint32_t Appo_Set_Current(uint16_t b,uint16_t g,uint16_t r);
+typedef struct _G_POWER
+{
+    uint8_t  on_off_flag;   //  0 off     1  on
+    uint16_t current_r;
+    uint16_t current_g;
+    uint16_t current_b;
 
+
+}G_POWER,*pG_POWER;
+
+extern G_POWER g_Power;
 
 
 /* Exported types ------------------------------------------------------------*/

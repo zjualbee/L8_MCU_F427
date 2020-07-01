@@ -69,6 +69,10 @@
 #define STM32F4
 #endif /* STM32F4 */
 
+#include "cmsis_os.h"
+#include "config.h"
+
+
 /* Uncomment the line below according to the target STM32 device used in your
    application 
   */

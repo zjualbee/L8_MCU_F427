@@ -15,8 +15,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "power.h"
-#include "appo_power_protocol.h"
-#include "power_cmd_task.h"
 #include "main.h"
 
 /* Private typedef -----------------------------------------------------------*/

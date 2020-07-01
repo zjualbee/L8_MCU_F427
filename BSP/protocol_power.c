@@ -22,7 +22,7 @@
 
 // #define DEBUG_POWER
 
-#define HUARTX (huart2)
+#define HUARTX (huart7)
 
 // ×´Ì¬»ú
 typedef enum

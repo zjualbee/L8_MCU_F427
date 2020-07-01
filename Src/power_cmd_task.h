@@ -19,10 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx.h"
-#include "cmsis_os.h"
 #include "appo_power_protocol.h"
-
-
 
 
 /* Exported types ------------------------------------------------------------*/

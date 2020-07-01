@@ -14,16 +14,12 @@
 *******************************************************************************/
 
 /* Includes ------------------------------------------------------------------*/
-//#include "motor_task.h"
-//#include "FreeRTOS.h"
-//#include "task.h"
-#include "cmsis_os.h"
 #include "MAX31790.h"
-
 #include "main.h"
+#include "heat_sink_task.h"
 
 /* Private typedef -----------------------------------------------------------*/
-#include "heat_sink_task.h"
+
 
 
 /* Private define ------------------------------------------------------------*/

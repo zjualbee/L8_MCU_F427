@@ -19,12 +19,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx.h"
-#include "cmsis_os.h"
 
 /* Exported types ------------------------------------------------------------*/
-
-#define POWER2_EN 0x01
-#define POWER3_EN 0x01
 
 #ifdef POWER3_EN
 #define POWER_NUM           (3)
