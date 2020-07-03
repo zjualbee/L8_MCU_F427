@@ -28,8 +28,8 @@ typedef struct _MAX31790_OBJ
     uint8_t  dev_addr; 
 
 
-    uint16_t pwm_value[FAN_NUM];
-    uint16_t rpm_value[FAN_NUM];
+    uint16_t pwm_value[FAN_NUM];  //定义为最大为100%的占空比数值
+    uint16_t rpm_value[FAN_NUM];  //定义为风扇转速
 
 //////////////do command/////////////
 

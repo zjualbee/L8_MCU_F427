@@ -39,7 +39,6 @@ uint8_t Check_Xor_5AA5(uint8_t * buf ,int len)
 	
 	for(i=0;i<len;i++)
 	{
-		//printf("%02x ",buf[i]);
 		sum = buf[i] ^ sum;
 	}
 	 //printf("\r\nsum:%x \r\n",sum);

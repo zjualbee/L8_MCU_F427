@@ -34,22 +34,12 @@
 // ÈÎÎñ¾ä±ú
 xTaskHandle g_xTaskHandle_heat_sink = NULL;
 
-
 MAX31790_OBJ Fan1_6;     //0x40 
 MAX31790_OBJ Fan7_12;    //0x5E
 MAX31790_OBJ Fan13_18;    //0x58
-
 MAX31790_OBJ Fan19_24;   //0x48
 MAX31790_OBJ Fan25_30;   //0x50
 MAX31790_OBJ Fan31_32_And_Bump1_4;  //0x56
-
-
-
-
-
-
-
-
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -68,7 +58,6 @@ static uint8_t Bsp_I2c5_Read(uint8_t dev_addr , uint8_t reg)
     }
     else
     {
-       ;// printf("iic ok %02X\r\n",dev_addr);
         g_i2c5.receive(&g_i2c5, dev_addr&0x00ff, databuff+1, 1,150);
     }
     return databuff[1];
@@ -143,9 +132,9 @@ void Init_Heat_Sink(void)
 {
 
 #if 1
-    Max31790_Init(&Fan1_6,0x40,Bsp_I2c5_Read,Bsp_I2c5_Write);
-    Max31790_Init(&Fan7_12,0x5e,Bsp_I2c5_Read,Bsp_I2c5_Write);
-    Max31790_Init(&Fan13_18,0x58,Bsp_I2c5_Read,Bsp_I2c5_Write);
+    Max31790_Init(&Fan1_6,Add_Fan1_6,Bsp_I2c5_Read,Bsp_I2c5_Write);
+    Max31790_Init(&Fan7_12,Add_Fan7_12,Bsp_I2c5_Read,Bsp_I2c5_Write);
+    Max31790_Init(&Fan13_18,Add_Fan13_18,Bsp_I2c5_Read,Bsp_I2c5_Write);
 
     Max31790_On(&Fan1_6);
     Max31790_On(&Fan7_12);
@@ -156,18 +145,17 @@ void Init_Heat_Sink(void)
     Max31790_List_Reg(&Fan13_18);
 #endif
 
+    Max31790_Init(&Fan19_24,Add_Fan19_24,Bsp_I2c2_Read,Bsp_I2c2_Write);
+    Max31790_Init(&Fan25_30,Add_Fan25_30,Bsp_I2c2_Read,Bsp_I2c2_Write);
+    Max31790_Init(&Fan31_32_And_Bump1_4,Add_Fan31_32_And_Bump1_4,Bsp_I2c2_Read,Bsp_I2c2_Write);
 
-
- 
-    Max31790_Init(&Fan19_24,0x48,Bsp_I2c2_Read,Bsp_I2c2_Write);
-    Max31790_Init(&Fan25_30,0x50,Bsp_I2c2_Read,Bsp_I2c2_Write);
-    Max31790_Init(&Fan31_32_And_Bump1_4,0x56,Bsp_I2c2_Read,Bsp_I2c2_Write);
-    Max31790_On(&Fan19_24);
+	Max31790_On(&Fan19_24);
     Max31790_On(&Fan25_30);
     Max31790_On(&Fan31_32_And_Bump1_4);
    // Max31790_Full_Speed(&Fan19_24);
    // Max31790_Full_Speed(&Fan25_30);
    // Max31790_Full_Speed(&Fan31_32_And_Bump1_4);
+
     Max31790_List_Reg(&Fan19_24);
     Max31790_List_Reg(&Fan25_30);
     Max31790_List_Reg(&Fan31_32_And_Bump1_4);
@@ -202,39 +190,20 @@ static portTASK_FUNCTION(heat_sink_task, pvParameters)
     //HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_RESET);
     Init_Heat_Sink();
     // MAX31790_on_full_speed();
-    Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,0,511);
-    Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,1,511);
-
-    Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,2,511);
-    Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,3,511);
-    Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,4,511);
-    Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,5,511);
-
-#if 1
+		
+    uint16_t pwm_init_value=100;
     for(i=0;i < 6;i++)
     {
-    Max31790_Pwm_Set(&Fan1_6,i,511);
-    Max31790_Pwm_Set(&Fan7_12,i,511);
-    Max31790_Pwm_Set(&Fan13_18,i,511);
+	    Max31790_Pwm_Set(&Fan1_6,i,pwm_init_value);
+	    Max31790_Pwm_Set(&Fan7_12,i,pwm_init_value);
+	    Max31790_Pwm_Set(&Fan13_18,i,pwm_init_value);
+		Max31790_Pwm_Set(&Fan19_24,i,pwm_init_value);
+	    Max31790_Pwm_Set(&Fan25_30,i,pwm_init_value);
+		Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,i,pwm_init_value);
     }
-#endif
-
-    for(i=0;i < 6;i++)
-    {
-    Max31790_Pwm_Set(&Fan19_24,i,511);
-    Max31790_Pwm_Set(&Fan25_30,i,511);
-    }
-    
-
-
-
-
-
-
 
     while(1)
     {
-
         Max31790_Update(&Fan1_6);
         Max31790_Update(&Fan7_12);
         Max31790_Update(&Fan13_18);

@@ -1,33 +1,19 @@
-/* Includes ------------------------------------------------------------------*/
-//#include "motor_task.h"
-//#include "FreeRTOS.h"
-//#include "task.h"
 #include "main.h"
 #include "power.h"
 /* Private typedef -----------------------------------------------------------*/
 
 
 /* Private define ------------------------------------------------------------*/
-
 // 任务参数
 #define TASK_PRIORITY     (tskIDLE_PRIORITY + 1)
 #define TASK_STACK_SIZE   (512) // *4 字节
 
 /* Private macro -------------------------------------------------------------*/
-
-
 #define POWER_ACK_BUF_SIZE  260
-
 
 uint16_t power_current[18]={0};
 G_POWER g_Power;
 xQueueHandle gQueuePowerAck  = NULL;
-
-
-
-
-
-
 /* Private variables ---------------------------------------------------------*/
 
 // 任务句柄
@@ -35,10 +21,6 @@ xTaskHandle g_xTaskHandle_auto_power = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-
-
-
-
 #if 1
 uint32_t Appo_Power_On(pG_POWER p)
 {
@@ -133,25 +115,6 @@ uint32_t onoff_laser_off()
 	return 1;
 }
 
-uint32_t laser_current_get()
-{
-    
-	uint16_t i=0;
-    g_power1.laser_current_update(&g_power1);
-	for (i = 0; i < POWER_CURRENT_USER; i++)
-            power_current[i] = g_power1.laser_current[i];
-	#ifdef POWER2_EN
-	g_power2.laser_current_update(&g_power2);
-	for (i = 6; i < POWER_CURRENT_USER; i++)
-            power_current[i] = g_power2.laser_current[i];
-	#endif
-	#ifdef POWER3_EN
-	g_power3.laser_current_update(&g_power3);
-	for (i = 12; i < POWER_CURRENT_USER; i++)
-            power_current[i] = g_power3.laser_current[i];
-	#endif
-	return 1;
-}
 /*******************************************************************************
 * Function Name  : msg_task
 * Description    : 任务处理入口

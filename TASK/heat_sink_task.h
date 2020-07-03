@@ -28,15 +28,23 @@
 /* Exported macro ------------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
 
+typedef enum
+{
+    Add_Fan1_6 = 0x40,
+	Add_Fan7_12 = 0x5E,
+	Add_Fan13_18 = 0x58,
+	Add_Fan19_24 = 0x48,
+	Add_Fan25_30 = 0x50,
+	Add_Fan31_32_And_Bump1_4 = 0x56,
+}enum_Fan_ADD;
+
 
 extern MAX31790_OBJ Fan1_6;     //0x40 
 extern MAX31790_OBJ Fan7_12;    //0x5E
 extern MAX31790_OBJ Fan13_18;    //0x58
-
 extern MAX31790_OBJ Fan19_24;   //0x48
 extern MAX31790_OBJ Fan25_30;   //0x50
 extern MAX31790_OBJ Fan31_32_And_Bump1_4;  //0x56
-
 
 
 

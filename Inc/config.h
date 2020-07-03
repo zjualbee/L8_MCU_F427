@@ -20,6 +20,7 @@
 #define DEVICE_ID_POWER2    (0x21)
 #define DEVICE_ID_POWER3    (0x22)
 
+// **************** ∑Á…» **********************
 
 
 #endif

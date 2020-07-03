@@ -1,12 +1,7 @@
-
-
-
 #include "MAX31790.h"
 
-
+#define MAX_PWM 100
 uint16_t pwm[20]   = {100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100};
-
-
 extern uint8_t temp_ce;
 
 
@@ -20,16 +15,18 @@ int Max31790_Pwm_Set(pMAX31790_OBJ pObj,uint8_t id, uint16_t pwm)
     //0x190                           78%
     //0x1E0                           94%
     //0x1FF                            100%
-    
+    uint32_t pwmout = 0;
+	
     if(id >= 6)return 0;
+	if(pwm>MAX_PWM)
+		pwm=MAX_PWM;
 
     pObj->pwm_value[id]=pwm;
     printf("Pwm_Set %d\r\n",pwm);
-    //pObj->iic_write(pObj->dev_addr,0x30+(id*2), (pwm >> 1) & 0xFF);
-    //pObj->iic_write(pObj->dev_addr,0x31+(id*2), (pwm & 0x01) << 7 & 0xFF);
-
-    pObj->iic_write(pObj->dev_addr,0x40+(id*2), (pwm >> 1) & 0xFF);
-    pObj->iic_write(pObj->dev_addr,0x41+(id*2), (pwm & 0x01) << 7 & 0xFF);
+    
+    pwmout = 511 * pwm /100;
+    pObj->iic_write(pObj->dev_addr,0x40+(id*2), (pwmout >> 1) & 0xFF);
+    pObj->iic_write(pObj->dev_addr,0x41+(id*2), (pwmout & 0x01) << 7 & 0xFF);
     return 0;
 }
 
@@ -141,8 +138,7 @@ int Max31790_Full_Speed(pMAX31790_OBJ pObj)
     int i = 0;
     uint16_t pwmout = 0;
     
-    pwmout = 250;   // 全速
-    // pwmout = 511 * 0.9;  // 低噪音
+    pwmout = 511;   // 全速
     for (i = 0; i < FAN_NUM; i++){
         pObj->iic_write(pObj->dev_addr,0x40+(i*2), (pwmout >> 1) & 0xFF);
         pObj->iic_write(pObj->dev_addr,0x41+(i*2), (pwmout & 0x01) << 7);
@@ -192,6 +188,7 @@ int Max31790_Init(pMAX31790_OBJ pObj,uint8_t dev_addr,Max_Bsp_Read  iic_read,Max
 	pObj->iic_write = iic_write;
 
 	printf("init31790 %02X\r\n",dev_addr);
+	//reset
 	//FULL_SPEED1_SET;
 	pObj->iic_write(pObj->dev_addr,0x00, 0x60);    // RESET
 	HAL_Delay(20);                       // > 1ms
@@ -208,12 +205,6 @@ int Max31790_Init(pMAX31790_OBJ pObj,uint8_t dev_addr,Max_Bsp_Read  iic_read,Max
 	pObj->iic_write(pObj->dev_addr,0x06, 0x08);
 	pObj->iic_write(pObj->dev_addr,0x07, 0x08);
 
-
-
-
-
-
-
 	// fan Dynamics 设置动态
 	pObj->iic_write(pObj->dev_addr,0x08, 0x40);//PWMOUT1
 	pObj->iic_write(pObj->dev_addr,0x09, 0x40);//PWMOUT2
@@ -221,8 +212,6 @@ int Max31790_Init(pMAX31790_OBJ pObj,uint8_t dev_addr,Max_Bsp_Read  iic_read,Max
 	pObj->iic_write(pObj->dev_addr,0x0b, 0x40);//PWMOUT4
 	pObj->iic_write(pObj->dev_addr,0x0c, 0x40);//PWMOUT5
 	pObj->iic_write(pObj->dev_addr,0x0D, 0x40);//PWMOUT6
-
-
 
 
 	// PWMOUT 0~511
@@ -237,10 +226,6 @@ int Max31790_Init(pMAX31790_OBJ pObj,uint8_t dev_addr,Max_Bsp_Read  iic_read,Max
 	//printf("init  fan ok\r\n");
 	return 1;
 }
-
-
-
-
 
 
 void Max31790_List_Reg(pMAX31790_OBJ pObj)
@@ -258,8 +243,6 @@ void Max31790_List_Reg(pMAX31790_OBJ pObj)
             
         }
     printf("\r\n");
-
-
 }
 
 
