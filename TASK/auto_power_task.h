@@ -7,7 +7,6 @@
 #include "stm32f4xx.h"
 
 //#include "motor_36V.h"
-extern uint16_t power_current[18];
 
 
 typedef struct _G_POWER

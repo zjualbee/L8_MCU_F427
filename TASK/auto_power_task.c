@@ -11,7 +11,6 @@
 /* Private macro -------------------------------------------------------------*/
 #define POWER_ACK_BUF_SIZE  260
 
-uint16_t power_current[18]={0};
 G_POWER g_Power;
 xQueueHandle gQueuePowerAck  = NULL;
 /* Private variables ---------------------------------------------------------*/

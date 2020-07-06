@@ -11,6 +11,8 @@
 #define D_CURRENT_GET_CNT 40
 #define D_NTC_TEM_CNT 52
 #define D_TEC_GET_CNT 10
+#define D_FAN_GET_CNT 100
+#define D_LS_GET_CNT 5
 
 typedef enum
 {
@@ -60,6 +62,26 @@ typedef struct tag_TEC
     uint16_t  command;
     int16_t temp[3];
 }TEC_GET_TEM,*pTEC_GET_TEM;
+
+typedef struct tag_LightSource
+{
+    uint8_t route_from;
+    uint8_t route_to; 
+
+    uint16_t  command;
+    int8_t onoff_status;
+}LS_GET_ST,*pLS_GET_ST;
+
+
+typedef struct tag_FAN
+{
+    uint8_t route_from;
+    uint8_t route_to; 
+
+    uint16_t  command;
+	uint16_t rpm[32];
+}FAN_GET_RPM,*pFAN_GET_RPM;
+
 
 
 void Do_Message(pDECODE_TABLE decode_table);

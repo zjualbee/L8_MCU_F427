@@ -62,6 +62,7 @@ extern "C" {
 #include "Do_message.h"
 #include "Decode.h"
 #include "ADS7830.h"
+#include "power.h"
 #include "vdebug.h"
 
 
