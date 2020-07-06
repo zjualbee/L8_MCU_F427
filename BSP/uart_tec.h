@@ -139,7 +139,7 @@ typedef struct _UART_TEC
 
 
 
-extern UART_TEC Uart_Tec1;
+//extern UART_TEC Uart_Tec1;
 extern UART_TEC Uart_Tec2;
 extern UART_TEC Uart_Tec3;
 

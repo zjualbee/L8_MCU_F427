@@ -146,7 +146,7 @@ int protocol_power_send_to_uart(uint8_t *pBuf, uint16_t len)
     if (NULL == pBuf)
         return 0;
 
-#if  1//DEBUG_POWER
+#if  0//DEBUG_POWER
     // ¥Ú”°∑¢ÀÕ÷°
     printf("\r\nSend:");
     for (i = 0; i < len; i++){

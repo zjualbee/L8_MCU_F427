@@ -21,41 +21,10 @@ xTaskHandle g_xTaskHandle_auto_power = NULL;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 #if 1
-uint32_t Appo_Power_On(pG_POWER p)
-{
-    uint8_t param[POWER_MAX_PARAM_LEN] = {0};
-    uint32_t len = 0;
-    uint8_t cmd = 0;
-    uint8_t  tmp_u8  = 0;
-	uint16_t  tmp_u16 = 0;
- 	 
-    len = 0;
-    cmd = POWER_CMD_ID_ONOFF_POWER;
-    tmp_u8 = p->on_off_flag;
-    memcpy(&param[len], &tmp_u8, sizeof(tmp_u8));
-    len += sizeof(tmp_u8);
-    memcpy(&param[len], &p->current_b, sizeof(tmp_u16));
-    len += sizeof(p->current_b);
-    memcpy(&param[len], &p->current_g, sizeof(tmp_u16));
-    len += sizeof(p->current_g);
-    memcpy(&param[len], &p->current_r, sizeof(tmp_u16));
-    len += sizeof(p->current_r);
-	printf("R:%d ,G:%d ,B:%d \r\n",p->current_r,p->current_g,p->current_b);
-    protocol_power_frame_cmd_send_to_uart(0x20, cmd, param, len);
-	osDelay(100);
-    protocol_power_frame_cmd_send_to_uart(0x21, cmd, param, len);
-	osDelay(100);
-	protocol_power_frame_cmd_send_to_uart(0x22, cmd, param, len);
-	osDelay(100);
-	return 1;
-
-		
-}
-
-
 
 uint32_t Appo_Set_Current(pG_POWER p)
 {
+    #if 0
 	uint8_t param[POWER_MAX_PARAM_LEN] = {0};
 	uint32_t len = 0;
 	uint8_t cmd = 0;
@@ -76,23 +45,29 @@ uint32_t Appo_Set_Current(pG_POWER p)
 	osDelay(100);
 	protocol_power_frame_cmd_send_to_uart(0x22, cmd, param, len);
 	osDelay(100);
-
+	#endif
+    g_power1.power_on(&g_power1,p->current_b,p->current_g,p->current_r,0,0);
+	#ifdef POWER2_EN
+	g_power2.power_on(&g_power2,p->current_b,p->current_g,p->current_r,0,0);
+	#endif
+	#ifdef POWER3_EN
+	g_power3.power_on(&g_power3,p->current_b,p->current_g,p->current_r,0,0);
+	#endif
 	return 1;
 
 }
 #endif
 
 
-uint32_t onoff_laser_on(uint16_t b,uint16_t g,uint16_t r)
+uint32_t Appo_Power_On(pG_POWER p)
 {
 	POWER_ON;
-
-    g_power1.power_on(&g_power1,b,g,r,0,0);
+    g_power1.power_on(&g_power1,p->current_b,p->current_g,p->current_r,0,0);
 	#ifdef POWER2_EN
-	g_power2.power_on(&g_power2,b,g,r,0,0);
+	g_power2.power_on(&g_power2,p->current_b,p->current_g,p->current_r,0,0);
 	#endif
 	#ifdef POWER3_EN
-	g_power3.power_on(&g_power3,b,g,r,0,0);
+	g_power3.power_on(&g_power3,p->current_b,p->current_g,p->current_r,0,0);
 	#endif
 
 	return 1;
@@ -100,7 +75,7 @@ uint32_t onoff_laser_on(uint16_t b,uint16_t g,uint16_t r)
 
 
 
-uint32_t onoff_laser_off()
+uint32_t Appo_Power_Off()
 {
 	g_power1.power_off(&g_power1);
 	#ifdef POWER2_EN

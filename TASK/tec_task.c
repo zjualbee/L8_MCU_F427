@@ -19,7 +19,7 @@
 
 // ÈÎÎñ¾ä±ú
 xTaskHandle g_xTaskHandle_tec = NULL;
-UART_TEC Uart_Tec1;
+//UART_TEC Uart_Tec1;
 UART_TEC Uart_Tec2;
 UART_TEC Uart_Tec3;
 
@@ -27,23 +27,6 @@ UART_TEC Uart_Tec3;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-
-
-
-uint8_t UART8_SEND(uint8_t *buf,uint16_t len)
-{
-    //int i=0;
-    vTaskSuspendAll();
-   // for(i = 0 ;i<len;i++)
-        {
-       HAL_UART_Transmit(&huart8,buf,len,50);
-        }
-    xTaskResumeAll();
-
-    return len;
-
-}
-
 uint8_t UART2_SEND(uint8_t *buf,uint16_t len)
 {
     //int i=0;
@@ -88,8 +71,8 @@ static portTASK_FUNCTION(tec_task, pvParameters)
 
 
     //J21   ºì¼¤¹â
-    Uart_Tec1.uart_send =   UART8_SEND;
-    Uart_Tec1.delayms =     osDelay;
+    //Uart_Tec1.uart_send =   UART8_SEND;
+    //Uart_Tec1.delayms =     osDelay;
 
 
     // J20   
@@ -103,15 +86,15 @@ static portTASK_FUNCTION(tec_task, pvParameters)
 
     osDelay(2000);
 
-    TEC_SetPowerDown(&Uart_Tec1);
+   // TEC_SetPowerDown(&Uart_Tec1);
     TEC_SetPowerDown(&Uart_Tec2);
     TEC_SetPowerDown(&Uart_Tec3);
     
     osDelay(3000);
     
-    TEC_Init_Table(&Uart_Tec1);
+    //TEC_Init_Table(&Uart_Tec1);
     //TEC_SetTemprature(&Uart_Tec1,20,20);
-    TEC_SetPowerUp(&Uart_Tec1);
+    //TEC_SetPowerUp(&Uart_Tec1);
 
     TEC_Init_Table(&Uart_Tec2);
     //TEC_SetTemprature(&Uart_Tec2,20,20);
@@ -122,18 +105,15 @@ static portTASK_FUNCTION(tec_task, pvParameters)
 
     while(1)
     {
-        printf("Uart_Tec1\r\n");
-        TEC_handler(&Uart_Tec1);
+        //printf("Uart_Tec1\r\n");
+        //TEC_handler(&Uart_Tec1);
         
-        printf("Uart_Tec2\r\n");
+        //printf("Uart_Tec2\r\n");
         TEC_handler(&Uart_Tec2);
         
-        printf("Uart_Tec3\r\n");
+        //printf("Uart_Tec3\r\n");
         TEC_handler(&Uart_Tec3);
-        osDelay(3000);
-        
-        //TEC_Get_Run_Param(&Uart_Tec1,0,12);
-        //TEC_SetPowerUp(&Uart_Tec1);
+        osDelay(1000);
     }
 
 

@@ -73,7 +73,7 @@ static uint8_t Bsp_I2c5_Write(uint8_t dev_addr , uint8_t reg , uint8_t value)
     W_Result=g_i2c5.transmit(&g_i2c5, dev_addr, databuff, 2,150);
     if(W_Result==HAL_OK)
         {
-           ;// printf("iic ok %02X\r\n",dev_addr);
+           //printf("iic ok %02X\r\n",dev_addr);
      
         }
     else
@@ -191,7 +191,7 @@ static portTASK_FUNCTION(heat_sink_task, pvParameters)
     Init_Heat_Sink();
     // MAX31790_on_full_speed();
 		
-    uint16_t pwm_init_value=100;
+    uint16_t pwm_init_value=50;
     for(i=0;i < 6;i++)
     {
 	    Max31790_Pwm_Set(&Fan1_6,i,pwm_init_value);
@@ -211,7 +211,7 @@ static portTASK_FUNCTION(heat_sink_task, pvParameters)
         Max31790_Update(&Fan25_30);
         Max31790_Update(&Fan31_32_And_Bump1_4);
 
-
+        #if 0
         printf("===========channel  1===============\r\n");
         print_max31790_fan_rpm(&Fan1_6);
         
@@ -229,8 +229,9 @@ static portTASK_FUNCTION(heat_sink_task, pvParameters)
         
         printf("===========pump ===============\r\n");
         print_max31790_fan_rpm(&Fan31_32_And_Bump1_4);
+		#endif
 
-        osDelay(4000);
+        osDelay(1000);
     }
 
    

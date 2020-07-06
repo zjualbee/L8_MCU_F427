@@ -3008,7 +3008,7 @@ static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
     }
   else if(huart->Instance == UART8)  //   2  5  8
     {
-         TEC_Recv_Buf_In(&Uart_Tec1,temp);
+      //   TEC_Recv_Buf_In(&Uart_Tec1,temp);
     }
   else if(huart->Instance == USART2)
     {

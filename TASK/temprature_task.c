@@ -36,19 +36,9 @@ xTaskHandle g_xTaskHandle_temprature = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-
-
-
-
-
-
 ADS7830_OBJ  Ntc_1_8;
 ADS7830_OBJ  Ntc_9_16;
 ADS7830_OBJ  Ntc_17_24;
-
-
-
-
 
 uint8_t I2c_Recv(uint8_t dev_addr ,uint8_t * pBuf_out,uint16_t len)
 {
@@ -110,50 +100,23 @@ static portTASK_FUNCTION(temprature_task, pvParameters)
         {
            reg = Ads8730_Get_Raw_Adc(&Ntc_1_8,i);
            temprature = Transform_Reg_To_Temprature(reg,3.3);
-           printf("Ntc_1_8 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
+           //printf("Ntc_1_8 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
         }
 	    for(i=0;i<8;i++)
         {
            reg = Ads8730_Get_Raw_Adc(&Ntc_9_16,i);
            temprature = Transform_Reg_To_Temprature(reg,3.3);
-           printf("Ntc_9_16 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
+           //printf("Ntc_9_16 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
         }
 	    for(i=0;i<8;i++)
         {
            reg = Ads8730_Get_Raw_Adc(&Ntc_17_24,i);
            temprature = Transform_Reg_To_Temprature(reg,3.3);
-           printf("Ntc_17_24 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
+           //printf("Ntc_17_24 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
         }
-
-
-
-
-
-
         
         }
 
-
-    while(1)
-			{
-            
-        //for(i=0;i<255;i++)
-            {
-
-            if(HAL_OK ==Ntc_1_8.iic_transmit(0x90, "a", 1))
-           // if(HAL_OK ==HAL_I2C_Master_Transmit(&hi2c1, i, "a", 1,100))
-                {
-                    printf("dev:%02X  ok\r\n",i);
-                }
-            else
-                {
-                   ;// printf("dev:%02X  error\r\n",i);
-                }
-
-            
-            }
-            osDelay(2000);
-        }
 }
 
 

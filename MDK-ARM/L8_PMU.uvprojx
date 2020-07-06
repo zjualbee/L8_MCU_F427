@@ -663,6 +663,11 @@
               <FileType>1</FileType>
               <FilePath>..\TASK\auto_power_task.c</FilePath>
             </File>
+            <File>
+              <FileName>uart_printf_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TASK\uart_printf_task.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

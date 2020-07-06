@@ -39,7 +39,7 @@ void On_Set_LightSource(pONE_ELEMENT p)
     else if(p->value_id == DPV_LIGHTSOURCE_STATUS_OFF)
         {
         g_Power.on_off_flag = 0;
-        Appo_Power_On(&g_Power);
+        Appo_Power_Off();
 
         }
     }

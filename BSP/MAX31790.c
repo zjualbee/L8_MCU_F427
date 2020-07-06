@@ -1,11 +1,11 @@
 #include "MAX31790.h"
 
 #define MAX_PWM 100
-uint16_t pwm[20]   = {100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100};
+uint16_t init_pwm=50;
 extern uint8_t temp_ce;
 
 
-int Max31790_Pwm_Set(pMAX31790_OBJ pObj,uint8_t id, uint16_t pwm)
+int Max31790_Pwm_Set(pMAX31790_OBJ pObj,uint8_t id, uint16_t duty)
 {
 
     // bits 15:7 reg            PWM     
@@ -18,13 +18,13 @@ int Max31790_Pwm_Set(pMAX31790_OBJ pObj,uint8_t id, uint16_t pwm)
     uint32_t pwmout = 0;
 	
     if(id >= 6)return 0;
-	if(pwm>MAX_PWM)
-		pwm=MAX_PWM;
+    if(duty>100)
+		duty=100;
 
-    pObj->pwm_value[id]=pwm;
-    printf("Pwm_Set %d\r\n",pwm);
+    pObj->pwm_value[id]=duty;
+    printf("Pwm_Set %d\r\n",duty);
     
-    pwmout = 511 * pwm /100;
+    pwmout = 511 * duty /100;
     pObj->iic_write(pObj->dev_addr,0x40+(id*2), (pwmout >> 1) & 0xFF);
     pObj->iic_write(pObj->dev_addr,0x41+(id*2), (pwmout & 0x01) << 7 & 0xFF);
     return 0;
@@ -119,7 +119,7 @@ int Max31790_On(pMAX31790_OBJ pObj)
 
     for(i=0 ; i < 6; i++)
     {
-    	Max31790_Pwm_Set(pObj, i,pwm[i]);
+    	Max31790_Pwm_Set(pObj, i,init_pwm);
     }
 
     return 0;

@@ -35,56 +35,13 @@ typedef enum
 	
    
 }enum_CmdId_5AA5;
-typedef struct tag_POWER_GET_CURRENT
-{
-    uint8_t route_from;
-    uint8_t route_to; 
-
-    uint16_t  command;
-    uint16_t p_current[18]; 
-}POWER_GET_CURRENT,*pPOWER_GET_CURRENT;
-
-typedef struct tag_NTC
-{
-    uint8_t route_from;
-    uint8_t route_to; 
-
-    uint16_t  command;
-    uint8_t id[24];
-	uint8_t temperature[24];
-}NTC_GET_TEM,*pNTC_GET_TEM;
-
-typedef struct tag_TEC
-{
-    uint8_t route_from;
-    uint8_t route_to; 
-
-    uint16_t  command;
-    int16_t temp[3];
-}TEC_GET_TEM,*pTEC_GET_TEM;
-
-typedef struct tag_LightSource
-{
-    uint8_t route_from;
-    uint8_t route_to; 
-
-    uint16_t  command;
-    int8_t onoff_status;
-}LS_GET_ST,*pLS_GET_ST;
-
-
-typedef struct tag_FAN
-{
-    uint8_t route_from;
-    uint8_t route_to; 
-
-    uint16_t  command;
-	uint16_t rpm[32];
-}FAN_GET_RPM,*pFAN_GET_RPM;
 
 
 
 void Do_Message(pDECODE_TABLE decode_table);
+
+int Do_Dlp_Route(pCMD_PACKET p,uint16_t len);
+
 int Do_Pmu_Route(pCMD_PACKET p,uint16_t len);
 
 

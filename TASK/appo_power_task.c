@@ -111,7 +111,7 @@ uint32_t Appo_Power_Set_Current(pG_POWER_STATUS p)
     send_buf[6] = (p->current_r>>8)&0xff;;
     
 
-    printf("R:%d ,G:%d ,B:%d \r\n",p->current_r,p->current_g,p->current_b);
+    //printf("R:%d ,G:%d ,B:%d \r\n",p->current_r,p->current_g,p->current_b);
 
     protocol_power_frame_cmd_send_to_uart(0x20,POWER_CMD_ID_ONOFF_POWER,send_buf,7);
 	osDelay(100);

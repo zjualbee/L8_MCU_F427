@@ -180,6 +180,7 @@ static int power_current_set(struct Power *thiz, enum_CurrentModule cm, uint16_t
     return ret;
 }
 
+
 /*******************************************************************************
 * Function Name  : power_power_temp_update
 * Description    : update temp

@@ -15,6 +15,10 @@
 #define POWER2_EN
 #define POWER3_EN
 
+#define TEC_SUPPORT
+#define FAN_SUPPORT
+#define CW_SUPPORT
+#define NTC_SUPPORT
 // **************** 电源设备ID ****************
 #define DEVICE_ID_POWER1    (0x20)
 #define DEVICE_ID_POWER2    (0x21)

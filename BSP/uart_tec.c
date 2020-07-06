@@ -1,9 +1,4 @@
-
-
-
-
 /* Includes ------------------------------------------------------------------*/
-
 #include "uart_tec.h"
 #include "vdebug.h"
 
@@ -16,8 +11,6 @@ TEC_Check_Table checkindex=TEC_Check_1;
 
 
 extern uint8_t Tec_Error_Reboot_Flag;
-
-
 
 
 int16_t TEM_TEMP1=0;
@@ -427,24 +420,19 @@ void TEC_Show(pUART_TEC p)
     int16_t temp=0;
     
     temp = p->run_param_reg[1]|((p->run_param_reg[0]<<8)&0xff00);
-    printf("TEC_CHANNEL1:%d.%d \r\n",temp/10,temp%10);
+    //printf("TEC_CHANNEL1:%d.%d \r\n",temp/10,temp%10);
     p->temp1 = temp;
 
 
 
     temp = p->run_param_reg[5]|((p->run_param_reg[4]<<8)&0xff00);
-    printf("TEC_CHANNEL2:%d.%d \r\n",temp/10,temp%10);
+    //printf("TEC_CHANNEL2:%d.%d \r\n",temp/10,temp%10);
     p->temp2 = temp;
 
     
     temp = p->run_param_reg[9]|((p->run_param_reg[8]<<8)&0xff00);
-    printf("TEC_CHANNEL3:%d.%d \r\n",temp/10,temp%10);
+    //printf("TEC_CHANNEL3:%d.%d \r\n",temp/10,temp%10);
     p->temp3 = temp;
-
-
-
-  
-
 }
 
 
