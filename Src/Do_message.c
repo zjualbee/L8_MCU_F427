@@ -108,37 +108,13 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to, uint16_t len)
 	{
 		Route_RxBuffer2[8]   = (D_LIGHTSOURCE_R_CMD&0xff00)>>8; 
         Route_RxBuffer2[9]   = (D_LIGHTSOURCE_R_CMD&0xff);
-		for(i=0;i<6;i++)
+		for(i=0;i<32;i++)
 		{
 		    Route_RxBuffer2[10+3*i]=i;
-			Route_RxBuffer2[11+3*i]=(Fan1_6.rpm_value[i]&0xff00)>>8;
-			Route_RxBuffer2[12+3*i]=Fan1_6.rpm_value[i]&0xff;
+			Route_RxBuffer2[11+3*i]=(g_fan_cooling.fan_speed[i]&0xff00)>>8;
+			Route_RxBuffer2[12+3*i]=g_fan_cooling.fan_speed[i]&0xff;
 		}
-		for(i=0;i<6;i++)
-		{
-		    Route_RxBuffer2[28+3*i]=i;
-			Route_RxBuffer2[29+3*i]=(Fan7_12.rpm_value[i]&0xff00)>>8;
-			Route_RxBuffer2[30+3*i]=Fan7_12.rpm_value[i]&0xff;
-		}
-		for(i=0;i<6;i++)
-		{
-		    Route_RxBuffer2[46+3*i]=i;
-			Route_RxBuffer2[47+3*i]=(Fan13_18.rpm_value[i]&0xff00)>>8;
-			Route_RxBuffer2[48+3*i]=Fan13_18.rpm_value[i]&0xff;
-		}
-		for(i=0;i<6;i++)
-		{
-		    Route_RxBuffer2[64+3*i]=i;
-			Route_RxBuffer2[65+3*i]=(Fan19_24.rpm_value[i]&0xff00)>>8;
-			Route_RxBuffer2[66+3*i]=Fan19_24.rpm_value[i]&0xff;
-		}
-		for(i=0;i<6;i++)
-		{
-		    Route_RxBuffer2[80+3*i]=i;
-			Route_RxBuffer2[81+3*i]=(Fan25_30.rpm_value[i]&0xff00)>>8;
-			Route_RxBuffer2[82+3*i]=Fan25_30.rpm_value[i]&0xff;
-		}
-		
+
 		sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&Route_RxBuffer2,len+7-1);
 		Route_RxBuffer2[100]   = sum_byte;
 	}
@@ -251,23 +227,29 @@ void Do_Message(pDECODE_TABLE decode_table)
 							switch(fan_id)
 							{
 							    case 0:
-									Max31790_Pwm_Set_All(&Fan1_6,pwm_value);
+									//Max31790_Pwm_Set_All(&Fan1_6,pwm_value);
+									g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL1,pwm_value);
 									break;
 								case 1:
-									Max31790_Pwm_Set_All(&Fan7_12,pwm_value);
+									//Max31790_Pwm_Set_All(&Fan7_12,pwm_value);
+									g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL2,pwm_value);
 									break;
 								case 2:
-									Max31790_Pwm_Set_All(&Fan13_18,pwm_value);
+									//Max31790_Pwm_Set_All(&Fan13_18,pwm_value);
+									g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL3,pwm_value);
 									break;
 								case 3:
-									Max31790_Pwm_Set_All(&Fan19_24,pwm_value);
+									//Max31790_Pwm_Set_All(&Fan19_24,pwm_value);
+									g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL4,pwm_value);
 									break;
 								case 4:
-									Max31790_Pwm_Set_All(&Fan25_30,pwm_value);
+									//Max31790_Pwm_Set_All(&Fan25_30,pwm_value);
+									g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL5,pwm_value);
 									break;
 								case 5:
-									Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,0,pwm_value);
-									Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,1,pwm_value);
+									//Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,0,pwm_value);
+									//Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,1,pwm_value);
+								    g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL6,pwm_value);
 									break;
 								default:
 									break;

@@ -56,7 +56,7 @@
 /* USER CODE END ExternalFunctions */
 
 /* USER CODE BEGIN 0 */
-#define UART1_SEL 1
+#define UART1_SEL 0
 /* USER CODE END 0 */
                         
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);

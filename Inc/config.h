@@ -15,6 +15,8 @@
 #define POWER2_EN
 #define POWER3_EN
 
+#define PUMP_EN
+
 #define TEC_SUPPORT
 #define FAN_SUPPORT
 #define CW_SUPPORT

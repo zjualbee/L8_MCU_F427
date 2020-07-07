@@ -1,5 +1,4 @@
-#include "main.h"
-#include "power.h"
+#include "power_task.h"
 /* Private typedef -----------------------------------------------------------*/
 
 
@@ -16,36 +15,12 @@ xQueueHandle gQueuePowerAck  = NULL;
 /* Private variables ---------------------------------------------------------*/
 
 // 任务句柄
-xTaskHandle g_xTaskHandle_auto_power = NULL;
+xTaskHandle g_xTaskHandle_power = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-#if 1
-
 uint32_t Appo_Set_Current(pG_POWER p)
 {
-    #if 0
-	uint8_t param[POWER_MAX_PARAM_LEN] = {0};
-	uint32_t len = 0;
-	uint8_t cmd = 0;
-	uint16_t tmp_u16 = 0;
-
-	// 设置激光电流为0
-	len = 0;
-	cmd = POWER_CMD_ID_SET_LASER_CURRENT;
-	memcpy(&param[len], &p->current_b, sizeof(tmp_u16));
-	len += sizeof(p->current_b);
-	memcpy(&param[len], &p->current_g, sizeof(tmp_u16));
-	len += sizeof(p->current_g);
-	memcpy(&param[len], &p->current_r, sizeof(tmp_u16));
-	len += sizeof(p->current_r);
-	protocol_power_frame_cmd_send_to_uart(0x20, cmd, param, len);
-	osDelay(100);
-	protocol_power_frame_cmd_send_to_uart(0x21, cmd, param, len);
-	osDelay(100);
-	protocol_power_frame_cmd_send_to_uart(0x22, cmd, param, len);
-	osDelay(100);
-	#endif
     g_power1.power_on(&g_power1,p->current_b,p->current_g,p->current_r,0,0);
 	#ifdef POWER2_EN
 	g_power2.power_on(&g_power2,p->current_b,p->current_g,p->current_r,0,0);
@@ -56,7 +31,7 @@ uint32_t Appo_Set_Current(pG_POWER p)
 	return 1;
 
 }
-#endif
+
 
 
 uint32_t Appo_Power_On(pG_POWER p)
@@ -96,7 +71,7 @@ uint32_t Appo_Power_Off()
 * Output         : None
 * Return         : None
 *******************************************************************************/
-static portTASK_FUNCTION(auto_power_task, pvParameters)
+static portTASK_FUNCTION(power_task, pvParameters)
 {
 	    int i = 0;
 		int index = 0;
@@ -154,9 +129,9 @@ static portTASK_FUNCTION(auto_power_task, pvParameters)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-portBASE_TYPE auto_power_task_create(void)
+portBASE_TYPE power_task_create(void)
 {
-    return xTaskCreate(auto_power_task, "auto_power_task", 256, NULL, TASK_PRIORITY+1, &g_xTaskHandle_auto_power);
+    return xTaskCreate(power_task, "auto_power_task", 256, NULL, TASK_PRIORITY+1, &g_xTaskHandle_power);
 }
 
 

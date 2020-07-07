@@ -50,9 +50,7 @@
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
-
 SPI_HandleTypeDef hspi4;
-
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
 
@@ -936,7 +934,7 @@ void StartDefaultTask(void const * argument)
     heat_sink_task_create();
     temprature_task_create();
     tec_task_create();
-	auto_power_task_create();
+	power_task_create();
 #else
     led_task_create();
     uart_task_create();

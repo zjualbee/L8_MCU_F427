@@ -18,8 +18,8 @@ int Max31790_Pwm_Set(pMAX31790_OBJ pObj,uint8_t id, uint16_t duty)
     uint32_t pwmout = 0;
 	
     if(id >= 6)return 0;
-    if(duty>100)
-		duty=100;
+    if(duty>MAX_PWM)
+		duty=MAX_PWM;
 
     pObj->pwm_value[id]=duty;
     printf("Pwm_Set %d\r\n",duty);
@@ -107,7 +107,7 @@ void print_max31790_fan_rpm(pMAX31790_OBJ p)
 * Output         : None
 * Return         : 0正常，非0异常
 *******************************************************************************/
-int Max31790_On(pMAX31790_OBJ pObj)
+int Max31790_On(pMAX31790_OBJ pObj, uint16_t pwm_value)
 {
 
     int i = 0;
@@ -119,7 +119,7 @@ int Max31790_On(pMAX31790_OBJ pObj)
 
     for(i=0 ; i < 6; i++)
     {
-    	Max31790_Pwm_Set(pObj, i,init_pwm);
+    	Max31790_Pwm_Set(pObj, i,pwm_value);
     }
 
     return 0;
@@ -215,7 +215,7 @@ int Max31790_Init(pMAX31790_OBJ pObj,uint8_t dev_addr,Max_Bsp_Read  iic_read,Max
 
 
 	// PWMOUT 0~511
-	pwmout = 100;
+	pwmout = init_pwm;
 	int i=0;
 	for(i=0; i<6; i++)
 	{
@@ -244,13 +244,4 @@ void Max31790_List_Reg(pMAX31790_OBJ pObj)
         }
     printf("\r\n");
 }
-
-
-
-
-
-
-
-
-
 

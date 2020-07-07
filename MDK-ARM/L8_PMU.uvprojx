@@ -428,6 +428,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\power_cmd_task.c</FilePath>
             </File>
+            <File>
+              <FileName>fan_cooling.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\fan_cooling.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -659,14 +664,14 @@
               <FilePath>..\TASK\dlp4422_task.c</FilePath>
             </File>
             <File>
-              <FileName>auto_power_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\TASK\auto_power_task.c</FilePath>
-            </File>
-            <File>
               <FileName>uart_printf_task.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\TASK\uart_printf_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>power_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TASK\power_task.c</FilePath>
             </File>
           </Files>
         </Group>

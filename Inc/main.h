@@ -1,24 +1,3 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file           : main.h
-  * @brief          : Header for main.c file.
-  *                   This file contains the common defines of the application.
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
-  */
-/* USER CODE END Header */
-
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H__
 #define __MAIN_H__
@@ -45,7 +24,9 @@ extern "C" {
 #include "system.h"
 
 #include "appo_power_protocol.h"
-
+#include "power.h"
+#include "power_task.h"
+#include "power_cmd_task.h"
 
 #include "motor_task.h"
 #include "heat_sink_task.h"
@@ -55,8 +36,7 @@ extern "C" {
 #include "uart_task.h"
 #include "dlp4422_task.h"
 #include "i2c5.h"
-#include "auto_power_task.h"
-#include "power_cmd_task.h"
+
 
 
 #include "Do_message.h"
@@ -65,9 +45,8 @@ extern "C" {
 #include "power.h"
 #include "vdebug.h"
 
-
-
-
+#include "MAX31790.h"
+#include "fan_cooling.h"
 
 
 /* USER CODE END Includes */
@@ -78,7 +57,6 @@ extern "C" {
 extern I2C_HandleTypeDef hi2c1;
 extern I2C_HandleTypeDef hi2c2;
 extern SPI_HandleTypeDef hspi4;
-
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 
