@@ -32,6 +32,7 @@ static portTASK_FUNCTION(heat_sink_task, pvParameters)
     HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_SET);
     //HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_RESET);
     fan_cooling_init(&g_fan_cooling);
+	g_fan_cooling.fan_on_all(&g_fan_cooling,100);
 	
     while(1)
     {

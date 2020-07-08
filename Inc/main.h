@@ -44,7 +44,7 @@ extern "C" {
 #include "ADS7830.h"
 #include "power.h"
 #include "vdebug.h"
-
+#include "motor_36V.h"
 #include "MAX31790.h"
 #include "fan_cooling.h"
 

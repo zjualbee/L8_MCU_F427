@@ -423,10 +423,14 @@ int fan_cooling_init(struct_FanCooling *thiz)
 	thiz->fan_off_all           = fan_cooling_fan_off_all;
 	thiz->fan_speed_set_pwm     = fan_cooling_fan_speed_set_pwm;
 	thiz->fan_speed_set_pwm_all = fan_cooling_fan_speed_set_pwm_all;
+	thiz->fan_speed_update      = fan_cooling_fan_speed_update;
 	thiz->fan_full_speed        = fan_cooling_fan_full_speed;
 
+	// init
+	thiz->fan_init_all(thiz);
+
     // 关闭本地外设
-    thiz->fan_off_all(thiz);
+    //thiz->fan_off_all(thiz);
     return 0;
 }
 

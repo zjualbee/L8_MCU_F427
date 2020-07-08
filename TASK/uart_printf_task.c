@@ -37,12 +37,12 @@ static void uart_printf(void)
 	printf("\r\n");
 #endif
 
-#ifdef CW_SUPPORT
-
-    printf("========Color Wheel Info========\r\n");
-    printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
-    printf("\r\n");
-
+#ifdef MOTOR_36V_EN
+    // MOTOR 12V
+    printf("========Wheel Motor========\r\n");
+    printf("MOTOR 1:%4dRPM(%4d),  %4dHz(%4d),  PWM:%.1f%%,  TEMP:%3d°„C,  status:0x%04X,  dt:%d(%d),   OK:%d\r\n", 
+           (uint16_t)g_motor_36v.speed_sensor, (uint16_t)g_motor_36v.speed, (uint16_t)g_motor_36v.Hz_sensor, (uint16_t)g_motor_36v.Hz_chip, 
+           (float)g_motor_36v.duty_cycle/10.0, (int16_t)g_motor_36v.temp, (uint16_t)g_motor_36v.A4960_reg_status, (int32_t)g_motor_36v.speed_dt_sensor, (int32_t)g_motor_36v.speed_dt_chip,  g_motor_36v.ok_flag);
 #endif
 
 #ifdef NTC_SUPPORT
@@ -71,12 +71,13 @@ static void uart_printf(void)
 	printf("\r\n");
 #endif
 #ifdef FAN_SUPPORT
-    printf("FAN  :");
+    printf("========Fan Info========\r\n");
     for (i = 0; i < MAX_COOL_FAN_NUM; i++)
     {
-        printf("%4drpm(%d%%), ", g_fan_cooling.fan_speed[i], g_fan_cooling.fan_pwm[i]);
         if(i%6==0)
-			printf("\r\n");
+			printf("\r\nFan Group %d Info\r\n", i/6+1);
+        printf("%4drpm(%d%%), ", g_fan_cooling.fan_speed[i], g_fan_cooling.fan_pwm[i]);
+        
     }
 	printf("\r\n");
 #endif

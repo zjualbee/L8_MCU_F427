@@ -19,7 +19,7 @@
 
 #define TEC_SUPPORT
 #define FAN_SUPPORT
-#define CW_SUPPORT
+#define MOTOR_36V_EN
 #define NTC_SUPPORT
 // **************** 电源设备ID ****************
 #define DEVICE_ID_POWER1    (0x20)
