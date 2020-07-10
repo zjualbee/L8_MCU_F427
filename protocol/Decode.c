@@ -4,15 +4,22 @@ DECODE_TABLE Decode_PMU;
 DECODE_TABLE Decode_DLP;
 
 //---------------------------------------------------------------------------------------------------
-//      chr        : ???????????(???FIFO???????)
-//  decode_table   : ?????
-//     buf         : ????,?????buf 
-//   return        : ??????
-//---------------------------------------------------------------------------------------------------
-
-
-//#define PRINT_DECODE  printf
 #define PRINT_DECODE   printf
+
+/************************************************************
+@info: for appo2.0 protocol encode
+@function name:appoProtocolEncode
+@params:
+  cmd:      command
+  indata:   buffer for input data
+  len:      data length input
+  flag:     flag 
+  seria:    seria number for message check
+  outData:  buffer after encode, NULL if no need
+  fnSend:   outdata callbak task, NULL if no need
+@return:
+  int:      data length after encode, 0 is error
+************************************************************/
 
 unsigned char Make_5AA5_Sum_Ext(unsigned char start_value,unsigned char * buf ,int len)
 {
@@ -20,10 +27,8 @@ unsigned char Make_5AA5_Sum_Ext(unsigned char start_value,unsigned char * buf ,i
 	int i=0;
 
     sum = start_value;
-    
 	for(i=0;i<len;i++)
 	{
-		//printf("%02x ",buf[i]);
 		sum = buf[i] ^ sum;
 	}
       
@@ -41,7 +46,6 @@ uint8_t Check_Xor_5AA5(uint8_t * buf ,int len)
 	{
 		sum = buf[i] ^ sum;
 	}
-	 //printf("\r\nsum:%x \r\n",sum);
 	return sum&0xFF;
 }
 
@@ -95,7 +99,7 @@ void Decode_Handle(pDECODE_TABLE decode_table)
     if(decode_table->switch_channel == RECV_CHANNEL_B)
         {
 
-        for( ;  pre_index < decode_table->index_a ; pre_index++ )
+        for( pre_index=0;  pre_index < decode_table->index_a ; pre_index++ )
             { 
        //         PRINT_DECODE("A pre:%d / %d\r\n",pre_index,decode_table->index_a);
                 if(0!=CMD_5AA5_Decode(decode_table,decode_table->buf_channel_a[pre_index]))
@@ -114,7 +118,7 @@ void Decode_Handle(pDECODE_TABLE decode_table)
     else //if(decode_table->switch_channel == RECV_CHANNEL_A)
         {
 
-        for( ; pre_index < decode_table->index_b;pre_index++ )
+        for(pre_index=0 ; pre_index < decode_table->index_b;pre_index++ )
             {
                 
             //    PRINT_DECODE("B pre:%d / %d\r\n",pre_index,decode_table->index_b);
@@ -145,14 +149,7 @@ void for_delay(int x)
 }
 
 uint32_t CMD_5AA5_Decode(pDECODE_TABLE decode_table, uint8_t chr)
-{        
-	//PRINT_DECODE("%s,part:%x :%X\r\n",__FUNCTION__,decode_table->part,chr);
-	//printf("%02x ",chr);
-
-    
-//	PRINT_DECODE("->%x ",chr);
-
-    
+{           
     switch(decode_table->part)
     {
         case 0 :    // ??
@@ -161,21 +158,16 @@ uint32_t CMD_5AA5_Decode(pDECODE_TABLE decode_table, uint8_t chr)
                 {
                     decode_table->package_buf[decode_table->recv_total] = chr;
                     decode_table->recv_total++;
-					      //    PRINT_DECODE("sys in \r\n"); 
                 }             
                 else
                 {
                     decode_table->part = 0;
-                    decode_table->recv_total = 0;
-
-
-
-               //     PRINT_DECODE("sys err \r\n");                     
+                    decode_table->recv_total = 0;                  
                     return 0;
                 }
 
-		  if(decode_table->recv_total<2)
-				return 0;
+		  		if(decode_table->recv_total<2)
+					return 0;
 				
                 if((decode_table->package_buf[decode_table->recv_total-2]==0x5A)  && (decode_table->package_buf[decode_table->recv_total-1]==0xA5))
                 {
@@ -183,8 +175,6 @@ uint32_t CMD_5AA5_Decode(pDECODE_TABLE decode_table, uint8_t chr)
                     decode_table->package_buf[0] = 0x5A;
                     decode_table->package_buf[1] = 0xA5;
                     decode_table->recv_total = 2;
-
-			//		PRINT_DECODE("sys ok\r\n");
                     return 0;
                 }
             }
@@ -192,12 +182,11 @@ uint32_t CMD_5AA5_Decode(pDECODE_TABLE decode_table, uint8_t chr)
 			
 		case 1 :	// ???? ???;
 		{
-		 // printf("cmd and len in\r\n");
 		 decode_table->package_buf[decode_table->recv_total++] = chr;
          if(decode_table->recv_total >= 4)
             {
                  decode_table->packet_len = ((decode_table->package_buf[2]<<8)|decode_table->package_buf[3]);
-             //    PRINT_DECODE("packet_len %d \r\n",decode_table->packet_len);
+             	//    PRINT_DECODE("packet_len %d \r\n",decode_table->packet_len);
                  if(decode_table->packet_len > CMD_SIZE)
                     {
                    //     printf("big than max cmd\r\n");

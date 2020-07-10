@@ -8,12 +8,10 @@
 #include "Decode.h"
 
 
-#define D_CURRENT_GET_CNT 40
-#define D_NTC_TEM_CNT 52
-#define D_TEC_GET_CNT 10
-#define D_FAN_GET_CNT 100
-#define D_LS_GET_CNT 5
+#define PROTOCOL_HEAD_H	0x5A
+#define PROTOCOL_HEAD_L	0xA5
 
+#if 1
 typedef enum
 {
     D_CW_MODEL_W_CMD = 0x0801,    //设置色轮模型
@@ -35,7 +33,7 @@ typedef enum
 	
    
 }enum_CmdId_5AA5;
-
+#endif
 
 
 void Do_Message(pDECODE_TABLE decode_table);
@@ -43,6 +41,17 @@ void Do_Message(pDECODE_TABLE decode_table);
 int Do_Dlp_Route(pCMD_PACKET p,uint16_t len);
 
 int Do_Pmu_Route(pCMD_PACKET p,uint16_t len);
+
+typedef struct tag_GET_LASER_STATUS
+{
+   uint8_t route_from;
+   uint8_t route_to; 
+   uint16_t  command;
+   uint8_t   status;                                /* ON: 0x01 OFF:0x00	ON: 0x01 OFF:0x00 */
+}GET_LASER_STATUS,*pGET_LASER_STATUS;
+
+
+int apiGetLaserStatus(pGET_LASER_STATUS pMsg);
 
 
 #endif

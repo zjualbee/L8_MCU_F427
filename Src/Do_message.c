@@ -1,130 +1,59 @@
 #include "Do_message.h"
 #include "main.h"
 
-uint8_t Route_Len1[4] = {0};
-uint8_t Route_Len2[4] = {0};
-uint8_t Route_RxBuffer1[30] = {0};
-uint8_t Route_RxBuffer2[108] = {0};
+#ifndef  __CMD_BIGLITTLE_SWAP__ 
+#define  __CMD_BIGLITTLE_SWAP__ 
+
+#define BigLittleSwap16(A) ((((uint16_t)(A) & 0xff00) >> 8) | (((uint16_t)(A) & 0x00ff) << 8))
+#define BigLittleSwap32(A) ((((uint32_t)(A) & 0xff000000) >> 24) | (((uint32_t)(A) & 0x00ff0000) >> 8) | (((uint32_t)(A) & 0x0000ff00) << 8) | (((uint32_t)(A) & 0x000000ff) << 24))
+
+#endif 
+
+uint8_t Appo_Send_Buffer[108] = {0};
 
 /*开机标志*/
 uint8_t PC_POWER_FLAG = 0;
 
-int L8_Cmd_Send(uint8_t route_from,uint8_t route_to, uint16_t len)
+
+
+int Appo_Encode(uint8_t route_from,uint8_t route_to, uint8_t *indata, uint16_t len)
 {
 
-    USART_TypeDef * Port;
-    uint8_t     sum_byte=0; 
-    CMD_PACKET  send_packet={0};
-	uint8_t i;
+    uint8_t sum_byte=0; 
 
-    Route_RxBuffer2[0]   = 0x5A;
-    Route_RxBuffer2[1]   = 0xA5;
-    Route_RxBuffer2[2]   = ((len+7)&0xff00)>>8;
-    Route_RxBuffer2[3]   = ((len+7)&0xff);
-    Route_RxBuffer2[4]   = 0;
-    Route_RxBuffer2[5]   = 0;
-    Route_RxBuffer2[6]   = route_from; 
-    Route_RxBuffer2[7]   = route_to;	
+    Appo_Send_Buffer[0]   = 0x5A;
+    Appo_Send_Buffer[1]   = 0xA5;
+    Appo_Send_Buffer[2]   = ((len+7)&0xff00)>>8;
+    Appo_Send_Buffer[3]   = ((len+7)&0xff);
+    Appo_Send_Buffer[4]   = 0;
+    Appo_Send_Buffer[5]   = 0;
+	memcpy(&Appo_Send_Buffer[6], indata, len);
+	sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&Appo_Send_Buffer,len+7-1);
+	Appo_Send_Buffer[len+7-1] = sum_byte;
 	
-	if(len == D_CURRENT_GET_CNT)
-	{
-	    Route_RxBuffer2[8]   = (D_CURRENT_R_CMD&0xff00)>>8;
-        Route_RxBuffer2[9]   = (D_CURRENT_R_CMD&0xff);
-		for(i=0;i<POWER_CURRENT_MAX;i++)
-		{
-		   Route_RxBuffer2[10+i*2] = g_power1.laser_current[i]/1000;
-		   Route_RxBuffer2[11+i*2] = (g_power1.laser_current[i]%1000)/10;
-		}
-		for(i=0;i<POWER_CURRENT_MAX;i++)
-		{
-		   Route_RxBuffer2[22+i*2] = g_power2.laser_current[i]/1000;
-		   Route_RxBuffer2[23+i*2] = (g_power2.laser_current[i]%1000)/10;
-		}
-		for(i=0;i<POWER_CURRENT_MAX;i++)
-		{
-		   Route_RxBuffer2[34+i*2] = g_power3.laser_current[i]/1000;
-		   Route_RxBuffer2[35+i*2] = (g_power3.laser_current[i]%1000)/10;
-		}
-	    sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&Route_RxBuffer2,len+7-1);    
-	    Route_RxBuffer2[46]   = sum_byte;
-	}
-	
-	else if (len == D_NTC_TEM_CNT)
-	{
-	    Route_RxBuffer2[8]   = (D_NTC_R_CMD&0xff00)>>8;
-        Route_RxBuffer2[9]   = (D_NTC_R_CMD&0xff);
-
-		uint8_t reg=0;
-		int16_t temprature=0;
-		
-	    for(i=0;i<8;i++)
-	    {
-	       reg = Ads8730_Get_Raw_Adc(&Ntc_1_8,i);		   
-	       temprature = Transform_Reg_To_Temprature(reg,3.3);		  
-
-		   Route_RxBuffer2[10+i*2]=reg;
-		   Route_RxBuffer2[11+i*2]=(temprature>>8)&0xff;
-	    }
-	    for(i=0;i<8;i++)
-	    {
-	       reg = Ads8730_Get_Raw_Adc(&Ntc_9_16,i);
-	       temprature = Transform_Reg_To_Temprature(reg,3.3);
-		   Route_RxBuffer2[26+i*2]=reg;
-		   Route_RxBuffer2[27+i*2]=(temprature>>8)&0xff;
-	    }
-	    for(i=0;i<8;i++)
-	    {
-	       reg = Ads8730_Get_Raw_Adc(&Ntc_17_24,i);
-	       temprature = Transform_Reg_To_Temprature(reg,3.3);
-	       Route_RxBuffer2[42+i*2]=reg;
-		   Route_RxBuffer2[43+i*2]=(temprature>>8)&0xff;
-	    }
-	    
-	    sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&Route_RxBuffer2,len+7-1);    
-	    Route_RxBuffer2[58]   = sum_byte;	
-	}
-	else if(len==D_TEC_GET_CNT)
-	{
-	    Route_RxBuffer2[8]   = (D_TEC_R_CMD&0xff00)>>8; 
-        Route_RxBuffer2[9]   = (D_TEC_R_CMD&0xff);
-		Route_RxBuffer2[10] = (Uart_Tec2.temp1&0xff00)>>8;
-		Route_RxBuffer2[11] = Uart_Tec2.temp1&0xff;
-		Route_RxBuffer2[12] = (Uart_Tec3.temp1&0xff00)>>8;
-		Route_RxBuffer2[13] = Uart_Tec3.temp1&0xff;
-		Route_RxBuffer2[14] = (Uart_Tec3.temp3&0xff00)>>8;
-		Route_RxBuffer2[15] = Uart_Tec3.temp3&0xff;
-		sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&Route_RxBuffer2,len+7-1);    
-	    Route_RxBuffer2[16]   = sum_byte;	
-	}
-	else if(len==D_LS_GET_CNT)
-	{
-	    Route_RxBuffer2[8]   = (D_LIGHTSOURCE_R_CMD&0xff00)>>8; 
-        Route_RxBuffer2[9]   = (D_LIGHTSOURCE_R_CMD&0xff);
-		Route_RxBuffer2[9]   = g_power1.power_on_set;
-		sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&Route_RxBuffer2,len+7-1);
-		Route_RxBuffer2[10]   = sum_byte;
-	}
-	else if(len == D_FAN_GET_CNT)
-	{
-		Route_RxBuffer2[8]   = (D_LIGHTSOURCE_R_CMD&0xff00)>>8; 
-        Route_RxBuffer2[9]   = (D_LIGHTSOURCE_R_CMD&0xff);
-		for(i=0;i<32;i++)
-		{
-		    Route_RxBuffer2[10+3*i]=i;
-			Route_RxBuffer2[11+3*i]=(g_fan_cooling.fan_speed[i]&0xff00)>>8;
-			Route_RxBuffer2[12+3*i]=g_fan_cooling.fan_speed[i]&0xff;
-		}
-
-		sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&Route_RxBuffer2,len+7-1);
-		Route_RxBuffer2[100]   = sum_byte;
-	}
-	
-
-    HAL_UART_Transmit(&huart1,(uint8_t*)Route_RxBuffer2,len+7, 100);
+    HAL_UART_Transmit(&huart1,(uint8_t*)Appo_Send_Buffer,len+7-1, 100);
     return len+7;
 
 }
 
+
+int apiGetLaserStatus(pGET_LASER_STATUS p)
+{
+	int ret = 0;
+	GET_LASER_STATUS temp={0};
+	temp.route_from = p->route_to;
+	temp.route_to = p->route_from;
+	temp.command=D_LIGHTSOURCE_R_CMD;
+	temp.status = g_power1.power_on_set;
+	ret = Appo_Encode(p->route_to, p->route_from, (uint8_t *)&temp, sizeof(GET_LASER_STATUS));
+
+	if(ret > 0)
+	{
+	}
+
+	return ret;
+
+}
 
 int Do_Pmu_Route(pCMD_PACKET p,uint16_t len)
 {
@@ -153,6 +82,7 @@ int Do_Dlp_Route(pCMD_PACKET p,uint16_t len)
 void Do_Message(pDECODE_TABLE decode_table)
 {
     static int x=1;
+	void * recv = 0;
 	
     if(decode_table->cmd_flag == 1)
         {
@@ -185,6 +115,7 @@ void Do_Message(pDECODE_TABLE decode_table)
             uint16_t cmd=0;
             cmd = (decode_table->cmd_buf[8]<<8) |decode_table->cmd_buf[9];
 
+			recv = &(p->packet_route_from);
             if(to == UART_ADDR_MCU)
 			{
                 switch(cmd)
@@ -266,7 +197,7 @@ void Do_Message(pDECODE_TABLE decode_table)
 						 temp_l = decode_table->cmd_buf[11];
 						 g_TecTemp = temp_h+temp_l/100; 
 
-						 //TEC_SetTemprature(&Uart_Tec1,g_TecTemp,g_TecTemp);
+						 
 						 TEC_SetTemprature(&Uart_Tec2,g_TecTemp,g_TecTemp);
 						 TEC_SetTemprature(&Uart_Tec3,g_TecTemp,g_TecTemp);
                          break;		
@@ -280,32 +211,32 @@ void Do_Message(pDECODE_TABLE decode_table)
 					//查询读取类命令
                     case D_CURRENT_R_CMD:
                     {
-                         L8_Cmd_Send(to,from,D_CURRENT_GET_CNT);
+                         apiGetLaserStatus((pGET_LASER_STATUS)recv);
                          break;		
                     }
 
 					case D_LIGHTSOURCE_R_CMD:
 					{
 					    
-					    L8_Cmd_Send(to,from,D_LS_GET_CNT);
+					    
 						break;
 					}
 
 					case D_FAN_SPEED_R_CMD:
 					{
-					    L8_Cmd_Send(to,from,D_FAN_GET_CNT);
+					    
 						break;
 					}
 
                     case D_TEC_R_CMD:
 					{
-					    L8_Cmd_Send(to,from,D_TEC_GET_CNT);
+					    
 					    break;
 					}
 					
 					case D_NTC_R_CMD:
                     {
-						 L8_Cmd_Send(to,from,D_NTC_TEM_CNT);
+						 
                          break;		
                     }
 

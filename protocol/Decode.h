@@ -21,6 +21,10 @@
 #define UART_ADDR_MCU	0X0E //427
 #define UART_ADDR_IMX8	0X11 //imx8
 
+
+#define BigLittleSwap16(A) ((((uint16_t)(A) & 0xff00) >> 8) | (((uint16_t)(A) & 0x00ff) << 8))
+#define BigLittleSwap32(A) ((((uint32_t)(A) & 0xff000000) >> 24) | (((uint32_t)(A) & 0x00ff0000) >> 8) | (((uint32_t)(A) & 0x0000ff00) << 8) | (((uint32_t)(A) & 0x000000ff) << 24))
+
 #define RECV_CHANNEL_A 1
 #define RECV_CHANNEL_B 0
 
@@ -28,12 +32,12 @@ typedef struct _DECODE_TABLE
 {
 	__IO uint8_t 	part;
     
-  __IO uint8_t	flag;
+    __IO uint8_t	flag;
 	__IO uint8_t	route_from; 
 	__IO uint8_t	route_to;   
 	__IO uint8_t	packet_count;
 
-  __IO uint8_t 	check_sum;
+    __IO uint8_t 	check_sum;
 	__IO uint16_t   packet_len;
 	__IO uint16_t	recv_total;
 	uint8_t         package_buf[CMD_SIZE];
@@ -60,7 +64,7 @@ typedef struct tag_CMD_PACKET
     uint8_t  packet_len_h;
     uint8_t  packet_len_l;
     uint8_t  packet_flag;
-	  uint8_t	 packet_count;
+	uint8_t	 packet_count;
     uint8_t  packet_route_from; 
     uint8_t  packet_route_to; 
     uint8_t  command_h;
@@ -69,6 +73,8 @@ typedef struct tag_CMD_PACKET
     
    //uint8_t   packet_check;
 }CMD_PACKET,*pCMD_PACKET;
+
+
 
 extern DECODE_TABLE Decode_PMU;
 extern DECODE_TABLE Decode_DLP;
