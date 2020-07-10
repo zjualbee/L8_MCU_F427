@@ -121,7 +121,7 @@ static portTASK_FUNCTION(motor_task, pvParameters)
         if ((tick_cur>tick_last) && ((tick_cur-tick_last)>1000)){
             tick_last = xTaskGetTickCount();
             g_motor_36v.speed_update(&g_motor_36v);
-            //g_motor_36v.temp_update(&g_motor_36v);
+            g_motor_36v.temp_update(&g_motor_36v);
             g_motor_36v.closed_loop(&g_motor_36v);
             g_motor_36v.run_need_reset(&g_motor_36v);
             motor_status_check();

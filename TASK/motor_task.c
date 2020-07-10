@@ -115,7 +115,7 @@ while(1)
             if(pre_cw_speed_cnt!=g_CW_speed_cnt)
                 {
                 pre_cw_speed_cnt = g_CW_speed_cnt;
-            //printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
+            printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
                 }
             if(g_CW_speed_cnt > 80)
                 {
@@ -132,8 +132,8 @@ while(1)
                 if(pre_laser_state!=0)
                 {
                     pre_laser_state=0;
-                    //printf("laser OFF\r\n");
-                    //printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
+                    printf("laser OFF\r\n");
+                    printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
                     HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
                 }
                 }
@@ -147,8 +147,8 @@ while(1)
                     if(pre_laser_state!=1)
                     {
                         pre_laser_state=1;
-                        //printf("laser on\r\n");
-                        //printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
+                        printf("laser on\r\n");
+                        printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
                         HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
                     }
                 }
@@ -157,7 +157,7 @@ while(1)
             if(Speed_Error_Cnt > 100)
                 {
                     Speed_Error_Cnt = 0;
-                    //printf("reset motor drive\r\n");
+                    printf("reset motor drive\r\n");
                     motor_36V_init(&g_motor_36v);
                     g_motor_36v.on(&g_motor_36v);
                 }

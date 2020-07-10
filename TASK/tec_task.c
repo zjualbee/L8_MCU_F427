@@ -113,7 +113,7 @@ static portTASK_FUNCTION(tec_task, pvParameters)
         
         //printf("Uart_Tec3\r\n");
         TEC_handler(&Uart_Tec3);
-        osDelay(1000);
+        osDelay(3000);
     }
 
 

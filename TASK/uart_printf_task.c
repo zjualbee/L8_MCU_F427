@@ -40,6 +40,7 @@ static void uart_printf(void)
 #ifdef MOTOR_36V_EN
     // MOTOR 12V
     printf("========Wheel Motor========\r\n");
+
     printf("MOTOR 1:%4dRPM(%4d),  %4dHz(%4d),  PWM:%.1f%%,  TEMP:%3d°„C,  status:0x%04X,  dt:%d(%d),   OK:%d\r\n", 
            (uint16_t)g_motor_36v.speed_sensor, (uint16_t)g_motor_36v.speed, (uint16_t)g_motor_36v.Hz_sensor, (uint16_t)g_motor_36v.Hz_chip, 
            (float)g_motor_36v.duty_cycle/10.0, (int16_t)g_motor_36v.temp, (uint16_t)g_motor_36v.A4960_reg_status, (int32_t)g_motor_36v.speed_dt_sensor, (int32_t)g_motor_36v.speed_dt_chip,  g_motor_36v.ok_flag);
@@ -54,19 +55,19 @@ static void uart_printf(void)
     {
        reg = Ads8730_Get_Raw_Adc(&Ntc_1_8,i);
        temprature = Transform_Reg_To_Temprature(reg,3.3);
-       //printf("Ntc_1_8 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
+       printf("Ntc_1_8 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
     }
     for(i=0;i<8;i++)
     {
        reg = Ads8730_Get_Raw_Adc(&Ntc_9_16,i);
        temprature = Transform_Reg_To_Temprature(reg,3.3);
-       //printf("Ntc_9_16 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
+       printf("Ntc_9_16 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
     }
     for(i=0;i<8;i++)
     {
        reg = Ads8730_Get_Raw_Adc(&Ntc_17_24,i);
        temprature = Transform_Reg_To_Temprature(reg,3.3);
-       //printf("Ntc_17_24 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
+       printf("Ntc_17_24 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
     }
 	printf("\r\n");
 #endif
@@ -174,7 +175,7 @@ static portTASK_FUNCTION(uart_printf_task, pvParameters)
     printf("*************************************\r\n");
 
     while(1){
-        osDelay(3000);
+        osDelay(5000);
         if (g_uart_pirntf_delay_s > 0)
             g_uart_pirntf_delay_s--;
         if (0 == g_uart_pirntf_delay_s)

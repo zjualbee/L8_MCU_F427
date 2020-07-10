@@ -313,27 +313,52 @@ static int fan_cooling_fan_off_all(struct FanCooling *thiz)
 static	int fan_cooling_fan_speed_set_pwm(struct FanCooling *thiz, uint8_t group_id, uint16_t pwm)
 {
     int ret = 0;
-
+    int i=0;
     xSemaphoreTake(thiz->mutex, portMAX_DELAY);
     switch (group_id)
 		{
 		case FAN_G_SL1:
 			Max31790_Pwm_Set_All(&Fan1_6,pwm);
+			for(i=0;i<6;i++)
+			{
+				thiz->fan_pwm[i]=pwm;
+			}
 			break;
 		case FAN_G_SL2:
 			Max31790_Pwm_Set_All(&Fan7_12,pwm);
+			for(i=0;i<6;i++)
+			{
+				thiz->fan_pwm[6+i]=pwm;
+			}
 			break;
 		case FAN_G_SL3:
 			Max31790_Pwm_Set_All(&Fan13_18,pwm);
+			for(i=0;i<6;i++)
+			{
+				thiz->fan_pwm[12+i]=pwm;
+			}
 			break;
 		case FAN_G_SL4:
 			Max31790_Pwm_Set_All(&Fan19_24,pwm);
+			for(i=0;i<6;i++)
+			{
+				thiz->fan_pwm[18+i]=pwm;
+			}
 			break;
 		case FAN_G_SL5:
 			Max31790_Pwm_Set_All(&Fan25_30,pwm);
+			for(i=0;i<6;i++)
+			{
+				thiz->fan_pwm[24+i]=pwm;
+			}
 			break;
 		case FAN_G_SL6:
 			Max31790_Pwm_Set_All(&Fan31_32_And_Bump1_4,pwm);
+			for(i=0;i<6;i++)
+			{
+				thiz->fan_pwm[30+i]=pwm;
+				thiz->fan_ctr_status[i]=fan_status_on;
+			}
 			break;
 		default:
 			break;

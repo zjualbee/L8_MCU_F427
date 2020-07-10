@@ -117,6 +117,27 @@ static portTASK_FUNCTION(temprature_task, pvParameters)
         
         }
 
+
+    while(1)
+			{
+            
+        //for(i=0;i<255;i++)
+            {
+
+            if(HAL_OK ==Ntc_1_8.iic_transmit(0x90, "a", 1))
+           // if(HAL_OK ==HAL_I2C_Master_Transmit(&hi2c1, i, "a", 1,100))
+                {
+                    printf("dev:%02X  ok\r\n",i);
+                }
+            else
+                {
+                   ;// printf("dev:%02X  error\r\n",i);
+                }
+
+            
+            }
+            osDelay(2000);
+        }
 }
 
 

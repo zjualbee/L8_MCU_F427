@@ -1,7 +1,7 @@
 #include "MAX31790.h"
 
 #define MAX_PWM 100
-uint16_t init_pwm=50;
+uint16_t init_pwm=100;
 extern uint8_t temp_ce;
 
 

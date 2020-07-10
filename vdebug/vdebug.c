@@ -94,30 +94,9 @@ int fputc(int ch, FILE *f)
     
 	return ch;
 }
-#endif 
-/*******************************************************************************
-* Function Name  : app_printf_debug
-* Description    : printf_debug
-* Input          : None
-* Output         : None
-* Return         : 0正常，非0异常
-*******************************************************************************/
-int app_printf_debug(uint8_t *pStr, uint32_t len)
-{
-    int ret = 0;
-    uint16_t send_count = 0;
 
-   // xSemaphoreTake(s_mutex_uart_debug, portMAX_DELAY);
-    // ret = HAL_UART_Transmit(&huart1, pStr, len, ~0);
-    while(send_count < len){
-        if (RESET != __HAL_UART_GET_FLAG(&huart8, UART_FLAG_TXE)){
-            huart8.Instance->DR = (*pStr++ & (uint8_t)0xFF);
-            send_count++;
-        }
-    }
-   // xSemaphoreGive(s_mutex_uart_debug);
-    return ret;
-}
+
+#endif 
 
 
 
