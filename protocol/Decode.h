@@ -8,6 +8,9 @@
 
 #pragma pack (1)
 
+#define RECV_CHANNEL_A 1
+#define RECV_CHANNEL_B 0
+
 #define CMD_SIZE 32
 
 #ifndef     __IO
@@ -24,9 +27,6 @@
 
 #define BigLittleSwap16(A) ((((uint16_t)(A) & 0xff00) >> 8) | (((uint16_t)(A) & 0x00ff) << 8))
 #define BigLittleSwap32(A) ((((uint32_t)(A) & 0xff000000) >> 24) | (((uint32_t)(A) & 0x00ff0000) >> 8) | (((uint32_t)(A) & 0x0000ff00) << 8) | (((uint32_t)(A) & 0x000000ff) << 24))
-
-#define RECV_CHANNEL_A 1
-#define RECV_CHANNEL_B 0
 
 typedef struct _DECODE_TABLE
 {

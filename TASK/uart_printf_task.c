@@ -47,6 +47,8 @@ static void uart_printf(void)
 #endif
 
 #ifdef NTC_SUPPORT
+	printf("========NTC Motor========\r\n");
+
 	uint8_t reg=0;
 	int16_t temprature=0;
     // NTC Info
