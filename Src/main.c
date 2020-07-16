@@ -135,25 +135,8 @@ void bsp_delay_us(uint32_t us)
     }
 }
 
-#if 0
-#pragma import(__use_no_semihosting)             
-//标准库需要的支持函数                 
 
-//重定义fputc函数 
-int fputc(int ch, FILE *f)
-{
-	uint8_t temp;
-    
-    //vTaskSuspendAll();
-	temp=(uint8_t)ch;
-    
-	HAL_UART_Transmit(&huart1,&temp,1,50);
-   // xTaskResumeAll();
-	return ch;
-}
-#endif 
-
-uint8_t uart1_recv_buf[100]={0};
+uint8_t uart_recv_buf[100]={0};
 
 /* USER CODE END 0 */
 
@@ -201,14 +184,14 @@ int main(void)
     MX_USART6_UART_Init();
     /* USER CODE BEGIN 2 */
 
-	HAL_UART_Receive_IT(&huart1, uart1_recv_buf,50);
-    HAL_UART_Receive_IT(&huart4, uart1_recv_buf,50);
-    HAL_UART_Receive_IT(&huart3, uart1_recv_buf,50);
-    HAL_UART_Receive_IT(&huart6, uart1_recv_buf,50);
-    HAL_UART_Receive_IT(&huart2, uart1_recv_buf,50);
-    HAL_UART_Receive_IT(&huart5, uart1_recv_buf,50);
-    HAL_UART_Receive_IT(&huart8, uart1_recv_buf,50);
-    HAL_UART_Receive_IT(&huart7, uart1_recv_buf,50);
+	HAL_UART_Receive_IT(&huart1, uart_recv_buf,50);
+    HAL_UART_Receive_IT(&huart4, uart_recv_buf,50);
+    HAL_UART_Receive_IT(&huart3, uart_recv_buf,50);
+    HAL_UART_Receive_IT(&huart6, uart_recv_buf,50);
+    HAL_UART_Receive_IT(&huart2, uart_recv_buf,50);
+    HAL_UART_Receive_IT(&huart5, uart_recv_buf,50);
+    HAL_UART_Receive_IT(&huart8, uart_recv_buf,50);
+    HAL_UART_Receive_IT(&huart7, uart_recv_buf,50);
     
     
     init_hardware_version();
@@ -222,11 +205,6 @@ int main(void)
     HAL_TIM_Base_Start(&htim2);
     HAL_TIM_Base_Start_IT(&htim2);
     HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
-
-    
-    //print_cmd_string_list();
-    //Test_Func();
-    //at_decode_buf1.Do_One_Element= App_Func;
 
 
   /* USER CODE END 2 */
@@ -266,15 +244,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    //printf("LOOP\r\n");
-
-    
-    //At_Analyze_Handle(&at_decode_buf);
-
-
-    
-    //HAL_Delay(100);
-    //HAL_GPIO_TogglePin(GPIOF,GPIO_PIN_10);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

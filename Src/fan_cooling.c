@@ -12,6 +12,8 @@ MAX31790_OBJ Fan19_24;   //0x48
 MAX31790_OBJ Fan25_30;   //0x50
 MAX31790_OBJ Fan31_32_And_Bump1_4;  //0x56
 
+
+
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
@@ -190,7 +192,7 @@ static int fan_cooling_fan_on_all(struct FanCooling *thiz, uint16_t pwm)
 		thiz->fan_pwm[30+i]=pwm;
 		thiz->fan_ctr_status[i]=fan_status_on;
 	}
-   // Max31790_Full_Speed(&Fan19_24);
+   //Max31790_Full_Speed(&Fan19_24);
    // Max31790_Full_Speed(&Fan25_30);
    // Max31790_Full_Speed(&Fan31_32_And_Bump1_4);
    
@@ -208,7 +210,7 @@ static int fan_cooling_fan_on_all(struct FanCooling *thiz, uint16_t pwm)
 
 
 /*******************************************************************************
-* Function Name  : water_cooling_fan_off
+* Function Name  : fan_cooling_fan_off
 * Description    : fan off
 * Input          : None
 * Output         : None
@@ -304,13 +306,13 @@ static int fan_cooling_fan_off_all(struct FanCooling *thiz)
 }
 
 /*******************************************************************************
-* Function Name  : wfan_cooling_fan_speed_set_pwm
+* Function Name  : fan_cooling_fan_set_pwm
 * Description    : update fan speed
 * Input          : None
 * Output         : None
 * Return         : 0正常，非0异常
 *******************************************************************************/
-static	int fan_cooling_fan_speed_set_pwm(struct FanCooling *thiz, uint8_t group_id, uint16_t pwm)
+static	int fan_cooling_fan_set_pwm_group(struct FanCooling *thiz, uint8_t group_id, uint16_t pwm)
 {
     int ret = 0;
     int i=0;
@@ -357,7 +359,6 @@ static	int fan_cooling_fan_speed_set_pwm(struct FanCooling *thiz, uint8_t group_
 			for(i=0;i<6;i++)
 			{
 				thiz->fan_pwm[30+i]=pwm;
-				thiz->fan_ctr_status[i]=fan_status_on;
 			}
 			break;
 		default:
@@ -367,7 +368,34 @@ static	int fan_cooling_fan_speed_set_pwm(struct FanCooling *thiz, uint8_t group_
     return ret;
 }
 
-static	int fan_cooling_fan_speed_set_pwm_all(struct FanCooling *thiz, uint16_t pwm)
+
+static	int fan_cooling_fan_set_pwm_single(struct FanCooling *thiz, uint8_t id, uint16_t pwm)
+{
+
+    int ret = 0;
+    int i=0;
+    xSemaphoreTake(thiz->mutex, portMAX_DELAY);
+	if(id>=0 && id<6)
+	    Max31790_Pwm_Set(&Fan1_6,id,pwm);
+	else if(id<12)
+	    Max31790_Pwm_Set(&Fan7_12,id-6,pwm);
+	else if(id<18)
+		Max31790_Pwm_Set(&Fan13_18,id-12,pwm);
+	else if(id<24)
+		Max31790_Pwm_Set(&Fan19_24,id-18,pwm);
+	else if(id<30)
+		Max31790_Pwm_Set(&Fan25_30,id-24,pwm);
+	else if(id<36)
+		Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,id-30,pwm);
+	thiz->fan_pwm[id]=pwm;
+    xSemaphoreGive(thiz->mutex);
+    return ret;
+
+}
+
+
+
+static	int fan_cooling_fan_set_pwm_all(struct FanCooling *thiz, uint16_t pwm)
 {
     int ret = 0;
     uint8_t i = 0;
@@ -425,10 +453,10 @@ static int fan_cooling_fan_speed_update(struct FanCooling *thiz)
 
 static int fan_cooling_fan_full_speed(struct FanCooling *thiz)
 {
-    fan_cooling_fan_speed_set_pwm_all(thiz,100);
+    fan_cooling_fan_set_pwm_all(thiz,100);
 }
 /*******************************************************************************
-* Function Name  : water_cooling_init
+* Function Name  : fan_cooling_init
 * Description    : init
 * Input          : None
 * Output         : None
@@ -446,8 +474,9 @@ int fan_cooling_init(struct_FanCooling *thiz)
 	thiz->fan_on_all            = fan_cooling_fan_on_all;
 	thiz->fan_off               = fan_cooling_fan_off;
 	thiz->fan_off_all           = fan_cooling_fan_off_all;
-	thiz->fan_speed_set_pwm     = fan_cooling_fan_speed_set_pwm;
-	thiz->fan_speed_set_pwm_all = fan_cooling_fan_speed_set_pwm_all;
+	thiz->fan_set_pwm_group     = fan_cooling_fan_set_pwm_group;
+	thiz->fan_set_pwm_single    = fan_cooling_fan_set_pwm_single;
+	thiz->fan_set_pwm_all       = fan_cooling_fan_set_pwm_all;
 	thiz->fan_speed_update      = fan_cooling_fan_speed_update;
 	thiz->fan_full_speed        = fan_cooling_fan_full_speed;
 

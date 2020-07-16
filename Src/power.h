@@ -24,8 +24,7 @@
 
 #ifdef POWER3_EN
 #define POWER_NUM           (3)
-#endif
-#ifdef POWER2_EN
+#elif defined(POWER2_EN)
 #define POWER_NUM           (2)
 #else
 #define POWER_NUM           (1)
@@ -55,7 +54,7 @@ typedef enum
 typedef struct Power
 {
     uint32_t device_id;                             // 设备地址
-
+ 
     uint8_t status;                                 // 状态
     uint8_t power_on_set;                           // 电源已设置power_on
     uint32_t warning;                               // warning

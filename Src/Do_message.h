@@ -1,12 +1,8 @@
 #ifndef __DO_MESSAGE_H__
 #define __DO_MESSAGE_H__
 
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
-#include "stdint.h"
+#include "main.h"
 #include "Decode.h"
-
 #pragma pack(1)
 
 
@@ -75,7 +71,7 @@ typedef struct tag_FAN
     uint8_t route_from;
     uint8_t route_to; 
     uint16_t  command;
-	uint16_t rpm[32];
+	uint16_t rpm[MAX_FAN_NUM];
 }FAN_GET_RPM,*pFAN_GET_RPM;
 
 typedef struct tag_MCU_GET_SOFTWARE_VERSION

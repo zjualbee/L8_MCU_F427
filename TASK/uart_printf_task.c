@@ -75,7 +75,7 @@ static void uart_printf(void)
 #endif
 #ifdef FAN_SUPPORT
     printf("========Fan Info========\r\n");
-    for (i = 0; i < MAX_COOL_FAN_NUM; i++)
+    for (i = 0; i < MAX_FAN_NUM; i++)
     {
         if(i%6==0)
 			printf("\r\nFan Group %d Info\r\n", i/6+1);

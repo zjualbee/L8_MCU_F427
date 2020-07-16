@@ -35,6 +35,10 @@
 #define ROUTE_PORT_TEC3   huart5
 #define ROUTE_PORT_DEBUG   huart8
 
+// **************** fan **********************
+#define MAX_FAN_NUM    36
+#define MAX_FAN_GROUP 6
+
 
 
 #endif

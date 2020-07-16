@@ -158,47 +158,31 @@ void On_Set_SetFan(pONE_ELEMENT p)
         }
         if(p->key_id == DPK_SETFAN_ALL)
         {
-           #if 0
-            Max31790_Pwm_Set_All(&Fan1_6,PWM);
-            Max31790_Pwm_Set_All(&Fan7_12,PWM);
-            Max31790_Pwm_Set_All(&Fan13_18,PWM);
-            Max31790_Pwm_Set_All(&Fan19_24,PWM);
-            Max31790_Pwm_Set_All(&Fan25_30,PWM);
-            Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,0,PWM);
-            Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,1,PWM);
-			#endif
-			g_fan_cooling.fan_speed_set_pwm_all(&g_fan_cooling,PWM);
+			g_fan_cooling.fan_set_pwm_all(&g_fan_cooling,PWM);
         }
         else if(p->key_id == DPK_SETFAN_FAN1)
         {
-           //Max31790_Pwm_Set_All(&Fan1_6,PWM);
-		   g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL1,PWM);
+		   g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL1,PWM);
         }
         else if(p->key_id == DPK_SETFAN_FAN2)
         {
-            //Max31790_Pwm_Set_All(&Fan7_12,PWM);
-            g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL2,PWM);
+            g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL2,PWM);
         }
         else if(p->key_id == DPK_SETFAN_FAN3)
         {
-            //Max31790_Pwm_Set_All(&Fan13_18,PWM);
-            g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL3,PWM);
+            g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL3,PWM);
         }        
         else if(p->key_id == DPK_SETFAN_FAN4)
         {
-            //Max31790_Pwm_Set_All(&Fan19_24,PWM);
-            g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL4,PWM);
+            g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL4,PWM);
         }
         else if(p->key_id == DPK_SETFAN_FAN5)
         {
-            //Max31790_Pwm_Set_All(&Fan25_30,PWM);
-            g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL5,PWM);
+            g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL5,PWM);
         }
         else if(p->key_id == DPK_SETFAN_FAN6)
         {
-            //Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,0,PWM);
-            //Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,1,PWM);
-            g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL6,PWM);
+            g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL6,PWM);
         }
     }
 }

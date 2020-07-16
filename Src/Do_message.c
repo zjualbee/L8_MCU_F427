@@ -1,5 +1,5 @@
 #include "Do_message.h"
-#include "main.h"
+
 
 /*开机标志*/
 #define VERSION_MAIN   1
@@ -106,7 +106,7 @@ int On_Fan_Rpm_Get(pFAN_GET_RPM p)
     FAN_GET_RPM temp={0};
 	temp.command = D_FAN_SPEED_W_CMD;
 	uint8_t i=0;
-	for(i=0;i<32;i++)
+	for(i=0;i<MAX_FAN_NUM;i++)
 		temp.rpm[i]=g_fan_cooling.fan_speed[i];
 	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(FAN_GET_RPM));
 }
@@ -265,42 +265,28 @@ void Do_Message(pDECODE_TABLE decode_table)
 
 					case D_FAN_PWM_W_CMD:
 					{
-					    uint8_t fan_id,pwm_value;
+					    
+						uint8_t type;
 						uint8_t i=0;
-						for(i=0;i<6;i++)
+						type = decode_table->cmd_buf[10];
+						if(type)
 						{
-					        fan_id = decode_table->cmd_buf[10+2*i];
-							pwm_value = decode_table->cmd_buf[11+2*i];
-							switch(fan_id)
-							{
-							    case 0:
-									//Max31790_Pwm_Set_All(&Fan1_6,pwm_value);
-									g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL1,pwm_value);
-									break;
-								case 1:
-									//Max31790_Pwm_Set_All(&Fan7_12,pwm_value);
-									g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL2,pwm_value);
-									break;
-								case 2:
-									//Max31790_Pwm_Set_All(&Fan13_18,pwm_value);
-									g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL3,pwm_value);
-									break;
-								case 3:
-									//Max31790_Pwm_Set_All(&Fan19_24,pwm_value);
-									g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL4,pwm_value);
-									break;
-								case 4:
-									//Max31790_Pwm_Set_All(&Fan25_30,pwm_value);
-									g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL5,pwm_value);
-									break;
-								case 5:
-									//Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,0,pwm_value);
-									//Max31790_Pwm_Set(&Fan31_32_And_Bump1_4,1,pwm_value);
-								    g_fan_cooling.fan_speed_set_pwm(&g_fan_cooling,FAN_G_SL6,pwm_value);
-									break;
-								default:
-									break;
-							}
+						     uint8_t select,fan_id,pwm_value;
+						     select = decode_table->cmd_buf[11];
+							 if(select == 0xFF)
+						 	{
+						 	    for(i=0;i<36;i++)
+									g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,i,decode_table->cmd_buf[12+i]);
+						 	}
+							 else
+						 	{
+						 	    g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,select,decode_table->cmd_buf[11+select]);
+						 	
+						 	}
+						}
+						else
+						{
+						     g_fan_cooling.fan_off_all(&g_fan_cooling);
 						}
 						break;
 					}
