@@ -25,15 +25,6 @@
 #define DEVICE_ID_POWER2    (0x21)
 #define DEVICE_ID_POWER3    (0x22)
 
-// **************** ´®¿Ú **********************
-#define ROUTE_PORT_DLP_G   huart3
-#define ROUTE_PORT_DLP_R   huart4
-#define ROUTE_PORT_DLP_B   huart6
-#define ROUTE_PORT_POWER   huart7
-#define ROUTE_PORT_PMU    huart1
-#define ROUTE_PORT_TEC2   huart2
-#define ROUTE_PORT_TEC3   huart5
-#define ROUTE_PORT_DEBUG   huart8
 
 // **************** fan **********************
 #define MAX_FAN_NUM    36

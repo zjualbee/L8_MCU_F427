@@ -11,7 +11,7 @@
 #define RECV_CHANNEL_A 1
 #define RECV_CHANNEL_B 0
 
-#define CMD_SIZE 32
+#define CMD_SIZE 50
 
 #ifndef     __IO
 #define     __IO    volatile         /*!< defines 'read / write' permissions  */

@@ -259,7 +259,10 @@ void Do_Message(pDECODE_TABLE decode_table)
 					    uint8_t onoff;
 						onoff = decode_table->cmd_buf[10];
 						g_Power.on_off_flag = onoff;
-	 					Appo_Power_On(&g_Power);
+						if(onoff)
+	 					   Appo_Power_On(&g_Power);
+						else
+        				  Appo_Power_Off();
 						break;
 					}
 
@@ -280,7 +283,7 @@ void Do_Message(pDECODE_TABLE decode_table)
 						 	}
 							 else
 						 	{
-						 	    g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,select,decode_table->cmd_buf[11+select]);
+						 	    g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,select-1,decode_table->cmd_buf[11+select]);
 						 	
 						 	}
 						}

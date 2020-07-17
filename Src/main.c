@@ -135,8 +135,25 @@ void bsp_delay_us(uint32_t us)
     }
 }
 
+#if 0
+#pragma import(__use_no_semihosting)             
+//¡À¨º¡Á??aD¨¨¨°a¦Ì??¡ì3?o¡¥¨ºy                 
 
-uint8_t uart_recv_buf[100]={0};
+//???¡§¨°?fputco¡¥¨ºy 
+int fputc(int ch, FILE *f)
+{
+	uint8_t temp;
+    
+    //vTaskSuspendAll();
+	temp=(uint8_t)ch;
+    
+	HAL_UART_Transmit(&huart1,&temp,1,50);
+   // xTaskResumeAll();
+	return ch;
+}
+#endif 
+
+uint8_t uart1_recv_buf[100]={0};
 
 /* USER CODE END 0 */
 
@@ -184,14 +201,14 @@ int main(void)
     MX_USART6_UART_Init();
     /* USER CODE BEGIN 2 */
 
-	HAL_UART_Receive_IT(&huart1, uart_recv_buf,50);
-    HAL_UART_Receive_IT(&huart4, uart_recv_buf,50);
-    HAL_UART_Receive_IT(&huart3, uart_recv_buf,50);
-    HAL_UART_Receive_IT(&huart6, uart_recv_buf,50);
-    HAL_UART_Receive_IT(&huart2, uart_recv_buf,50);
-    HAL_UART_Receive_IT(&huart5, uart_recv_buf,50);
-    HAL_UART_Receive_IT(&huart8, uart_recv_buf,50);
-    HAL_UART_Receive_IT(&huart7, uart_recv_buf,50);
+	HAL_UART_Receive_IT(&huart1, uart1_recv_buf,50);
+    HAL_UART_Receive_IT(&huart4, uart1_recv_buf,50);
+    HAL_UART_Receive_IT(&huart3, uart1_recv_buf,50);
+    HAL_UART_Receive_IT(&huart6, uart1_recv_buf,50);
+    HAL_UART_Receive_IT(&huart2, uart1_recv_buf,50);
+    HAL_UART_Receive_IT(&huart5, uart1_recv_buf,50);
+    HAL_UART_Receive_IT(&huart8, uart1_recv_buf,50);
+    HAL_UART_Receive_IT(&huart7, uart1_recv_buf,50);
     
     
     init_hardware_version();
