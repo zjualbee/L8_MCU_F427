@@ -2,13 +2,11 @@
 
 显示控制板MCU
 
-#prejeck: DISPLAY_CTR_L8_STM32F730
-
-#object:cd MDK-ARM && UV4 -r L8_PMU.uvprojx
+#object: cd MDK-ARM && UV4 -r L8_PMU.uvprojx
 
 #output start: 
 
-.\MDK-ARM\L8_PMU\*.hex
+MDK-ARM\L8_PMU\*.hex
 
 #output end;
 
@@ -23,3 +21,7 @@
 20200614：
 1.添加5AA5协议
 2.编写与Imx8的电源设置的对接函数
+
+-----------------------------V1.2-------------------------------
+20200724：
+1.添加持续集成管理，敏捷的方式开发项目
