@@ -163,40 +163,40 @@ void On_Set_SetFan(pONE_ELEMENT p)
         }
         else if(p->key_id == DPK_SETFAN_FAN1)
         {
-		   //g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL1,PWM);
-		   g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,0,PWM);
+		   g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL1,PWM);
+		   //g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,0,PWM);
         }
         else if(p->key_id == DPK_SETFAN_FAN2)
         {
-            //g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL2,PWM);
-			g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,1,PWM);
+            g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL2,PWM);
+			//g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,1,PWM);
         }
         else if(p->key_id == DPK_SETFAN_FAN3)
         {
-            //g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL3,PWM);
-			g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,2,PWM);
+            g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL3,PWM);
+			//g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,2,PWM);
         }        
         else if(p->key_id == DPK_SETFAN_FAN4)
         {
-            //g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL4,PWM);
-			g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,3,PWM);
+            g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL4,PWM);
+			//g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,3,PWM);
         }
         else if(p->key_id == DPK_SETFAN_FAN5)
         {
-            //g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL5,PWM);
-			g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,4,PWM);
+            g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL5,PWM);
+			//g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,4,PWM);
         }
         else if(p->key_id == DPK_SETFAN_FAN6)
         {
-            //g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL6,PWM);
-			g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,5,PWM);
+            g_fan_cooling.fan_set_pwm_group(&g_fan_cooling,FAN_G_SL6,PWM);
+			//g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,5,PWM);
 		}
-		
+		#if 0
         else if(p->key_id == DPK_SETFAN_FAN7)
         {
            g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,6,PWM);
         }
-		#if 0
+		
         }
         else if(p->key_id == DPK_SETFAN_FAN8)
         {
