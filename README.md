@@ -1,6 +1,7 @@
 # DISPLAY_CTR_L8_STM32F730
 
 显示控制板MCU F427模块
+用于控制风扇、NTC
 
 #object: cd MDK-ARM && UV4 -r L8_PMU.uvprojx
 
