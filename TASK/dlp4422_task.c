@@ -43,9 +43,9 @@ static portTASK_FUNCTION(dlp4422_task, pvParameters)
 
     while(1)
     {
-        HAL_UART_Transmit(&huart3,dlp_send_buf,0x0b,100);
-        HAL_UART_Transmit(&huart4,dlp_send_buf,0x0b,100);
-        HAL_UART_Transmit(&huart6,dlp_send_buf,0x0b,100);
+        //HAL_UART_Transmit(&huart3,dlp_send_buf,0x0b,100);
+        //HAL_UART_Transmit(&huart4,dlp_send_buf,0x0b,100);
+        //HAL_UART_Transmit(&huart6,dlp_send_buf,0x0b,100);
         vdebug_buf_handle();
         osDelay(3000);
         //printf("dlp4422\r\n");

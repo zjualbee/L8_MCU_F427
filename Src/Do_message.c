@@ -93,7 +93,8 @@ int On_Software_Version_Get(pMCU_GET_SOFTWARE_VERSION p)
     temp.command = D_SOFTWARE_VERSION_W_CMD&0x7fff;
     temp.version_h = VERSION_MAIN;
     temp.version_l = VERSION_SLAVE;
-	temp.version_buildtime = VERSION_BUILDTIME;
+
+	temp.version_buildtime = BigLittleSwap32(VERSION_BUILDTIME);
 
 
     L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(MCU_GET_SOFTWARE_VERSION));
@@ -190,6 +191,16 @@ int Do_Dlp_Route(pCMD_PACKET p,uint16_t len)
 		HAL_UART_Transmit(&huart3,(uint8_t*)p,len,100);
         HAL_UART_Transmit(&huart4,(uint8_t*)p,len,100);
         HAL_UART_Transmit(&huart6,(uint8_t*)p,len,100);
+	}
+	
+	return 0;		
+}
+
+int Do_Pc_Route(pCMD_PACKET p,uint16_t len)
+{
+    if(p->packet_route_to==UART_ADDR_PMU)
+	{	 	 
+		HAL_UART_Transmit(&huart8,(uint8_t*)p,len, 100);
 	}
 	
 	return 0;		
@@ -366,9 +377,14 @@ void Do_Message(pDECODE_TABLE decode_table)
 				Do_Dlp_Route((pCMD_PACKET)decode_table->cmd_buf, len);
 			  
 			}
-			else if(to == UART_ADDR_PMU)
+			else if(to == UART_ADDR_PMU || to == UART_ADDR_IMX8)
 			{
                Do_Pmu_Route((pCMD_PACKET)decode_table->cmd_buf, len);
+			}
+
+			else if(to == UART_ADDR_PC)
+			{
+			   Do_Pc_Route((pCMD_PACKET)decode_table->cmd_buf, len);
 			}
 			
 			
