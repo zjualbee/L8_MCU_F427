@@ -152,9 +152,41 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
+          <LineNumber>52</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134251566</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\TASK\dlp4422_task.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\L8_PMU\../TASK/dlp4422_task.c\52</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>191</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134224824</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\Src\Do_message.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\L8_PMU\../Src/Do_message.c\191</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
           <LineNumber>318</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134252906</Address>
+          <Address>134252986</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -166,20 +198,20 @@
           <Expression>\\L8_PMU\../Src/fan_cooling.c\318</Expression>
         </Bp>
         <Bp>
-          <Number>1</Number>
+          <Number>3</Number>
           <Type>0</Type>
-          <LineNumber>217</LineNumber>
+          <LineNumber>3006</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134224894</Address>
+          <Address>134245936</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\Src\Do_message.c</Filename>
+          <Filename>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\L8_PMU\../Src/Do_message.c\217</Expression>
+          <Expression>\\L8_PMU\../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c\3006</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>

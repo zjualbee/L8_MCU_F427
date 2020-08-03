@@ -49,29 +49,7 @@ static void uart_printf(void)
 #ifdef NTC_SUPPORT
 	printf("========NTC Motor========\r\n");
 
-	uint8_t reg=0;
-	int16_t temprature=0;
-    // NTC Info
-    printf("========NTC Info========\r\n");
-    for(i=0;i<8;i++)
-    {
-       reg = Ads8730_Get_Raw_Adc(&Ntc_1_8,i);
-       temprature = Transform_Reg_To_Temprature(reg,3.3);
-       //printf("Ntc_1_8 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
-    }
-    for(i=0;i<8;i++)
-    {
-       reg = Ads8730_Get_Raw_Adc(&Ntc_9_16,i);
-       temprature = Transform_Reg_To_Temprature(reg,3.3);
-       //printf("Ntc_9_16 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
-    }
-    for(i=0;i<8;i++)
-    {
-       reg = Ads8730_Get_Raw_Adc(&Ntc_17_24,i);
-       temprature = Transform_Reg_To_Temprature(reg,3.3);
-       //printf("Ntc_17_24 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
-    }
-	printf("\r\n");
+    
 #endif
 #ifdef FAN_SUPPORT
     printf("========Fan Info========\r\n");

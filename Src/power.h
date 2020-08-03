@@ -30,7 +30,7 @@
 #define POWER_NUM           (1)
 #endif
 
-#define POWER_TEMP_USER     (6)
+#define POWER_TEMP_USER     (4)
 #define POWER_TEMP_MAX      (10)
 #define POWER_FAN_USER      (0)
 #define POWER_FAN_MAX       (8)
