@@ -377,10 +377,15 @@ void Do_Message(pDECODE_TABLE decode_table)
 				Do_Dlp_Route((pCMD_PACKET)decode_table->cmd_buf, len);
 			  
 			}
-			else if(to == UART_ADDR_PMU || to == UART_ADDR_IMX8)
+			else if(to == UART_ADDR_PMU)
 			{
                Do_Pmu_Route((pCMD_PACKET)decode_table->cmd_buf, len);
 			}
+
+			else if(to == UART_ADDR_IMX8)
+				{
+				Do_Pmu_Route((pCMD_PACKET)decode_table->cmd_buf, len);
+				}
 
 			else if(to == UART_ADDR_PC)
 			{

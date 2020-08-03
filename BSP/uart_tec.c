@@ -420,18 +420,18 @@ void TEC_Show(pUART_TEC p)
     int16_t temp=0;
     
     temp = p->run_param_reg[1]|((p->run_param_reg[0]<<8)&0xff00);
-    //printf("TEC_CHANNEL1:%d.%d \r\n",temp/10,temp%10);
+    printf("TEC_CHANNEL1:%d.%d \r\n",temp/10,temp%10);
     p->temp1 = temp;
 
 
 
     temp = p->run_param_reg[5]|((p->run_param_reg[4]<<8)&0xff00);
-    //printf("TEC_CHANNEL2:%d.%d \r\n",temp/10,temp%10);
+    printf("TEC_CHANNEL2:%d.%d \r\n",temp/10,temp%10);
     p->temp2 = temp;
 
     
     temp = p->run_param_reg[9]|((p->run_param_reg[8]<<8)&0xff00);
-    //printf("TEC_CHANNEL3:%d.%d \r\n",temp/10,temp%10);
+    printf("TEC_CHANNEL3:%d.%d \r\n",temp/10,temp%10);
     p->temp3 = temp;
 }
 

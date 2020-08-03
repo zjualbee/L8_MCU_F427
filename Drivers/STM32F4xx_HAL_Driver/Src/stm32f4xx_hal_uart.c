@@ -3008,7 +3008,7 @@ static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
     }
   else if(huart->Instance == UART8)  //   2  5  8
     {
-        ppfifo_in(&Decode_PMU,&temp,1);
+        ppfifo_in(&Decode_PC,&temp,1);
         At_Fifo_In(&at_decode,temp);
     }
   else if(huart->Instance == USART2)

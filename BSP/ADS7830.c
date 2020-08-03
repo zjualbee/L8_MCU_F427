@@ -1,12 +1,4 @@
-
-
-
-
-
-
-
 #include "ADS7830.h"
-
 
 uint8_t Ads8730_Get_Raw_Adc(pADS7830_OBJ pObj,uint8_t channel)
 {
@@ -36,19 +28,11 @@ uint8_t Ads8730_Get_Raw_Adc(pADS7830_OBJ pObj,uint8_t channel)
 }
 
 
-;  //
-   ; //Transmit
-   ;
-
-
-
 int Ads8730_Init(pADS7830_OBJ pObj,uint8_t dev_addr,\
     Ads7830_Bsp_Recv      iic_recv,\
     Ads7830_Bsp_Transmit  iic_transmit,\
     Ads7830_Bsp_Delayms   delayms)
 {
-
-
 
     pObj->iic_transmit = iic_transmit;
     pObj->iic_recv = iic_recv;
@@ -57,8 +41,6 @@ int Ads8730_Init(pADS7830_OBJ pObj,uint8_t dev_addr,\
 
 
 }
-
-
 
 
 int16_t Transform_Reg_To_Temprature(uint8_t reg,double base_volt)

@@ -83,6 +83,9 @@ static portTASK_FUNCTION(uart_task, pvParameters)
 
 		Decode_Handle(&Decode_PMU);		
 	    Do_Message(&Decode_PMU);
+
+		Decode_Handle(&Decode_PC);		
+	    Do_Message(&Decode_PC);
 		
 		Decode_Handle(&Decode_DLP);		
 	    Do_Message(&Decode_DLP);

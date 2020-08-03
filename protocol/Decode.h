@@ -78,6 +78,8 @@ typedef struct tag_CMD_PACKET
 
 extern DECODE_TABLE Decode_PMU;
 extern DECODE_TABLE Decode_DLP;
+extern DECODE_TABLE Decode_PC;
+
 
 #pragma pack ()
 

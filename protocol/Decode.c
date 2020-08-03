@@ -2,6 +2,8 @@
 #include "main.h"
 DECODE_TABLE Decode_PMU;
 DECODE_TABLE Decode_DLP;
+DECODE_TABLE Decode_PC;
+
 
 //---------------------------------------------------------------------------------------------------
 #define PRINT_DECODE   printf
