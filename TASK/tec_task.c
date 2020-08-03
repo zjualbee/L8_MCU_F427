@@ -67,14 +67,6 @@ uint8_t UART5_SEND(uint8_t *buf,uint16_t len)
 *******************************************************************************/
 static portTASK_FUNCTION(tec_task, pvParameters)
 {
-
-
-
-    //J21   ºì¼¤¹â
-    //Uart_Tec1.uart_send =   UART8_SEND;
-    //Uart_Tec1.delayms =     osDelay;
-
-
     // J20   
     Uart_Tec2.uart_send =   UART2_SEND;
     Uart_Tec2.delayms =     osDelay;
@@ -86,28 +78,20 @@ static portTASK_FUNCTION(tec_task, pvParameters)
 
     osDelay(2000);
 
-   // TEC_SetPowerDown(&Uart_Tec1);
     TEC_SetPowerDown(&Uart_Tec2);
     TEC_SetPowerDown(&Uart_Tec3);
     
     osDelay(3000);
     
-    //TEC_Init_Table(&Uart_Tec1);
-    //TEC_SetTemprature(&Uart_Tec1,20,20);
-    //TEC_SetPowerUp(&Uart_Tec1);
 
     TEC_Init_Table(&Uart_Tec2);
-    //TEC_SetTemprature(&Uart_Tec2,20,20);
     TEC_SetPowerUp(&Uart_Tec2);
 
     TEC_Init_Table(&Uart_Tec3);
     TEC_SetPowerUp(&Uart_Tec3);
 
     while(1)
-    {
-        //printf("Uart_Tec1\r\n");
-        //TEC_handler(&Uart_Tec1);
-        
+    { 
         //printf("Uart_Tec2\r\n");
         TEC_handler(&Uart_Tec2);
         

@@ -47,10 +47,27 @@ static void uart_printf(void)
 #endif
 
 #ifdef NTC_SUPPORT
-	printf("========NTC Motor========\r\n");
+	printf("========NTC 1-8 Temperature========\r\n");
+    for(i=0;i<ADS7830_CH_MAX;i++)
+		printf("%.1f¡ãC, ", (float)Ntc_1_8.temperature[i]);
+	printf("\r\n");
+	
+	#ifdef NTC2_EN
+    printf("========NTC 9-16 Temperature========\r\n");
+    for(i=0;i<ADS7830_CH_MAX;i++)
+		printf("%.1f¡ãC, ", (float)Ntc_9_16.temperature[i]);
+	printf("\r\n");
+	#endif
 
-    
+	#ifdef NTC3_EN
+    printf("========NTC 17-24 Temperature========\r\n");
+    for(i=0;i<ADS7830_CH_MAX;i++)
+		printf("%.1f¡ãC, ", (float)Ntc_17_24.temperature[i]);
+	printf("\r\n");
+	#endif
 #endif
+
+
 #ifdef FAN_SUPPORT
     printf("========Fan Info========\r\n");
     for (i = 0; i < MAX_FAN_NUM; i++)

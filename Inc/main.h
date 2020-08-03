@@ -17,6 +17,7 @@ extern "C" {
 #include "stdlib.h"
 #include "string.h"
 #include "stdint.h"
+#include "math.h"
 
 
 #include "at_decode.h"

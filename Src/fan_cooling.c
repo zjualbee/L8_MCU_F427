@@ -97,7 +97,6 @@ static uint8_t Bsp_I2c2_Write(uint8_t dev_addr , uint8_t reg , uint8_t value)
         {
            printf("iic write error %02X\r\n",dev_addr);
         }
-  
     return W_Result;
 }
 
@@ -138,6 +137,7 @@ static int fan_cooling_fan_init_all(struct FanCooling *thiz)
 static int fan_cooling_fan_on(struct FanCooling *thiz, uint8_t group_id, uint16_t pwm)
 {
     int ret = 0;
+	xSemaphoreTake(thiz->mutex, portMAX_DELAY);
 	switch (group_id)
 		{
 		case FAN_G_SL1:
@@ -167,6 +167,7 @@ static int fan_cooling_fan_on(struct FanCooling *thiz, uint8_t group_id, uint16_
 		default:
 			break;
 		}
+	xSemaphoreGive(thiz->mutex);
 	return ret;
 }
 

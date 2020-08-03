@@ -108,7 +108,7 @@ int On_Fan_Rpm_Get(pFAN_GET_RPM p)
 	temp.command = D_FAN_SPEED_W_CMD;
 	uint8_t i=0;
 	for(i=0;i<MAX_FAN_NUM;i++)
-		temp.rpm[i]=g_fan_cooling.fan_speed[i];
+		temp.rpm[i]=BigLittleSwap16(g_fan_cooling.fan_speed[i]);
 	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(FAN_GET_RPM));
 }
 
@@ -126,9 +126,9 @@ int On_TEC_GetTemperature(pTEC_GET_TEM p)
 {
 	TEC_GET_TEM temp={0};
 	temp.command = D_TEC_W_CMD;
-	temp.tecTemp[0]=((Uart_Tec2.temp1/10>>8)&0xff00)| (Uart_Tec2.temp1%10 & 0xff);
-	temp.tecTemp[1]=((Uart_Tec3.temp1/10>>8)&0xff00)| (Uart_Tec3.temp1%10 & 0xff);
-	temp.tecTemp[2]=((Uart_Tec3.temp3/10>>8)&0xff00)| (Uart_Tec3.temp3%10 & 0xff);
+	temp.tecTemp[0]=BigLittleSwap16(Uart_Tec2.temp1);
+	temp.tecTemp[1]=BigLittleSwap16(Uart_Tec2.temp2);
+	temp.tecTemp[2]=BigLittleSwap16(Uart_Tec2.temp3);
 	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(TEC_GET_TEM));
 
 }
@@ -143,33 +143,19 @@ int On_NTC_GetTemperature(pNTC_GET_TEM p)
 		temp.command = D_NTC_R_CMD;
 		
         uint8_t i;
-	    for(i=0;i<8;i++)
-	    {
-	       reg = Ads8730_Get_Raw_Adc(&Ntc_1_8,i);		   
-	       temprature = Transform_Reg_To_Temprature(reg,3.3);		  
-	       //printf("Ntc_1_8 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
-		   temp.temperature[index]=temprature;
-		   index++;
-	    }
-	    for(i=0;i<8;i++)
-	    {
-	       reg = Ads8730_Get_Raw_Adc(&Ntc_9_16,i);
-	       temprature = Transform_Reg_To_Temprature(reg,3.3);
-	       //printf("Ntc_9_16 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
+	    for(i=0;i<ADS7830_CH_MAX;i++)
+		   temp.temperature[i]=BigLittleSwap16(Ntc_1_8.temperature[i]);
+		
+		#ifdef NTC2_EN
+		for(i=0;i<ADS7830_CH_MAX;i++)
+		   temp.temperature[i+ADS7830_CH_MAX]=BigLittleSwap16(Ntc_9_16.temperature[i]);
+		#endif
 
-		   temp.temperature[index]=temprature;
-		   index++;
-	
-	    }
-	    for(i=0;i<8;i++)
-	    {
-	       reg = Ads8730_Get_Raw_Adc(&Ntc_17_24,i);
-	       temprature = Transform_Reg_To_Temprature(reg,3.3);
-	       //printf("Ntc_17_24 channel:%d,reg:%02X,temprature:%d\r\n",i,reg,temprature);
-
-		   temp.temperature[index]=temprature;
-		   index++;
-	    }
+		#ifdef NTC3_EN
+		for(i=0;i<ADS7830_CH_MAX;i++)
+		   temp.temperature[i+2*ADS7830_CH_MAX]=BigLittleSwap16(Ntc_17_24.temperature[i]);
+		#endif
+		
 		L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(NTC_GET_TEM));
 
 }
@@ -207,7 +193,140 @@ int Do_Pc_Route(pCMD_PACKET p,uint16_t len)
 }
 
 
-//int abcd = 0;
+int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
+{
+    uint16_t cmd = 0;
+	void *recv = 0;
+
+	cmd = p->command_h<<8 | p->command_l;
+	recv = &(p->packet_route_from);
+
+	switch(cmd)
+    {
+        //操作类命令
+        case D_CURRENT_W_CMD:
+        {
+             uint8_t current_h, current_l;
+			 current_h = p->pdata[0];	
+		     current_l = p->pdata[1];
+			 uint16_t g_CurrentValue=1000;
+			 g_CurrentValue = current_h*1000+current_l*10;
+			 g_Power.current_b=g_CurrentValue;
+		     g_Power.current_g=g_CurrentValue;
+			 g_Power.current_r=g_CurrentValue;
+		     Appo_Power_On(&g_Power);
+            break;		
+        }
+		
+		case D_LIGHTSOURCE_W_CMD:
+		{
+		    uint8_t onoff;
+			onoff = p->pdata[0];
+			g_Power.on_off_flag = onoff;
+			if(onoff)
+				   Appo_Power_On(&g_Power);
+			else
+			  Appo_Power_Off();
+			break;
+		}
+
+		case D_FAN_PWM_W_CMD:
+		{
+		    
+			uint8_t type;
+			uint8_t i=0;
+			type = p->pdata[0];
+			if(type)
+			{
+			     uint8_t select,fan_id,pwm_value;
+			     select = p->pdata[1];
+				 if(select == 0xFF)
+			 	{
+			 	    for(i=0;i<36;i++)
+						g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,i,p->pdata[2+i]);
+			 	}
+				 else
+			 	{
+			 	    g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,select-1,p->pdata[2+i]);
+			 	
+			 	}
+			}
+			else
+			{
+			     g_fan_cooling.fan_off_all(&g_fan_cooling);
+			}
+			break;
+		}
+		
+		case D_TEC_W_CMD:
+        {
+             int8_t temp_h,temp_l;
+			 int16_t g_TecTemp=20;
+			 temp_h = p->pdata[0];
+			 temp_l = p->pdata[1];
+			 g_TecTemp = temp_h+temp_l/100; 
+
+			 
+			 TEC_SetTemprature(&Uart_Tec2,g_TecTemp,g_TecTemp);
+			 TEC_SetTemprature(&Uart_Tec3,g_TecTemp,g_TecTemp);
+             break;		
+        }
+
+		case D_CW_SPEED_W_CMD:
+		{
+		break;
+		}
+
+		//查询读取类命令
+
+		case D_SOFTWARE_VERSION_R_CMD:
+		{
+		     On_Software_Version_Get((pMCU_GET_SOFTWARE_VERSION)recv);
+			 break;
+		}
+        case D_CURRENT_R_CMD:
+        {
+			 On_Current_Get((pPOWER_GET_CURRENT)recv);
+             break;		
+        }
+
+		case D_LIGHTSOURCE_R_CMD:
+		{
+		    
+		    On_LightSource_Get((pLS_GET_ST)recv);
+			break;
+		}
+
+		case D_FAN_SPEED_R_CMD:
+		{
+		    On_Fan_Rpm_Get((pFAN_GET_RPM)recv);
+			break;
+		}
+
+        case D_TEC_R_CMD:
+		{
+		    On_TEC_GetTemperature((pTEC_GET_TEM)recv);
+		    break;
+		}
+		
+		case D_NTC_R_CMD:
+        {
+			 On_NTC_GetTemperature((pNTC_GET_TEM)recv);
+             break;		
+        }
+
+		case D_CW_SPEED_R_CMD:
+		{
+		     break;
+		}
+		
+		default:
+            break;
+    }
+	return 0;
+}
+
+
 void Do_Message(pDECODE_TABLE decode_table)
 {
     static int x=1;
@@ -248,128 +367,7 @@ void Do_Message(pDECODE_TABLE decode_table)
 			recv = &(p->packet_route_from);
             if(to == UART_ADDR_MCU)
 			{
-                switch(cmd)
-                {
-                    //操作类命令
-                    case D_CURRENT_W_CMD:
-                    {
-                         uint8_t current_h, current_l;
-						 current_h = decode_table->cmd_buf[10];	
-					     current_l = decode_table->cmd_buf[11];
-						 uint16_t g_CurrentValue=1000;
-						 g_CurrentValue = current_h*1000+current_l*10;
-						 g_Power.current_b=g_CurrentValue;
-					     g_Power.current_g=g_CurrentValue;
-						 g_Power.current_r=g_CurrentValue;
-					     Appo_Power_On(&g_Power);
-                        break;		
-                    }
-					
-					case D_LIGHTSOURCE_W_CMD:
-					{
-					    uint8_t onoff;
-						onoff = decode_table->cmd_buf[10];
-						g_Power.on_off_flag = onoff;
-						if(onoff)
-	 					   Appo_Power_On(&g_Power);
-						else
-        				  Appo_Power_Off();
-						break;
-					}
-
-					case D_FAN_PWM_W_CMD:
-					{
-					    
-						uint8_t type;
-						uint8_t i=0;
-						type = decode_table->cmd_buf[10];
-						if(type)
-						{
-						     uint8_t select,fan_id,pwm_value;
-						     select = decode_table->cmd_buf[11];
-							 if(select == 0xFF)
-						 	{
-						 	    for(i=0;i<36;i++)
-									g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,i,decode_table->cmd_buf[12+i]);
-						 	}
-							 else
-						 	{
-						 	    g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,select-1,decode_table->cmd_buf[11+select]);
-						 	
-						 	}
-						}
-						else
-						{
-						     g_fan_cooling.fan_off_all(&g_fan_cooling);
-						}
-						break;
-					}
-					
-					case D_TEC_W_CMD:
-                    {
-                         int8_t temp_h,temp_l;
-						 int16_t g_TecTemp=20;
-						 temp_h = decode_table->cmd_buf[10];
-						 temp_l = decode_table->cmd_buf[11];
-						 g_TecTemp = temp_h+temp_l/100; 
-
-						 
-						 TEC_SetTemprature(&Uart_Tec2,g_TecTemp,g_TecTemp);
-						 TEC_SetTemprature(&Uart_Tec3,g_TecTemp,g_TecTemp);
-                         break;		
-                    }
-
-					case D_CW_SPEED_W_CMD:
-					{
-					break;
-					}
-
-					//查询读取类命令
-
-					case D_SOFTWARE_VERSION_R_CMD:
-					{
-					     On_Software_Version_Get((pMCU_GET_SOFTWARE_VERSION)recv);
-						 break;
-					}
-                    case D_CURRENT_R_CMD:
-                    {
-						 On_Current_Get((pPOWER_GET_CURRENT)recv);
-                         break;		
-                    }
-
-					case D_LIGHTSOURCE_R_CMD:
-					{
-					    
-					    On_LightSource_Get((pLS_GET_ST)recv);
-						break;
-					}
-
-					case D_FAN_SPEED_R_CMD:
-					{
-					    On_Fan_Rpm_Get((pFAN_GET_RPM)recv);
-						break;
-					}
-
-                    case D_TEC_R_CMD:
-					{
-					    On_TEC_GetTemperature((pTEC_GET_TEM)recv);
-					    break;
-					}
-					
-					case D_NTC_R_CMD:
-                    {
-						 On_NTC_GetTemperature((pNTC_GET_TEM)recv);
-                         break;		
-                    }
-
-					case D_CW_SPEED_R_CMD:
-					{
-					     break;
-					}
-					
-					default:
-                    break;
-                }
+			    Do_Mcu_Msg((pCMD_PACKET)decode_table->cmd_buf, len);
 			}
             
 			else if(to == UART_ADDR_DLP)
@@ -379,17 +377,17 @@ void Do_Message(pDECODE_TABLE decode_table)
 			}
 			else if(to == UART_ADDR_PMU)
 			{
-               Do_Pmu_Route((pCMD_PACKET)decode_table->cmd_buf, len);
+                Do_Pmu_Route((pCMD_PACKET)decode_table->cmd_buf, len);
 			}
 
 			else if(to == UART_ADDR_IMX8)
-				{
+			{
 				Do_Pmu_Route((pCMD_PACKET)decode_table->cmd_buf, len);
-				}
+			}
 
 			else if(to == UART_ADDR_PC)
 			{
-			   Do_Pc_Route((pCMD_PACKET)decode_table->cmd_buf, len);
+			    Do_Pc_Route((pCMD_PACKET)decode_table->cmd_buf, len);
 			}
 			
 			

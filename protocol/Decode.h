@@ -69,9 +69,7 @@ typedef struct tag_CMD_PACKET
     uint8_t  packet_route_to; 
     uint8_t  command_h;
     uint8_t  command_l;
-    void*  p;
-    
-   //uint8_t   packet_check;
+    uint8_t  pdata[50];
 }CMD_PACKET,*pCMD_PACKET;
 
 
