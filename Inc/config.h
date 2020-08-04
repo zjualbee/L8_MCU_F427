@@ -43,6 +43,17 @@
 #define MAX_FAN_NUM    36
 #define MAX_FAN_GROUP 6
 
+// **************** Port definition **********************
+#define ROUTE_PORT_IMX8   &huart1
+#define ROUTE_PORT_PMU   &huart1
+#define ROUTE_PORT_TEC  &huart2
+#define ROUTE_PORT_DLP_G  &huart3
+#define ROUTE_PORT_DLP_R  &huart4
+
+#define ROUTE_PORT_DLP_B  &huart6
+#define ROUTE_PORT_POWER  &huart7
+#define ROUTE_PORT_PC  &huart8
+
 
 
 #endif

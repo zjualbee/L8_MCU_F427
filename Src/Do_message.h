@@ -6,6 +6,8 @@
 #pragma pack(1)
 
 
+
+
 typedef enum
 {
 	D_SOFTWARE_VERSION_W_CMD = 0x0402,   //…Ë÷√MCU»Ìº˛∞Ê±æ

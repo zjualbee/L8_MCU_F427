@@ -32,7 +32,7 @@ typedef struct _ADS7830_OBJ
 {
 
     uint8_t  dev_addr; 
-    uint8_t reg[ADS7830_CH_MAX];                   // 首次读取电压值
+    uint8_t reg[ADS7830_CH_MAX];                   // 读取电压值
     uint16_t temperature[ADS7830_CH_MAX];          // 换算温度值
     
     SemaphoreHandle_t mutex;                        // 互斥信号量

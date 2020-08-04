@@ -10,9 +10,22 @@
 int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
 {
 
-    //USART_TypeDef * Port;
+    UART_HandleTypeDef * Port;
     uint8_t     sum_byte=0; 
     CMD_PACKET  send_packet={0};
+
+	if(route_to == UART_ADDR_PC)
+    {
+    	Port = ROUTE_PORT_PC;
+    }
+	else if(route_to == UART_ADDR_IMX8)
+	{
+		Port = ROUTE_PORT_IMX8;
+	}
+	else if(route_to == UART_ADDR_PMU)
+	{
+		Port = ROUTE_PORT_PMU;
+	}
 
     send_packet.head_sync_h        = 0x5A;
     send_packet.head_sync_l        = 0xA5;
@@ -27,9 +40,9 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
     sum_byte = Make_5AA5_Sum_Ext(sum_byte,buf+2,len-2); 
 	
 	
-    HAL_UART_Transmit(&huart1,(uint8_t*)&send_packet,8,100);
-    HAL_UART_Transmit(&huart1,buf+2,len-2,100);
-    HAL_UART_Transmit(&huart1,&sum_byte,1,100);
+    HAL_UART_Transmit(Port,(uint8_t*)&send_packet,8,100);
+    HAL_UART_Transmit(Port,buf+2,len-2,100);
+    HAL_UART_Transmit(Port,&sum_byte,1,100);
 
     return len+7;
 
@@ -72,13 +85,13 @@ int On_Current_Get(pPOWER_GET_CURRENT p)
 	uint8_t i =0;
 	uint8_t index=0;
 	for(i=0;i<POWER_CURRENT_MAX;i++)
-	   temp.p_current[i] = g_power1.laser_current[index++];
+	   temp.p_current[i] = BigLittleSwap16(g_power1.laser_current[index++]);
 	index=0;
 	for(i=POWER_CURRENT_MAX;i<2*POWER_CURRENT_MAX;i++)
-		temp.p_current[i] = g_power2.laser_current[index++];
+		temp.p_current[i] = BigLittleSwap16(g_power2.laser_current[index++]);
 	index=0;
 	for(i=POWER_CURRENT_MAX*2;i<3*POWER_CURRENT_MAX;i++)
-	    temp.p_current[i]=g_power3.laser_current[index++];
+	    temp.p_current[i]=BigLittleSwap16(g_power3.laser_current[index++]);
 	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(POWER_GET_CURRENT));
 	
 	return 0;
@@ -127,8 +140,8 @@ int On_TEC_GetTemperature(pTEC_GET_TEM p)
 	TEC_GET_TEM temp={0};
 	temp.command = D_TEC_W_CMD;
 	temp.tecTemp[0]=BigLittleSwap16(Uart_Tec2.temp1);
-	temp.tecTemp[1]=BigLittleSwap16(Uart_Tec2.temp2);
-	temp.tecTemp[2]=BigLittleSwap16(Uart_Tec2.temp3);
+	temp.tecTemp[1]=BigLittleSwap16(Uart_Tec3.temp1);
+	temp.tecTemp[2]=BigLittleSwap16(Uart_Tec3.temp3);
 	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(TEC_GET_TEM));
 
 }
@@ -164,7 +177,7 @@ int Do_Pmu_Route(pCMD_PACKET p,uint16_t len)
 {
     if(p->packet_route_to==UART_ADDR_PMU)
 	{	 	 
-		HAL_UART_Transmit(&huart1,(uint8_t*)p,len, 100);
+		HAL_UART_Transmit(ROUTE_PORT_PMU,(uint8_t*)p,len, 100);
 	}
 	
 	return 0;		
@@ -174,9 +187,9 @@ int Do_Dlp_Route(pCMD_PACKET p,uint16_t len)
 {
     if(p->packet_route_to==UART_ADDR_DLP)
 	{	 	 
-		HAL_UART_Transmit(&huart3,(uint8_t*)p,len,100);
-        HAL_UART_Transmit(&huart4,(uint8_t*)p,len,100);
-        HAL_UART_Transmit(&huart6,(uint8_t*)p,len,100);
+		HAL_UART_Transmit(ROUTE_PORT_DLP_B,(uint8_t*)p,len,100);
+        HAL_UART_Transmit(ROUTE_PORT_DLP_G,(uint8_t*)p,len,100);
+        HAL_UART_Transmit(ROUTE_PORT_DLP_R,(uint8_t*)p,len,100);
 	}
 	
 	return 0;		
@@ -186,7 +199,7 @@ int Do_Pc_Route(pCMD_PACKET p,uint16_t len)
 {
     if(p->packet_route_to==UART_ADDR_PMU)
 	{	 	 
-		HAL_UART_Transmit(&huart8,(uint8_t*)p,len, 100);
+		HAL_UART_Transmit(ROUTE_PORT_PC,(uint8_t*)p,len, 100);
 	}
 	
 	return 0;		
