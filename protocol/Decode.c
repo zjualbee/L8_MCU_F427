@@ -1,7 +1,9 @@
 #include "Decode.h"
 #include "main.h"
 DECODE_TABLE Decode_PMU;
-DECODE_TABLE Decode_DLP;
+DECODE_TABLE Decode_DLP_P3;
+DECODE_TABLE Decode_DLP_P4;
+DECODE_TABLE Decode_DLP_P6;
 DECODE_TABLE Decode_PC;
 
 

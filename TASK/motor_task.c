@@ -115,7 +115,9 @@ while(1)
             if(pre_cw_speed_cnt!=g_CW_speed_cnt)
                 {
                 pre_cw_speed_cnt = g_CW_speed_cnt;
+				#ifdef PRINTF_ON
             printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
+			   #endif
                 }
             if(g_CW_speed_cnt > 80)
                 {
@@ -132,8 +134,10 @@ while(1)
                 if(pre_laser_state!=0)
                 {
                     pre_laser_state=0;
+					#ifdef PRINTF_ON
                     printf("laser OFF\r\n");
                     printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
+					#endif
                     HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
                 }
                 }
@@ -147,8 +151,10 @@ while(1)
                     if(pre_laser_state!=1)
                     {
                         pre_laser_state=1;
+						#ifdef PRINTF_ON
                         printf("laser on\r\n");
                         printf("g_CW_speed_cnt %d\r\n",g_CW_speed_cnt*60);
+						#endif
                         HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
                     }
                 }

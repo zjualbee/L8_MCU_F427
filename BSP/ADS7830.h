@@ -28,7 +28,7 @@ typedef void (*Ads7830_Bsp_Delayms)(uint32_t time_ms);
 
 int16_t Transform_Reg_To_Temprature(uint8_t reg,double base_volt);
 
-typedef struct _ADS7830_OBJ
+typedef struct ADS7830
 {
 
     uint8_t  dev_addr; 
@@ -43,22 +43,22 @@ typedef struct _ADS7830_OBJ
      Ads7830_Bsp_Transmit  iic_transmit; //Transmit
      Ads7830_Bsp_Delayms   delayms;
 
-	 int (*ntc_read_adc)(struct _ADS7830_OBJ *thiz,uint8_t channel);
-	 int (*temperature_update)(struct _ADS7830_OBJ *thiz);
+     int (*read_reg)(struct ADS7830 *thiz, uint8_t channel);
+	 int (*temperature_update)(struct ADS7830 *thiz);
 
-}ADS7830_OBJ,* pADS7830_OBJ;
+}Struct_ADS7830;
 
-extern ADS7830_OBJ  Ntc_1_8;
+extern Struct_ADS7830  Ntc_1_8;
 #ifdef NTC2_EN
-extern ADS7830_OBJ  Ntc_9_16;
+extern Struct_ADS7830  Ntc_9_16;
 #endif
 #ifdef NTC3_EN
-extern ADS7830_OBJ  Ntc_17_24;
+extern Struct_ADS7830  Ntc_17_24;
 #endif
 
 
 
-int Ads8730_Init(struct _ADS7830_OBJ *thiz,uint8_t dev_addr,\
+int Ads8730_Init(struct ADS7830 *thiz,uint8_t dev_addr,\
     Ads7830_Bsp_Recv      iic_recv,\
     Ads7830_Bsp_Transmit  iic_transmit,\
     Ads7830_Bsp_Delayms   delayms);

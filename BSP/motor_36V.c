@@ -81,8 +81,8 @@ int app_printf_debug(uint8_t *pStr, uint32_t len)
    // xSemaphoreTake(s_mutex_uart_debug, portMAX_DELAY);
     // ret = HAL_UART_Transmit(&huart1, pStr, len, ~0);
     while(send_count < len){
-        if (RESET != __HAL_UART_GET_FLAG(&huart1, UART_FLAG_TXE)){
-            huart1.Instance->DR = (*pStr++ & (uint8_t)0xFF);
+        if (RESET != __HAL_UART_GET_FLAG(&huart8, UART_FLAG_TXE)){
+            //huart8.Instance->DR = (*pStr++ & (uint8_t)0xFF);
             send_count++;
         }
     }

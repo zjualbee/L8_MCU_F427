@@ -1,14 +1,15 @@
 #include "ADS7830.h"
 
-ADS7830_OBJ  Ntc_1_8;
+Struct_ADS7830  Ntc_1_8;
 #ifdef NTC2_EN
-ADS7830_OBJ  Ntc_9_16;
+Struct_ADS7830  Ntc_9_16;
 #endif
 #ifdef NTC3_EN
-ADS7830_OBJ  Ntc_17_24;
+Struct_ADS7830  Ntc_17_24;
 #endif
 
-static uint8_t Ads8730_Get_Raw_Adc(struct _ADS7830_OBJ *thiz,uint8_t channel)
+
+static uint8_t Ads8730_Get_Raw_Adc(struct ADS7830 *thiz,uint8_t channel)
 {
     xSemaphoreTake(thiz->mutex, portMAX_DELAY);
 
@@ -38,7 +39,7 @@ static uint8_t Ads8730_Get_Raw_Adc(struct _ADS7830_OBJ *thiz,uint8_t channel)
 }
 
 
-int16_t Transform_Reg_To_Temprature(uint8_t reg,double base_volt)
+static int16_t Transform_Reg_To_Temprature(uint8_t reg,double base_volt)
 {
     double ConvVolt, Resistor, temp;
     int8_t temperature = ADS7830_TEMPERATURE_ERROR; 
@@ -74,13 +75,13 @@ int16_t Transform_Reg_To_Temprature(uint8_t reg,double base_volt)
     return temperature;
 }
 
-static int Temperature_Update(struct _ADS7830_OBJ *thiz)
+static int Temperature_Update(struct ADS7830 *thiz)
 {
     xSemaphoreTake(thiz->mutex, portMAX_DELAY);
 	int i=0;
 	for(i=0;i<ADS7830_CH_MAX;i++)
 	{
-	    thiz->reg[i]=thiz->ntc_read_adc(thiz,i);
+	    thiz->reg[i]=thiz->read_reg(thiz,i);
 		thiz->temperature[i]=Transform_Reg_To_Temprature(thiz->reg[i],3.3);
 	}
 	xSemaphoreGive(thiz->mutex);
@@ -88,12 +89,12 @@ static int Temperature_Update(struct _ADS7830_OBJ *thiz)
 }
 
 
-int Ads8730_Init(struct _ADS7830_OBJ *thiz,uint8_t dev_addr,\
+int Ads8730_Init(struct ADS7830 *thiz,uint8_t dev_addr,\
 	Ads7830_Bsp_Recv	  iic_recv,\
 	Ads7830_Bsp_Transmit  iic_transmit,\
 	Ads7830_Bsp_Delayms   delayms)
 {  
-	memset(thiz, 0, sizeof(ADS7830_OBJ));
+	memset(thiz, 0, sizeof(Struct_ADS7830));
 	thiz->mutex = xSemaphoreCreateMutex();
 	if(thiz->mutex == NULL)
 		return 1;	 
@@ -102,8 +103,8 @@ int Ads8730_Init(struct _ADS7830_OBJ *thiz,uint8_t dev_addr,\
 	thiz->iic_recv = iic_recv;
 	thiz->dev_addr = dev_addr;
 	thiz->delayms = delayms;
-
-	thiz->ntc_read_adc = Ads8730_Get_Raw_Adc;
+	
+    thiz->read_reg = Ads8730_Get_Raw_Adc;
 	thiz->temperature_update = Temperature_Update;
 
 	return 0;

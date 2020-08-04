@@ -44,26 +44,27 @@ static void uart_printf(void)
     printf("MOTOR 1:%4dRPM(%4d),  %4dHz(%4d),  PWM:%.1f%%,  TEMP:%3d°„C,  status:0x%04X,  dt:%d(%d),   OK:%d\r\n", 
            (uint16_t)g_motor_36v.speed_sensor, (uint16_t)g_motor_36v.speed, (uint16_t)g_motor_36v.Hz_sensor, (uint16_t)g_motor_36v.Hz_chip, 
            (float)g_motor_36v.duty_cycle/10.0, (int16_t)g_motor_36v.temp, (uint16_t)g_motor_36v.A4960_reg_status, (int32_t)g_motor_36v.speed_dt_sensor, (int32_t)g_motor_36v.speed_dt_chip,  g_motor_36v.ok_flag);
-#endif
+    printf("\r\n\r\n");
+		   #endif
 
 #ifdef NTC_SUPPORT
 	printf("========NTC 1-8 Temperature========\r\n");
     for(i=0;i<ADS7830_CH_MAX;i++)
 		printf("%.1f°„C, ", (float)Ntc_1_8.temperature[i]);
-	printf("\r\n");
+	printf("\r\n\r\n");
 	
 	#ifdef NTC2_EN
     printf("========NTC 9-16 Temperature========\r\n");
     for(i=0;i<ADS7830_CH_MAX;i++)
 		printf("%.1f°„C, ", (float)Ntc_9_16.temperature[i]);
-	printf("\r\n");
+	printf("\r\n\r\n");
 	#endif
 
 	#ifdef NTC3_EN
     printf("========NTC 17-24 Temperature========\r\n");
     for(i=0;i<ADS7830_CH_MAX;i++)
 		printf("%.1f°„C, ", (float)Ntc_17_24.temperature[i]);
-	printf("\r\n");
+	printf("\r\n\r\n");
 	#endif
 #endif
 

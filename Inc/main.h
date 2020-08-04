@@ -72,7 +72,7 @@ extern UART_HandleTypeDef huart5;
 
 
 
-
+extern int decode_it_flag;
 extern int g_CW_speed_cnt;
 
 

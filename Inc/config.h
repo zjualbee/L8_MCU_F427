@@ -17,7 +17,7 @@
 #define TEC_SUPPORT
 #define MOTOR_36V_EN
 
-
+//#define PRINTF_ON
 
 // **************** µÁ‘¥ ****************
 #define POWER2_EN
@@ -47,10 +47,10 @@
 #define ROUTE_PORT_IMX8   &huart1
 #define ROUTE_PORT_PMU   &huart1
 #define ROUTE_PORT_TEC  &huart2
-#define ROUTE_PORT_DLP_G  &huart3
-#define ROUTE_PORT_DLP_R  &huart4
+#define ROUTE_PORT_DLP_3  &huart3
+#define ROUTE_PORT_DLP_4  &huart4
 
-#define ROUTE_PORT_DLP_B  &huart6
+#define ROUTE_PORT_DLP_6  &huart6
 #define ROUTE_PORT_POWER  &huart7
 #define ROUTE_PORT_PC  &huart8
 

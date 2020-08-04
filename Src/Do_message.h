@@ -92,7 +92,6 @@ typedef struct tag_MCU_GET_SOFTWARE_VERSION
 
 void Do_Message(pDECODE_TABLE decode_table);
 int Do_Pmu_Route(pCMD_PACKET p,uint16_t len);
-int Do_Dlp_Route(pCMD_PACKET p,uint16_t len);
 
 
 #pragma pack()

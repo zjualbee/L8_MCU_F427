@@ -70,7 +70,7 @@ osStaticThreadDef_t defaultTaskControlBlock;
 
 
 int g_CW_speed_cnt = 0;
-
+int decode_it_flag = 0;
 
 
 /* USER CODE END PV */
@@ -913,7 +913,9 @@ void StartDefaultTask(void const * argument)
 #if 1
     i2c5_init();
     dlp4422_task_create();
+	#ifdef PRINTF_ON
     uart_printf_task_create();
+	#endif
     led_task_create();
     uart_task_create();
     motor_task_create();
