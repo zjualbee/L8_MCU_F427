@@ -9,9 +9,8 @@ Struct_ADS7830  Ntc_17_24;
 #endif
 
 
-static uint8_t Ads8730_Get_Raw_Adc(struct ADS7830 *thiz,uint8_t channel)
+static uint8_t Ads8730_Get_Raw_Adc(struct ADS7830 *thiz, uint8_t channel)
 {
-    xSemaphoreTake(thiz->mutex, portMAX_DELAY);
 
 	static uint8_t cfg_words[ADS7830_CH_MAX] = {0x8c,0xcc,0x9c,0xdc,0xac,0xec,0xbc,0xfc};
 
@@ -19,7 +18,7 @@ static uint8_t Ads8730_Get_Raw_Adc(struct ADS7830 *thiz,uint8_t channel)
     uint8_t channel_cmd;
     uint8_t res=1;
 
-
+    
     channel_cmd = cfg_words[ channel < 8 ? channel:0];
  
     res = thiz->iic_transmit(thiz->dev_addr,&channel_cmd, 1);
@@ -33,7 +32,6 @@ static uint8_t Ads8730_Get_Raw_Adc(struct ADS7830 *thiz,uint8_t channel)
         {
             printf("Ads8730 iic error\r\n");
         }
-	xSemaphoreGive(thiz->mutex);
 
 	return b_value;
 }
@@ -77,14 +75,12 @@ static int16_t Transform_Reg_To_Temprature(uint8_t reg,double base_volt)
 
 static int Temperature_Update(struct ADS7830 *thiz)
 {
-    xSemaphoreTake(thiz->mutex, portMAX_DELAY);
 	int i=0;
 	for(i=0;i<ADS7830_CH_MAX;i++)
 	{
 	    thiz->reg[i]=thiz->read_reg(thiz,i);
 		thiz->temperature[i]=Transform_Reg_To_Temprature(thiz->reg[i],3.3);
 	}
-	xSemaphoreGive(thiz->mutex);
     return 0;
 }
 
@@ -95,9 +91,6 @@ int Ads8730_Init(struct ADS7830 *thiz,uint8_t dev_addr,\
 	Ads7830_Bsp_Delayms   delayms)
 {  
 	memset(thiz, 0, sizeof(Struct_ADS7830));
-	thiz->mutex = xSemaphoreCreateMutex();
-	if(thiz->mutex == NULL)
-		return 1;	 
 	
 	thiz->iic_transmit = iic_transmit;
 	thiz->iic_recv = iic_recv;

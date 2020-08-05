@@ -17,7 +17,7 @@
 #define TEC_SUPPORT
 #define MOTOR_36V_EN
 
-//#define PRINTF_ON
+#define PRINTF_ON
 
 // **************** µÁ‘¥ ****************
 #define POWER2_EN

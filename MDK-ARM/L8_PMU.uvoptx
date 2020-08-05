@@ -154,7 +154,7 @@
           <Type>0</Type>
           <LineNumber>318</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134253326</Address>
+          <Address>134253606</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -170,7 +170,7 @@
           <Type>0</Type>
           <LineNumber>3006</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134246244</Address>
+          <Address>134246524</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -180,22 +180,6 @@
           <Filename>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\L8_PMU\../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c\3006</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>382</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134225486</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\Src\Do_message.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\\../Src/Do_message.c\382</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>

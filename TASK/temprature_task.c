@@ -84,19 +84,13 @@ void Update_Ads7830()
 *******************************************************************************/
 static portTASK_FUNCTION(temprature_task, pvParameters)
 {
-
-    int i=0;
-
-    uint8_t reg=0;
-    int16_t temprature=0;
     Init_Ads7830();
 	osDelay(5000);
     while(1)
 	{
 	    osDelay(5000);
 		Update_Ads7830();
-    }
-    
+    }  
 }
 
 
