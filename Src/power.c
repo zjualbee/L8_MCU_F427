@@ -22,11 +22,11 @@
 /* Private macro -------------------------------------------------------------*/
 #define CMD_TIMEOUT_MS (300)
 
-#define POWER_CM1_CURRENT_MAX (3500)    // 3500
-#define POWER_CM2_CURRENT_MAX (1600)    // 1600
+#define POWER_CM1_CURRENT_MAX (3000)    // 3500
+#define POWER_CM2_CURRENT_MAX (3000)    // 1600
 #define POWER_CM3_CURRENT_MAX (3000)    // 3000
-#define POWER_CM4_CURRENT_MAX (1600)    // 1600
-#define POWER_CM5_CURRENT_MAX (3500)    // 3500
+#define POWER_CM4_CURRENT_MAX (3000)    // 1600
+#define POWER_CM5_CURRENT_MAX (3000)    // 3500
 
 /* Private variables ---------------------------------------------------------*/
 struct_Power g_power1;

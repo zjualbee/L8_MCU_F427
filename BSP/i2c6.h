@@ -1,9 +1,9 @@
 /******************** (C) COPYRIGHT 2014 APPOTRONICS ***************************
-* File Name          : i2c5.h
+* File Name          : i2c6.h
 * Author             : WWZ
 * Version            : V1.0.0
 * Date               : 2015-07-29
-* Description        : Header for i2c5 module
+* Description        : Header for i2c6 module
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
@@ -13,8 +13,8 @@
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 *******************************************************************************/
 /* Define to prevent recursive inclusion ------------------------------------ */
-#ifndef __I2C5_H__
-#define __I2C5_H__
+#ifndef __I2C6_H__
+#define __I2C6_H__
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -25,11 +25,11 @@
 /* Exported macro ------------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
 
-extern struct_I2cGpio g_i2c5;
+extern struct_I2cGpio g_i2c6;
 
 /* Exported functions ------------------------------------------------------- */
 
-int i2c5_init(void);
+int i2c6_init(void);
 
 #endif
 /******************* (C) COPYRIGHT 2014 APPOTRONICS ************END OF FILE****/

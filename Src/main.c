@@ -48,8 +48,8 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-I2C_HandleTypeDef hi2c1;
-I2C_HandleTypeDef hi2c2;
+//I2C_HandleTypeDef hi2c1;
+//I2C_HandleTypeDef hi2c2;
 SPI_HandleTypeDef hspi4;
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
@@ -82,8 +82,8 @@ static void MX_TIM1_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_SPI4_Init(void);
-static void MX_I2C1_Init(void);
-static void MX_I2C2_Init(void);
+//static void MX_I2C1_Init(void);
+//static void MX_I2C2_Init(void);
 static void MX_UART7_Init(void);
 static void MX_UART5_Init(void);
 static void MX_UART8_Init(void);
@@ -315,6 +315,7 @@ void SystemClock_Config(void)
   * @param None
   * @retval None
   */
+#if 0
 static void MX_I2C1_Init(void)
 {
 
@@ -401,6 +402,7 @@ static void MX_I2C2_Init(void)
   /* USER CODE END I2C2_Init 2 */
 
 }
+#endif
 
 /**
   * @brief SPI4 Initialization Function
@@ -840,8 +842,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOG, GPIO_PIN_1, GPIO_PIN_RESET);
-
-  /*Configure GPIO pins : PE4 LED, PE15 DLP_Power_EN*/
+  
+  /*New: Configure GPIO pins : PE4 LED, PE15 DLP_Power_EN*/
   GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_15;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -874,20 +876,72 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
-
-  /*Configure GPIO pin : PE8  E9, SCK-PP, SDA-OD*/
+  
+  /******************** GPIO I2C Definition ***************************/
+  /*Configure GPIO pin : I2C1: PB8 SCL-PP, PB9 SDA-OD*/
   GPIO_InitStruct.Pin = GPIO_PIN_8;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  
+  GPIO_InitStruct.Pin = GPIO_PIN_9;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : I2C2: PF1 SCL-PP, PF0 SDA-OD*/
+  GPIO_InitStruct.Pin = GPIO_PIN_1;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
   
+  GPIO_InitStruct.Pin = GPIO_PIN_0;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : I2C3: PA8 SCL-PP, PC9 SDA-OD*/
+  GPIO_InitStruct.Pin = GPIO_PIN_8;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  
+  GPIO_InitStruct.Pin = GPIO_PIN_9;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : I2C5: PE9 SCL-PP, PE8 SDA-OD*/
   GPIO_InitStruct.Pin = GPIO_PIN_9;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
   
+  GPIO_InitStruct.Pin = GPIO_PIN_8;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : I2C6: PB10 SCL-PP, PB11 SDA-OD*/
+  GPIO_InitStruct.Pin = GPIO_PIN_10;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  
+  GPIO_InitStruct.Pin = GPIO_PIN_11;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
   
 
   /* EXTI interrupt init*/
@@ -913,7 +967,9 @@ void StartDefaultTask(void const * argument)
   /* USER CODE BEGIN 5 */
   
 #if 1
+    i2c1_init();
     i2c5_init();
+    i2c6_init();
     dlp4422_task_create();
 	#ifdef PRINTF_ON
     uart_printf_task_create();

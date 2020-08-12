@@ -62,41 +62,40 @@ static uint8_t Bsp_I2c5_Write(uint8_t dev_addr , uint8_t reg , uint8_t value)
 }
 
 
-static uint8_t Bsp_I2c2_Read(uint8_t dev_addr , uint8_t reg)
+static uint8_t Bsp_I2c6_Read(uint8_t dev_addr , uint8_t reg)
 {
-
-    uint8_t databuff[2]={0};
+	uint8_t databuff[2]={0};
     databuff[0] = reg;
-    if(HAL_OK != HAL_I2C_Master_Transmit(&hi2c2, dev_addr, databuff, 1,150))
+    if(HAL_OK != g_i2c6.transmit(&g_i2c6, dev_addr&0x00ff, databuff, 1,150))
     {
         printf("iic error %02X\r\n",dev_addr);
         return 0xff;
     }
     else
     {
-       ;// printf("iic ok %02X\r\n",dev_addr);
-        HAL_I2C_Master_Receive(&hi2c2, dev_addr, databuff+1, 1,150);
+        g_i2c6.receive(&g_i2c6, dev_addr&0x00ff, databuff+1, 1,150);
     }
     return databuff[1];
 }
 
 
 
-static uint8_t Bsp_I2c2_Write(uint8_t dev_addr , uint8_t reg , uint8_t value)
+static uint8_t Bsp_I2c6_Write(uint8_t dev_addr , uint8_t reg , uint8_t value)
 {   
-    uint8_t databuff[2]={reg,value};
-    HAL_StatusTypeDef W_Result=HAL_BUSY;
+	uint8_t databuff[2]={reg,value};
+    int W_Result=HAL_BUSY;
 
-    W_Result=HAL_I2C_Master_Transmit(&hi2c2, dev_addr, databuff, 2,150);
+    W_Result=g_i2c6.transmit(&g_i2c6, dev_addr, databuff, 2,150);
     if(W_Result==HAL_OK)
         {
-           ;// printf("iic ok %02X\r\n",dev_addr);
+           //printf("iic ok %02X\r\n",dev_addr);
      
         }
     else
         {
            printf("iic write error %02X\r\n",dev_addr);
         }
+  
     return W_Result;
 }
 
@@ -109,9 +108,9 @@ static int fan_cooling_fan_init_all(struct FanCooling *thiz)
 	Max31790_Init(&Fan1_6,Add_Fan1_6,Bsp_I2c5_Read,Bsp_I2c5_Write);
 	Max31790_Init(&Fan7_12,Add_Fan7_12,Bsp_I2c5_Read,Bsp_I2c5_Write);
 	Max31790_Init(&Fan13_18,Add_Fan13_18,Bsp_I2c5_Read,Bsp_I2c5_Write);
-	Max31790_Init(&Fan19_24,Add_Fan19_24,Bsp_I2c2_Read,Bsp_I2c2_Write);
-	Max31790_Init(&Fan25_30,Add_Fan25_30,Bsp_I2c2_Read,Bsp_I2c2_Write);
-	Max31790_Init(&Fan31_32_And_Bump1_4,Add_Fan31_32_And_Bump1_4,Bsp_I2c2_Read,Bsp_I2c2_Write);
+	Max31790_Init(&Fan19_24,Add_Fan19_24,Bsp_I2c6_Read,Bsp_I2c6_Write);
+	Max31790_Init(&Fan25_30,Add_Fan25_30,Bsp_I2c6_Read,Bsp_I2c6_Write);
+	Max31790_Init(&Fan31_32_And_Bump1_4,Add_Fan31_32_And_Bump1_4,Bsp_I2c6_Read,Bsp_I2c6_Write);
 
 	for(i=0;i<6;i++)
 	{

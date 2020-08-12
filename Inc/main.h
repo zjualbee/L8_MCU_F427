@@ -19,6 +19,10 @@ extern "C" {
 #include "stdint.h"
 #include "math.h"
 
+#include "i2c1.h"
+#include "i2c6.h"
+#include "i2c5.h"
+
 
 #include "at_decode.h"
 #include "at_encode.h"
@@ -36,9 +40,6 @@ extern "C" {
 #include "tec_task.h"
 #include "uart_task.h"
 #include "dlp4422_task.h"
-#include "i2c5.h"
-
-
 
 #include "Do_message.h"
 #include "Decode.h"
@@ -55,8 +56,8 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 
-extern I2C_HandleTypeDef hi2c1;
-extern I2C_HandleTypeDef hi2c2;
+//extern I2C_HandleTypeDef hi2c1;
+//extern I2C_HandleTypeDef hi2c2;
 extern SPI_HandleTypeDef hspi4;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
