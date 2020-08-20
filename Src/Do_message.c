@@ -256,7 +256,7 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 			}
 			else
 			{
-			     g_fan_cooling.fan_off_all(&g_fan_cooling);
+			     g_fan_cooling.fan_off(&g_fan_cooling);
 			}
 			break;
 		}

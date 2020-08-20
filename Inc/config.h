@@ -12,13 +12,23 @@
 #define LASER_EN_OFF()  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET)
 #define LASER_EN(X)  (X)?(HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_SET)):HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET);
 
+#define MACHINEDOOR
+
+#ifdef MACHINEDOOR
+   #define NTC_ACTUAL_NUM     (13)
+   #define PUMP_NUM (3)
+#else
+   #define NTC_ACTUAL_NUM     (10)
+   #define PUMP_NUM (4)
+#endif 
+
 
 #define PUMP_EN
 #define TEC_SUPPORT
 #define MOTOR_36V_EN
 
 #define CW_PRINTF_ON
-#define NTC_ACTUAL_NUM     (10)
+
 
 // **************** µÁ‘¥ ****************
 #define POWER2_EN
@@ -41,7 +51,7 @@
 
 // **************** fan **********************
 #define FAN_SUPPORT
-#define MAX_FAN_NUM    36
+#define MAX_FAN_NUM    6*MAX_FAN_GROUP
 #define MAX_FAN_GROUP 6
 
 // **************** Port definition **********************

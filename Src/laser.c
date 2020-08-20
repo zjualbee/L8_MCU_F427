@@ -10,7 +10,24 @@
 /* Private variables ---------------------------------------------------------*/
 
 struct_Laser g_laser;
-
+#ifdef MACHINEDOOR	
+const static struct_NTC cs_all_temp[NTC_ACTUAL_NUM] = {
+		{&Ntc_1_8, Ads8730_CH1},
+		{&Ntc_1_8, Ads8730_CH2},
+		{&Ntc_1_8, Ads8730_CH5},
+		{&Ntc_9_16, Ads8730_CH0},
+		{&Ntc_9_16, Ads8730_CH1},
+		{&Ntc_9_16, Ads8730_CH2},
+		{&Ntc_9_16, Ads8730_CH3},
+		{&Ntc_9_16, Ads8730_CH4},
+		{&Ntc_9_16, Ads8730_CH5},
+		{&Ntc_17_24, Ads8730_CH1},
+		{&Ntc_17_24, Ads8730_CH3},
+		{&Ntc_17_24, Ads8730_CH4},
+		{&Ntc_17_24, Ads8730_CH5},
+};
+		
+#else
 const static struct_NTC cs_all_temp[NTC_ACTUAL_NUM] = {
     {&Ntc_1_8, Ads8730_CH2},
     {&Ntc_9_16, Ads8730_CH0},
@@ -23,6 +40,11 @@ const static struct_NTC cs_all_temp[NTC_ACTUAL_NUM] = {
     {&Ntc_17_24, Ads8730_CH1},
     {&Ntc_17_24, Ads8730_CH2},
 };
+
+#endif
+
+
+
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -94,7 +116,7 @@ static int laser_sys_on(struct Laser *thiz)
 
     // FAN
     #ifdef FAN_SUPPORT
-    g_fan_cooling.fan_on_all(&g_fan_cooling,pwm);
+    g_fan_cooling.fan_on(&g_fan_cooling,pwm);
     #endif
 	
     // Motor

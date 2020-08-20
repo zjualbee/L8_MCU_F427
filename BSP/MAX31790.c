@@ -1,8 +1,7 @@
 #include "MAX31790.h"
 
 #define MAX_PWM 100
-uint16_t init_pwm=100;
-extern uint8_t temp_ce;
+
 
 
 int Max31790_Pwm_Set(pMAX31790_OBJ pObj,uint8_t id, uint16_t duty)
@@ -180,9 +179,9 @@ int Max31790_Off(pMAX31790_OBJ pObj)
 *******************************************************************************/
 
 
-int Max31790_Init(pMAX31790_OBJ pObj,uint8_t dev_addr,Max_Bsp_Read  iic_read,Max_Bsp_Write iic_write)
+int Max31790_Init(pMAX31790_OBJ pObj,uint8_t dev_addr,Max_Bsp_Read  iic_read,Max_Bsp_Write iic_write, uint16_t pwm)
 {
-	uint16_t pwmout = 0;
+	uint16_t pwmout = pwm;
 	pObj->dev_addr = dev_addr;
 	pObj->iic_read = iic_read;
 	pObj->iic_write = iic_write;
@@ -215,7 +214,6 @@ int Max31790_Init(pMAX31790_OBJ pObj,uint8_t dev_addr,Max_Bsp_Read  iic_read,Max
 
 
 	// PWMOUT 0~511
-	pwmout = init_pwm;
 	int i=0;
 	for(i=0; i<6; i++)
 	{

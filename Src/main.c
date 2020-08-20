@@ -979,6 +979,7 @@ void StartDefaultTask(void const * argument)
     heat_sink_task_create();
     temprature_task_create();
     tec_task_create();
+	laser_task_create();
 	//system_init();
 	power_task_create();
 #else

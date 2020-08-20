@@ -1,19 +1,26 @@
+/**
+ * @file fan_cooling.h
+ * @author cao ting (tingcao@appotronics.com)
+ * @brief this struct is used to manage max31790 groups
+ * @version 1.02
+ * @date 2020-08-14
+ * 
+ * @copyright Copyright@appotronics 2020. All Rights Reserved
+ * 
+ */
+
 /* Define to prevent recursive inclusion ------------------------------------ */
 #ifndef __FAN_COOLING_H
 #define __FAN_COOLING_H
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-/* Exported types ------------------------------------------------------------*/
-typedef enum
-{
-    Add_Fan1_6 = 0x40,
-	Add_Fan7_12 = 0x5E,
-	Add_Fan13_18 = 0x58,
-	Add_Fan19_24 = 0x48,
-	Add_Fan25_30 = 0x50,
-	Add_Fan31_32_And_Bump1_4 = 0x56,
-}enum_Fan_ADD;
+
+
+/**
+ * @brief 
+ * 
+ */
 
 typedef enum
 {
@@ -21,39 +28,25 @@ typedef enum
 	fan_status_on,
 }enum_Fan_Status;
 
-typedef enum 
-{
-    FAN_G_SL1 = (0x01 << 0),  
-    FAN_G_SL2 = (0x01 << 1), 
-    FAN_G_SL3 = (0x01 << 2),
-    FAN_G_SL4 = (0x01 << 3),
-    FAN_G_SL5 = (0x01 << 4),
-    FAN_G_SL6 = (0x01 << 5),
 
-    FAN_SL_ALL = FAN_G_SL1 | FAN_G_SL2 | FAN_G_SL3 | FAN_G_SL4 | FAN_G_SL5 | FAN_G_SL6,
-
-    MAX_FAN_SELECT
-}enum_FanSelect;
-#define DEFAULT_WT_FAN_SELECT (FAN_G_SL1)
-
+/**
+ * @brief 
+ * 
+ */
 typedef struct FanCooling
 {	
-    uint16_t fan_speed[MAX_FAN_NUM];       // ·çÉÈ×ªËÙ, 0~65535 rpm
-    uint16_t fan_pwm[MAX_FAN_NUM];         // ·çÉÈPWMÕ¼¿Õ±È, 0~100 = 0~100%
-    uint8_t  fan_ctr_status[MAX_FAN_GROUP];  // ·çÉÈ¿ØÖÆ×´Ì¬, 0¹Ø, 1¿ª
-    SemaphoreHandle_t mutex;                    // »¥³âÐÅºÅÁ¿
+    uint16_t init_pwm_value;
+	uint16_t fan_speed[MAX_FAN_NUM];       // ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½, 0~65535 rpm
+    uint16_t fan_pwm[MAX_FAN_NUM];         // ï¿½ï¿½ï¿½ï¿½PWMÕ¼ï¿½Õ±ï¿½, 0~100 = 0~100%
+    enum_Fan_Status  fan_ctr_status[MAX_FAN_GROUP];  // ï¿½ï¿½ï¿½È¿ï¿½ï¿½ï¿½×´Ì¬, 0ï¿½ï¿½, 1ï¿½ï¿½
+    SemaphoreHandle_t mutex;                    // ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½ï¿½ï¿½
 
-    int (*fan_init_all)(struct FanCooling *thiz);
-    int (*fan_on)(struct FanCooling *thiz, uint8_t group_id, uint16_t pwm);
-	int (*fan_on_all)(struct FanCooling *thiz, uint16_t pwm);
-    int (*fan_off)(struct FanCooling *thiz, uint8_t group_id);
-	int (*fan_off_all)(struct FanCooling *thiz);
-	int (*fan_set_pwm_group)(struct FanCooling *thiz, uint8_t group_id, uint16_t pwm);
+    int (*fan_init)(struct FanCooling *thiz,uint16_t pwm);
+	int (*fan_on)(struct FanCooling *thiz,uint16_t pwm);
+	int (*fan_off)(struct FanCooling *thiz);
 	int (*fan_set_pwm_single)(struct FanCooling *thiz, uint8_t id, uint16_t pwm);
-	int (*fan_set_pwm_all)(struct FanCooling *thiz, uint16_t pwm);
+	int (*fan_set_pwm_all)(struct FanCooling *thiz, uint16_t pwm[MAX_FAN_NUM]);
 	int (*fan_speed_update)(struct FanCooling *thiz);
-	int (*fan_full_speed)(struct FanCooling *thiz);
-
 }struct_FanCooling;
 
 /* Exported constants --------------------------------------------------------*/

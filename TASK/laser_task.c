@@ -121,10 +121,12 @@ static void laser_status_check(void)
     #endif
 
     //pump
-	for(i=33;i<36;i++)
+	for(i=MAX_FAN_NUM-PUMP_NUM;i<MAX_FAN_NUM;i++)
 	{
 	    if(g_fan_cooling.fan_speed[i]<LIGHT_PUMP_SPEED_ERR_MIN)
 			s_fan_speed_low[i]++;
+		if(g_fan_cooling.fan_pwm[i]!=100)
+			printf("pump can't be set !100 pwm\r\n");
 		else
 			s_fan_speed_low[i]=0;
 		if(s_fan_speed_low[i] >= LIGHT_PUMP_SPEED_ERR_CHECK_SEC)

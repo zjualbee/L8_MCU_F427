@@ -30,9 +30,11 @@
 
 /* Private variables ---------------------------------------------------------*/
 struct_Power g_power1;
+
 #ifdef POWER2_EN
 struct_Power g_power2;
 #endif
+
 #ifdef POWER3_EN
 struct_Power g_power3;
 #endif

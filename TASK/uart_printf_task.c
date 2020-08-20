@@ -26,6 +26,24 @@ uint32_t g_uart_pirntf_delay_s = 0;
 *******************************************************************************/
 static void uart_printf(void)
 {
+
+    printf("\r\n\r\n************Debug Info************\r\n");
+    // System
+    printf("========System========\r\n");
+    if (g_laser.is_on)
+        printf("Laser: ON , ");
+    else
+        printf("Laser: OFF, ");
+    if (g_laser.en_flag)
+        printf("En: ON , ");
+    else
+        printf("En: OFF, ");
+    if (g_laser.sys_on_flag)
+        printf("Sys: ON , ");
+    else
+        printf("Sys: OFF, ");
+	printf("\r\n");
+    
     int i = 0;
     printf("========All the System Info========\r\n");
 #ifdef TEC_SUPPORT
@@ -39,6 +57,8 @@ static void uart_printf(void)
 	printf("TEC3_CHANNEL3:%d.%d \r\n",Uart_Tec3.temp3/10,Uart_Tec3.temp3%10);
 	printf("\r\n");
 #endif
+
+    
 
 #ifdef MOTOR_36V_EN
     // MOTOR 12V
@@ -70,6 +90,12 @@ static void uart_printf(void)
 		printf("%.1f°„C, ", (float)Ntc_17_24.temperature[i]);
 	printf("\r\n\r\n");
 	#endif
+
+
+	printf("========Actual NTC Temp========\r\n");
+    for(i=0;i<NTC_ACTUAL_NUM;i++)
+		printf("%.1f°„C, ", (float)g_laser.temp[i]);
+	printf("\r\n\r\n");
 #endif
 
 
@@ -82,6 +108,15 @@ static void uart_printf(void)
         printf("%4drpm(%d%%), ", g_fan_cooling.fan_speed[i], g_fan_cooling.fan_pwm[i]);
         
     }
+	printf("\r\n");
+
+    printf("========Pump Info========\r\n");
+	//pump
+	for(i=MAX_FAN_NUM-PUMP_NUM;i<MAX_FAN_NUM;i++)
+	{
+			printf("%4drpm(%d%%), ",g_fan_cooling.fan_speed[i],g_fan_cooling.fan_pwm[i]);
+	}
+	printf("\r\n");
 	printf("\r\n");
 #endif
     
@@ -112,6 +147,8 @@ static void uart_printf(void)
     
 #ifdef POWER2_EN
     printf("========Power 2 Info========\r\n");
+	printf("Satus:0x%02x, Power_On:0x%02x, Warning:0x%08x, Error:0x%08x \r\n", (uint8_t)g_power2.status, (uint8_t)g_power2.power_on_set, g_power2.warning, g_power2.error);
+
     printf("MODULE CURR :");
     for (i = 0; i < MAX_CURRENT_MODULE; i++){
         printf("%4dmA, ", g_power2.module_current[i]);
@@ -131,11 +168,13 @@ static void uart_printf(void)
     for (i = 0; i < POWER_TEMP_USER; i++){
         printf("%.1f°„C, ", (float)g_power2.power_temp[i]/10);
     }
-    printf("\r\n");
+	printf("\r\n");
+    printf("%s\r\n", g_power2.ver);
 #endif
 
    #ifdef POWER3_EN
     printf("========Power 3 Info========\r\n");
+   printf("Satus:0x%02x, Power_On:0x%02x, Warning:0x%08x, Error:0x%08x \r\n", (uint8_t)g_power3.status, (uint8_t)g_power3.power_on_set, g_power3.warning, g_power3.error);
     printf("MODULE CURR :");
     for (i = 0; i < MAX_CURRENT_MODULE; i++){
         printf("%4dmA, ", g_power3.module_current[i]);
@@ -156,6 +195,7 @@ static void uart_printf(void)
         printf("%.1f°„C, ", (float)g_power3.power_temp[i]/10);
     }
     printf("\r\n");
+    printf("%s\r\n", g_power3.ver);
 #endif
 
        return;

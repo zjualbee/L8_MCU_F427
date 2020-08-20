@@ -49,7 +49,7 @@ static void motor_status_check(void)
         err.module  = ERR_B_WHEEL_EX_SPEED;
         err.level   = ERR_DETECT_LOW;
         err.detail1 = g_motor_36v.speed_sensor;
-        //laser_err_handle(&err);
+        laser_err_handle(&err);
         printf("\r\n!!!!!!!!!!!!!!! Motor Speed Low %drpm!\r\n", g_motor_36v.speed_sensor);
     }
 

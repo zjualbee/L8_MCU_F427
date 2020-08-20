@@ -35,7 +35,6 @@ typedef struct Laser
     int is_on;                                          // 激光已开标志, 0x00关闭, 0x01打开
     uint32_t run_sec;                                   // 本次开灯时间, 单位 秒 
     uint16_t dif_motor_Hz;                              // 色轮马达转速频率
-
     SemaphoreHandle_t mutex;        // 私有变量,互斥信号量
     SemaphoreHandle_t mutex_brightness; // 私有变量,互斥信号量 亮度传感器
 

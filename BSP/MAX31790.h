@@ -46,7 +46,7 @@ int Max31790_Off(pMAX31790_OBJ pObj);
 
 
 
-int Max31790_Init(pMAX31790_OBJ pObj,uint8_t dev_addr,Max_Bsp_Read  iic_read,Max_Bsp_Write iic_write);
+int Max31790_Init(pMAX31790_OBJ pObj,uint8_t dev_addr,Max_Bsp_Read  iic_read,Max_Bsp_Write iic_write, uint16_t pwm);
 void Max31790_List_Reg(pMAX31790_OBJ pObj);
 int Max31790_Pwm_Set_All(pMAX31790_OBJ pObj, uint16_t pwm);
 
