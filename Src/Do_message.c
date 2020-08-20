@@ -82,18 +82,23 @@ int On_Current_Get(pPOWER_GET_CURRENT p)
 {
     POWER_GET_CURRENT temp={0};
 	temp.command = BigLittleSwap16(D_CURRENT_W_CMD);
-	uint8_t i =0;
-	uint8_t index=0;
-	for(i=0;i<POWER_CURRENT_MAX;i++)
-	   temp.p_current[i] = BigLittleSwap16(g_power1.laser_current[index++]);
-	index=0;
-	for(i=POWER_CURRENT_MAX;i<2*POWER_CURRENT_MAX;i++)
-		temp.p_current[i] = BigLittleSwap16(g_power2.laser_current[index++]);
-	index=0;
-	for(i=POWER_CURRENT_MAX*2;i<3*POWER_CURRENT_MAX;i++)
-	    temp.p_current[i]=BigLittleSwap16(g_power3.laser_current[index++]);
-	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(POWER_GET_CURRENT));
-	
+	uint8_t i = 0;
+
+	for (i = 0; i < POWER_CURRENT_MAX; i++)
+		temp.p_current[i] = BigLittleSwap16(g_power1.laser_current[i]);
+
+#ifdef POWER2_EN
+	for (i = 0; i < POWER_CURRENT_MAX; i++)
+		temp.p_current[i + POWER_CURRENT_MAX] = BigLittleSwap16(g_power2.laser_current[i]);
+#endif
+
+#ifdef POWER3_EN
+	for (i = 0; i < POWER_CURRENT_MAX; i++)
+		temp.p_current[i + 2 * POWER_CURRENT_MAX] = BigLittleSwap16(g_power3.laser_current[i]);
+#endif
+
+	L8_Cmd_Send(p->route_to, p->route_from, (uint8_t *)&temp, sizeof(POWER_GET_CURRENT));
+
 	return 0;
 }
 
@@ -222,9 +227,9 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 			onoff = p->pdata[0];
 			g_Power.on_off_flag = onoff;
 			if(onoff)
-				   Appo_Power_On(&g_Power);
+				   sys_onoff_laser_on();
 			else
-			  Appo_Power_Off();
+			  sys_onoff_laser_off();
 			break;
 		}
 

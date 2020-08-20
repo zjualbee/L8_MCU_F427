@@ -433,6 +433,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\fan_cooling.c</FilePath>
             </File>
+            <File>
+              <FileName>laser.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\laser.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -672,6 +677,11 @@
               <FileName>power_task.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\TASK\power_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>laser_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TASK\laser_task.c</FilePath>
             </File>
           </Files>
         </Group>

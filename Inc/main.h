@@ -50,7 +50,8 @@ extern "C" {
 #include "MAX31790.h"
 #include "fan_cooling.h"
 
-
+#include "laser.h"
+#include "laser_task.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

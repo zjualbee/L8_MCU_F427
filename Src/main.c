@@ -970,16 +970,16 @@ void StartDefaultTask(void const * argument)
     i2c1_init();
     i2c5_init();
     i2c6_init();
+	
     dlp4422_task_create();
-	#ifdef PRINTF_ON
     uart_printf_task_create();
-	#endif
     led_task_create();
     uart_task_create();
     motor_task_create();
     heat_sink_task_create();
     temprature_task_create();
     tec_task_create();
+	//system_init();
 	power_task_create();
 #else
     led_task_create();

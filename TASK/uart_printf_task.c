@@ -31,15 +31,19 @@ static void uart_printf(void)
 #ifdef TEC_SUPPORT
     // TEC 
     printf("========TEC Info========\r\n");
-    printf("TEC_CHANNEL1:%d.%d \r\n",Uart_Tec2.temp1/10,Uart_Tec2.temp1%10);
-    printf("TEC_CHANNEL2:%d.%d \r\n",Uart_Tec3.temp1/10,Uart_Tec3.temp1%10);
-	printf("TEC_CHANNEL3:%d.%d \r\n",Uart_Tec3.temp3/10,Uart_Tec3.temp3%10); 
+    printf("TEC2_CHANNEL1:%d.%d \r\n",Uart_Tec2.temp1/10,Uart_Tec2.temp1%10);
+    printf("TEC2_CHANNEL2:%d.%d \r\n",Uart_Tec2.temp2/10,Uart_Tec2.temp2%10);
+	printf("TEC2_CHANNEL3:%d.%d \r\n",Uart_Tec2.temp3/10,Uart_Tec2.temp3%10); 
+	printf("TEC3_CHANNEL1:%d.%d \r\n",Uart_Tec3.temp1/10,Uart_Tec3.temp1%10);
+    printf("TEC3_CHANNEL2:%d.%d \r\n",Uart_Tec3.temp2/10,Uart_Tec3.temp2%10);
+	printf("TEC3_CHANNEL3:%d.%d \r\n",Uart_Tec3.temp3/10,Uart_Tec3.temp3%10);
 	printf("\r\n");
 #endif
 
 #ifdef MOTOR_36V_EN
     // MOTOR 12V
     printf("========Wheel Motor========\r\n");
+    printf("CW : %4d RPM\r\n",g_CW_speed_cnt*60);
 
     printf("MOTOR 1:%4dRPM(%4d),  %4dHz(%4d),  PWM:%.1f%%,  TEMP:%3d°„C,  status:0x%04X,  dt:%d(%d),   OK:%d\r\n", 
            (uint16_t)g_motor_36v.speed_sensor, (uint16_t)g_motor_36v.speed, (uint16_t)g_motor_36v.Hz_sensor, (uint16_t)g_motor_36v.Hz_chip, 

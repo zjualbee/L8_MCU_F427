@@ -36,7 +36,6 @@ uint32_t Appo_Set_Current(pG_POWER p)
 
 uint32_t Appo_Power_On(pG_POWER p)
 {
-	POWER_ON;
     g_power1.power_on(&g_power1,p->current_b,p->current_g,p->current_r,0,0);
 	#ifdef POWER2_EN
 	g_power2.power_on(&g_power2,p->current_b,p->current_g,p->current_r,0,0);
@@ -60,7 +59,7 @@ uint32_t Appo_Power_Off()
 	g_power3.power_off(&g_power3);
 	#endif
 
-	POWER_OFF;
+	LASER_EN_OFF();
 	return 1;
 }
 

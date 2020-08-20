@@ -8,16 +8,17 @@
 #define LED_TOGGLE  HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_10);
 
 //Power
-#define POWER_ON  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_SET)
-#define POWER_OFF  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET)
-#define POWER(X)  (X)?(HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_SET)):HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET);
+#define LASER_EN_ON()  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_SET)
+#define LASER_EN_OFF()  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET)
+#define LASER_EN(X)  (X)?(HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_SET)):HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET);
 
 
 #define PUMP_EN
 #define TEC_SUPPORT
 #define MOTOR_36V_EN
 
-#define PRINTF_ON
+#define CW_PRINTF_ON
+#define NTC_ACTUAL_NUM     (10)
 
 // **************** µÁ‘¥ ****************
 #define POWER2_EN

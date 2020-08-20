@@ -32,15 +32,17 @@ void On_Set_LightSource(pONE_ELEMENT p)
     {
     if(p->value_id == DPV_LIGHTSOURCE_STATUS_ON)
         {
-            g_Power.on_off_flag = 1;
-			Appo_Power_On(&g_Power);
+            //g_Power.on_off_flag = 1;
+			//Appo_Power_On(&g_Power);
+			sys_onoff_laser_on();
 
         }
     else if(p->value_id == DPV_LIGHTSOURCE_STATUS_OFF)
         {
-        g_Power.on_off_flag = 0;
-        Appo_Power_Off();
-
+        //g_Power.on_off_flag = 0;
+        //Appo_Power_Off();
+        sys_onoff_laser_off();
+  
         }
     }
 }
