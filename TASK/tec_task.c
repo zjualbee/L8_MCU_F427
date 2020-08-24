@@ -24,6 +24,7 @@ UART_TEC Uart_Tec2;
 UART_TEC Uart_Tec3;
 
 
+#ifdef TEC2_EN
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -40,6 +41,7 @@ uint8_t UART2_SEND(uint8_t *buf,uint16_t len)
     return len;
 
 }
+#endif
 
 uint8_t UART5_SEND(uint8_t *buf,uint16_t len)
 {
@@ -68,8 +70,10 @@ uint8_t UART5_SEND(uint8_t *buf,uint16_t len)
 static portTASK_FUNCTION(tec_task, pvParameters)
 {
     // J20   
+    #ifdef TEC2_EN
     Uart_Tec2.uart_send =   UART2_SEND;
     Uart_Tec2.delayms =     osDelay;
+	#endif
 
     
     // J22    
@@ -78,22 +82,27 @@ static portTASK_FUNCTION(tec_task, pvParameters)
 
     osDelay(2000);
 
+    #ifdef TEC2_EN
     TEC_SetPowerDown(&Uart_Tec2);
+	#endif
     TEC_SetPowerDown(&Uart_Tec3);
     
     osDelay(3000);
     
-
+    #ifdef TEC2_EN
     TEC_Init_Table(&Uart_Tec2);
     TEC_SetPowerUp(&Uart_Tec2);
+	#endif
 
     TEC_Init_Table(&Uart_Tec3);
     TEC_SetPowerUp(&Uart_Tec3);
 
     while(1)
     { 
+        #ifdef TEC2_EN
         //printf("Uart_Tec2\r\n");
         TEC_handler(&Uart_Tec2);
+		#endif
         
         //printf("Uart_Tec3\r\n");
         TEC_handler(&Uart_Tec3);

@@ -10,38 +10,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 struct_Laser g_laser;
-#ifdef MACHINEDOOR	
-const static struct_NTC cs_all_temp[NTC_ACTUAL_NUM] = {
-		{&Ntc_1_8, Ads8730_CH1},
-		{&Ntc_1_8, Ads8730_CH2},
-		{&Ntc_1_8, Ads8730_CH5},
-		{&Ntc_9_16, Ads8730_CH0},
-		{&Ntc_9_16, Ads8730_CH1},
-		{&Ntc_9_16, Ads8730_CH2},
-		{&Ntc_9_16, Ads8730_CH3},
-		{&Ntc_9_16, Ads8730_CH4},
-		{&Ntc_9_16, Ads8730_CH5},
-		{&Ntc_17_24, Ads8730_CH1},
-		{&Ntc_17_24, Ads8730_CH3},
-		{&Ntc_17_24, Ads8730_CH4},
-		{&Ntc_17_24, Ads8730_CH5},
-};
-		
-#else
-const static struct_NTC cs_all_temp[NTC_ACTUAL_NUM] = {
-    {&Ntc_1_8, Ads8730_CH2},
-    {&Ntc_9_16, Ads8730_CH0},
-    {&Ntc_9_16, Ads8730_CH1},
-    {&Ntc_9_16, Ads8730_CH2},
-    {&Ntc_9_16, Ads8730_CH3},
-    {&Ntc_9_16, Ads8730_CH4},
-    {&Ntc_9_16, Ads8730_CH5},
-    {&Ntc_17_24, Ads8730_CH0},
-    {&Ntc_17_24, Ads8730_CH1},
-    {&Ntc_17_24, Ads8730_CH2},
-};
-
-#endif
 
 
 
@@ -60,8 +28,22 @@ const static struct_NTC cs_all_temp[NTC_ACTUAL_NUM] = {
 static int laser_temp_update(struct Laser *thiz)
 {
     uint8_t i=0;
-	for(i=0;i<NTC_ACTUAL_NUM;i++)
-		thiz->temp[i]=(cs_all_temp[i].obj)->temperature[cs_all_temp[i].ADS7830_ch];
+	for(i=0;i<8;i++)
+	{
+		thiz->temp[i]=Ntc_1_8.temperature[i];
+		if(thiz->temp[i]>TEMP_MAX)
+			thiz->useful_flag[i]=0;
+		else
+			thiz->useful_flag[i]=1;
+		
+	    #ifdef NTC2_EN
+		thiz->temp[i+8]=Ntc_9_16.temperature[i];
+		if(thiz->temp[i+8]>TEMP_MAX)
+			thiz->useful_flag[i+8]=0;
+		else
+			thiz->useful_flag[i+8]=1;
+		#endif
+	}		
 
 	thiz->dif_motor_Hz = g_CW_speed_cnt*60;
     return 0;
@@ -116,7 +98,7 @@ static int laser_sys_on(struct Laser *thiz)
 
     // FAN
     #ifdef FAN_SUPPORT
-    g_fan_cooling.fan_on(&g_fan_cooling,pwm);
+    //g_fan_cooling.fan_on(&g_fan_cooling,pwm);
     #endif
 	
     // Motor

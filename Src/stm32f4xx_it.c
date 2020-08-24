@@ -247,14 +247,6 @@ void USART1_IRQHandler(void)
 
   /* USER CODE END USART1_IRQn 0 */
   HAL_UART_IRQHandler(&huart1);
-
-  #if 0
-  uint8_t temp=0;
-  temp = (uint8_t)(huart1.Instance->DR &0xFF);
-  ppfifo_in(&Decode_PMU,&temp,1);
-  At_Fifo_In(&at_decode,temp);
-  #endif
-  
   /* USER CODE BEGIN USART1_IRQn 1 */
 
   /* USER CODE END USART1_IRQn 1 */
@@ -283,7 +275,6 @@ void USART3_IRQHandler(void)
 
   /* USER CODE END USART3_IRQn 0 */
   HAL_UART_IRQHandler(&huart3);
-  
   /* USER CODE BEGIN USART3_IRQn 1 */
 
   /* USER CODE END USART3_IRQn 1 */

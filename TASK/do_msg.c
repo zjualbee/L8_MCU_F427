@@ -42,7 +42,6 @@ void On_Set_LightSource(pONE_ELEMENT p)
         g_Power.on_off_flag = 0;
         Appo_Power_Off();
         //sys_onoff_laser_off();
-  
         }
     }
 }

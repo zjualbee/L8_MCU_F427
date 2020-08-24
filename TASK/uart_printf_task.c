@@ -48,10 +48,14 @@ static void uart_printf(void)
     printf("========All the System Info========\r\n");
 #ifdef TEC_SUPPORT
     // TEC 
-    printf("========TEC Info========\r\n");
-    printf("TEC2_CHANNEL1:%d.%d \r\n",Uart_Tec2.temp1/10,Uart_Tec2.temp1%10);
+    printf("========TEC Info========\r\n"); 
+
+    #ifdef TEC2_EN
+	printf("TEC2_CHANNEL1:%d.%d \r\n",Uart_Tec2.temp1/10,Uart_Tec2.temp1%10);
     printf("TEC2_CHANNEL2:%d.%d \r\n",Uart_Tec2.temp2/10,Uart_Tec2.temp2%10);
-	printf("TEC2_CHANNEL3:%d.%d \r\n",Uart_Tec2.temp3/10,Uart_Tec2.temp3%10); 
+	printf("TEC2_CHANNEL3:%d.%d \r\n",Uart_Tec2.temp3/10,Uart_Tec2.temp3%10);
+	printf("\r\n");
+	#endif
 	printf("TEC3_CHANNEL1:%d.%d \r\n",Uart_Tec3.temp1/10,Uart_Tec3.temp1%10);
     printf("TEC3_CHANNEL2:%d.%d \r\n",Uart_Tec3.temp2/10,Uart_Tec3.temp2%10);
 	printf("TEC3_CHANNEL3:%d.%d \r\n",Uart_Tec3.temp3/10,Uart_Tec3.temp3%10);
@@ -90,12 +94,6 @@ static void uart_printf(void)
 		printf("%.1f°„C, ", (float)Ntc_17_24.temperature[i]);
 	printf("\r\n\r\n");
 	#endif
-
-
-	printf("========Actual NTC Temp========\r\n");
-    for(i=0;i<NTC_ACTUAL_NUM;i++)
-		printf("%.1f°„C, ", (float)g_laser.temp[i]);
-	printf("\r\n\r\n");
 #endif
 
 
@@ -112,9 +110,9 @@ static void uart_printf(void)
 
     printf("========Pump Info========\r\n");
 	//pump
-	for(i=MAX_FAN_NUM-PUMP_NUM;i<MAX_FAN_NUM;i++)
+	for(i=0;i<MAX_PUMP_NUM;i++)
 	{
-			printf("%4drpm(%d%%), ",g_fan_cooling.fan_speed[i],g_fan_cooling.fan_pwm[i]);
+			printf("%4drpm(%d%%), ",g_fan_cooling.fan_speed[Pump1+i],g_fan_cooling.fan_pwm[Pump1+i]);
 	}
 	printf("\r\n");
 	printf("\r\n");

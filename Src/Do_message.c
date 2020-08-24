@@ -144,8 +144,8 @@ int On_TEC_GetTemperature(pTEC_GET_TEM p)
 {
 	TEC_GET_TEM temp={0};
 	temp.command = BigLittleSwap16(D_TEC_W_CMD);
-	temp.tecTemp[0]=BigLittleSwap16(Uart_Tec2.temp1);
-	temp.tecTemp[1]=BigLittleSwap16(Uart_Tec3.temp1);
+	temp.tecTemp[0]=BigLittleSwap16(Uart_Tec3.temp1);
+	temp.tecTemp[1]=BigLittleSwap16(Uart_Tec3.temp2);
 	temp.tecTemp[2]=BigLittleSwap16(Uart_Tec3.temp3);
 	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(TEC_GET_TEM));
 
@@ -268,9 +268,7 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 			 temp_h = p->pdata[0];
 			 temp_l = p->pdata[1];
 			 g_TecTemp = temp_h+temp_l/100; 
-
 			 
-			 TEC_SetTemprature(&Uart_Tec2,g_TecTemp,g_TecTemp);
 			 TEC_SetTemprature(&Uart_Tec3,g_TecTemp,g_TecTemp);
              break;		
         }

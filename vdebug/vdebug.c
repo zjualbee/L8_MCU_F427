@@ -4,27 +4,6 @@
 int vdebug_buf_len=0;
 uint8_t vdebug_buf[VDEBUG_BUF_LEN]={0};
 
-/*******************************************************************************
-* Function Name  : delay_ms
-* Description    : 延时,毫秒级.
-* Input          : None
-* Output         : None
-* Return         : None
-*******************************************************************************/
-void delay_ms(uint32_t Nms)
-{
-#if 0
-    uint32_t i = 0;
-    
-    while(Nms--)
-    {
-        for (i = 0; i < DELAY_1MS_COUNTER; i++);    // 1ms
-    }
-#else
-    vTaskDelay(Nms / portTICK_RATE_MS);
-#endif
-}
-
 
 void vdebug_buf_in(uint8_t chr)
 {
@@ -74,29 +53,7 @@ void bubble_sort(int *pData, unsigned int Count)
 
 
 
-#if 1
-#pragma import(__use_no_semihosting)             
-//标准库需要的支持函数                 
 
-//重定义fputc函数 
-int fputc(int ch, FILE *f)
-{
-	uint8_t temp;
-    //vTaskSuspendAll();
-	temp=(uint8_t)ch;
-
-    //huart1.Instance->DR = temp;
-    //while((huart1.Instance->SR&USART_SR_TXE)==0);
-	HAL_UART_Transmit(&huart8,&temp,1,50);
-
-    
-   // xTaskResumeAll();
-    
-	return ch;
-}
-
-
-#endif 
 
 
 

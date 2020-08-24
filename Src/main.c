@@ -48,11 +48,16 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+DAC_HandleTypeDef hdac;
+
 //I2C_HandleTypeDef hi2c1;
 //I2C_HandleTypeDef hi2c2;
+
 SPI_HandleTypeDef hspi4;
+
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim4;
 
 UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart5;
@@ -91,6 +96,8 @@ static void MX_USART2_UART_Init(void);
 static void MX_UART4_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_USART6_UART_Init(void);
+static void MX_DAC_Init(void);
+static void MX_TIM4_Init(void);
 void StartDefaultTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
@@ -99,59 +106,6 @@ void StartDefaultTask(void const * argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-/*******************************************************************************
-* Function Name  : bsp_delay_us
-* Description    : delay_us
-* Input          : None
-* Output         : None
-* Return         : None
-*******************************************************************************/
-static uint32_t s_systick_counter_us_init = 0;
-static uint32_t s_systick_counter_us = 0;
-void bsp_delay_us(uint32_t us)
-{
-    uint32_t counter = 0;
-    uint32_t tick_pre = SysTick->VAL;
-    uint32_t tick_cur = 0;
-    uint32_t counter_delay = 0;
-
-    if (0 == s_systick_counter_us_init){
-        s_systick_counter_us_init = 1;
-        s_systick_counter_us = SystemCoreClock / 1000 / 1000;
-    }
-    if (0 == us)
-        return;
-    counter_delay = us * s_systick_counter_us;
-    while(1){
-        tick_cur = SysTick->VAL;
-        if (tick_cur < tick_pre)
-            counter += tick_pre - tick_cur;
-        else
-            counter += tick_pre + SysTick->LOAD - tick_cur;
-        tick_pre = tick_cur;
-        if (counter >= counter_delay)
-            return;
-    }
-}
-
-#if 0
-#pragma import(__use_no_semihosting)             
-//¡À¨º¡Á??aD¨¨¨°a¦Ì??¡ì3?o¡¥¨ºy                 
-
-//???¡§¨°?fputco¡¥¨ºy 
-int fputc(int ch, FILE *f)
-{
-	uint8_t temp;
-    
-    //vTaskSuspendAll();
-	temp=(uint8_t)ch;
-    
-	HAL_UART_Transmit(&huart1,&temp,1,50);
-   // xTaskResumeAll();
-	return ch;
-}
-#endif 
 
 uint8_t uart1_recv_buf[100]={0};
 
@@ -168,38 +122,40 @@ int main(void)
   /* USER CODE END 1 */
   
 
-    /* MCU Configuration--------------------------------------------------------*/
+  /* MCU Configuration--------------------------------------------------------*/
 
-    /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-    HAL_Init();
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
 
-    /* USER CODE BEGIN Init */
+  /* USER CODE BEGIN Init */
 
-    /* USER CODE END Init */
+  /* USER CODE END Init */
 
-    /* Configure the system clock */
-    SystemClock_Config();
+  /* Configure the system clock */
+  SystemClock_Config();
 
-    /* USER CODE BEGIN SysInit */
+  /* USER CODE BEGIN SysInit */
 
-    /* USER CODE END SysInit */
+  /* USER CODE END SysInit */
 
-    /* Initialize all configured peripherals */
-    MX_GPIO_Init();
-    MX_TIM1_Init();
-    MX_USART1_UART_Init();
-    MX_TIM2_Init();
-    MX_SPI4_Init();
-    //MX_I2C1_Init();
-    //MX_I2C2_Init();
-    MX_UART7_Init();
-    MX_UART5_Init();
-    MX_UART8_Init();
-    MX_USART2_UART_Init();
-    MX_UART4_Init();
-    MX_USART3_UART_Init();
-    MX_USART6_UART_Init();
-    /* USER CODE BEGIN 2 */
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_TIM1_Init();
+  MX_USART1_UART_Init();
+  MX_TIM2_Init();
+  MX_SPI4_Init();
+  //MX_I2C1_Init();
+  //MX_I2C2_Init();
+  MX_UART7_Init();
+  MX_UART5_Init();
+  MX_UART8_Init();
+  MX_USART2_UART_Init();
+  MX_UART4_Init();
+  MX_USART3_UART_Init();
+  MX_USART6_UART_Init();
+  MX_DAC_Init();
+  MX_TIM4_Init();
+  /* USER CODE BEGIN 2 */
 
 	HAL_UART_Receive_IT(&huart1, uart1_recv_buf,50);
     HAL_UART_Receive_IT(&huart4, uart1_recv_buf,50);
@@ -308,6 +264,50 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief DAC Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_DAC_Init(void)
+{
+
+  /* USER CODE BEGIN DAC_Init 0 */
+
+  /* USER CODE END DAC_Init 0 */
+
+  DAC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN DAC_Init 1 */
+
+  /* USER CODE END DAC_Init 1 */
+  /** DAC Initialization 
+  */
+  hdac.Instance = DAC;
+  if (HAL_DAC_Init(&hdac) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** DAC channel OUT1 config 
+  */
+  sConfig.DAC_Trigger = DAC_TRIGGER_NONE;
+  sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_ENABLE;
+  if (HAL_DAC_ConfigChannel(&hdac, &sConfig, DAC_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** DAC channel OUT2 config 
+  */
+  if (HAL_DAC_ConfigChannel(&hdac, &sConfig, DAC_CHANNEL_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN DAC_Init 2 */
+
+  /* USER CODE END DAC_Init 2 */
+
 }
 
 /**
@@ -546,6 +546,55 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 2 */
   HAL_TIM_MspPostInit(&htim2);
+
+}
+
+/**
+  * @brief TIM4 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM4_Init(void)
+{
+
+  /* USER CODE BEGIN TIM4_Init 0 */
+
+  /* USER CODE END TIM4_Init 0 */
+
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM4_Init 1 */
+
+  /* USER CODE END TIM4_Init 1 */
+  htim4.Instance = TIM4;
+  htim4.Init.Prescaler = TIM4_PRESCALER;
+  htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim4.Init.Period = TIM4_PERIOD;
+  htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_PWM_Init(&htim4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM4_Init 2 */
+
+  /* USER CODE END TIM4_Init 2 */
+  HAL_TIM_MspPostInit(&htim4);
 
 }
 
@@ -842,8 +891,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOG, GPIO_PIN_1, GPIO_PIN_RESET);
-  
-  /*New: Configure GPIO pins : PE4 LED, PE15 DLP_Power_EN*/
+
+  /*Configure GPIO pins : PE4 PE15 */
   GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_15;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -964,6 +1013,9 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void const * argument)
 {
     
+    
+    
+
   /* USER CODE BEGIN 5 */
   
 #if 1
