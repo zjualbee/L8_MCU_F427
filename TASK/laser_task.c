@@ -176,10 +176,12 @@ static void laser_status_check(void)
 			power_temp_high[4+i]++;
 		else
 			power_temp_high[i]=0;
+		#ifdef POWER3_EN
 		if(g_power3.power_temp[i]>POWER_TEMP_ERR_MAX)
 			power_temp_high[8+i]++;
 		else
 			power_temp_high[i]=0;
+		#endif
 		if(power_temp_high[i]>=POWER_TEMP_ERR_CHECK_SEC)
 		{
             laser_err_handle(&err);

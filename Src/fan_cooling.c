@@ -4,7 +4,7 @@
 
 MAX31790_OBJ sFan_Group[MAX_FAN_GROUP];
 struct_FanCooling g_fan_cooling;
-uint8_t sFan_addr[MAX_FAN_GROUP]={0x40,0x5E,0x58,0x48,0x50,0x56};
+uint8_t sFan_addr[MAX_FAN_GROUP]={0x40,0x5E,0x58,0x46,0x40};
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/

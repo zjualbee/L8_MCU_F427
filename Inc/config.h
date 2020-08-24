@@ -25,14 +25,14 @@
 
 #define PUMP_EN
 #define TEC_SUPPORT
-#define MOTOR_36V_EN
+//#define MOTOR_36V_EN
 
 #define CW_PRINTF_ON
 
 
 // **************** 电源 ****************
 #define POWER2_EN
-#define POWER3_EN
+//#define POWER3_EN
 
 // **************** 电源设备ID ****************
 #define DEVICE_ID_POWER1    (0x20)
@@ -42,7 +42,7 @@
 // **************** NTC ****************
 #define NTC_SUPPORT
 #define NTC2_EN
-#define NTC3_EN
+//#define NTC3_EN
 
 // **************** NTC设备ID ****************
 #define DEVICE_ID_NTC1    (0x90)
@@ -52,12 +52,12 @@
 // **************** fan **********************
 #define FAN_SUPPORT
 #define MAX_FAN_NUM    6*MAX_FAN_GROUP
-#define MAX_FAN_GROUP 6
+#define MAX_FAN_GROUP 5
 
 // **************** Port definition **********************
 #define ROUTE_PORT_IMX8   &huart1
 #define ROUTE_PORT_PMU   &huart1
-#define ROUTE_PORT_TEC  &huart2
+#define ROUTE_PORT_TEC  &huart5
 #define ROUTE_PORT_DLP_3  &huart3
 #define ROUTE_PORT_DLP_4  &huart4
 
