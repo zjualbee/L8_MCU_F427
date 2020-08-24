@@ -87,7 +87,7 @@ static portTASK_FUNCTION(motor_task, pvParameters)
     static int Speed_Error_Cnt = 0;
     static int pre_cw_speed_cnt = 0;
 
-    osDelay(2000);
+    osDelay(4000);
     
     motor_36V_init(&g_motor_36v);
     g_motor_36v.on(&g_motor_36v);

@@ -83,19 +83,12 @@ int On_Current_Get(pPOWER_GET_CURRENT p)
     POWER_GET_CURRENT temp={0};
 	temp.command = BigLittleSwap16(D_CURRENT_W_CMD);
 	uint8_t i = 0;
-
-	for (i = 0; i < POWER_CURRENT_MAX; i++)
-		temp.p_current[i] = BigLittleSwap16(g_power1.laser_current[i]);
-
-#ifdef POWER2_EN
-	for (i = 0; i < POWER_CURRENT_MAX; i++)
-		temp.p_current[i + POWER_CURRENT_MAX] = BigLittleSwap16(g_power2.laser_current[i]);
-#endif
-
-#ifdef POWER3_EN
-	for (i = 0; i < POWER_CURRENT_MAX; i++)
-		temp.p_current[i + 2 * POWER_CURRENT_MAX] = BigLittleSwap16(g_power3.laser_current[i]);
-#endif
+	uint8_t j=0;
+	for(j=0;j<POWER_NUM;j++)
+	{
+		for (i = 0; i < POWER_CURRENT_USER; i++)
+			temp.p_current[i+j*8] = BigLittleSwap16(g_powers[j].laser_current[i]);
+	}
 
 	L8_Cmd_Send(p->route_to, p->route_from, (uint8_t *)&temp, sizeof(POWER_GET_CURRENT));
 
@@ -135,7 +128,7 @@ int On_LightSource_Get(pLS_GET_ST p)
 {
    LS_GET_ST temp={0};
    temp.command  = BigLittleSwap16(D_LIGHTSOURCE_W_CMD);
-   temp.onoff_status = g_power1.power_on_set;
+   temp.onoff_status = g_powers[0].power_on_set;
    L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(LS_GET_ST));
 }
 
@@ -160,19 +153,10 @@ int On_NTC_GetTemperature(pNTC_GET_TEM p)
 		NTC_GET_TEM temp={0};
 		temp.command = BigLittleSwap16(D_NTC_R_CMD);
 		
-        uint8_t i;
-	    for(i=0;i<ADS7830_CH_MAX;i++)
-		   temp.temperature[i]=BigLittleSwap16(Ntc_1_8.temperature[i]);
-		
-		#ifdef NTC2_EN
-		for(i=0;i<ADS7830_CH_MAX;i++)
-		   temp.temperature[i+ADS7830_CH_MAX]=BigLittleSwap16(Ntc_9_16.temperature[i]);
-		#endif
-
-		#ifdef NTC3_EN
-		for(i=0;i<ADS7830_CH_MAX;i++)
-		   temp.temperature[i+2*ADS7830_CH_MAX]=BigLittleSwap16(Ntc_17_24.temperature[i]);
-		#endif
+        uint8_t i,j;
+		for(j=0;j<NTC_NUM;j++)
+		    for(i=0;i<ADS7830_CH_MAX;i++)
+			   temp.temperature[i+8*j]=BigLittleSwap16(sNtc_Group[j].temperature[i]);
 		
 		L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(NTC_GET_TEM));
 

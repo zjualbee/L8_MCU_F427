@@ -44,13 +44,7 @@ typedef struct ADS7830
 
 }Struct_ADS7830;
 
-extern Struct_ADS7830  Ntc_1_8;
-#ifdef NTC2_EN
-extern Struct_ADS7830  Ntc_9_16;
-#endif
-#ifdef NTC3_EN
-extern Struct_ADS7830  Ntc_17_24;
-#endif
+extern Struct_ADS7830  sNtc_Group[NTC_NUM];
 
 
 

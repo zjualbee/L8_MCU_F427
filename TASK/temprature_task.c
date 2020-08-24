@@ -21,6 +21,7 @@ xTaskHandle g_xTaskHandle_temprature = NULL;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
+uint8_t DEVICE_ID_NTCS[NTC_NUM]={0x90,0x96};
 
 static uint8_t I2c1_Recv(uint8_t dev_addr ,uint8_t * pBuf_out,uint16_t len)
 {
@@ -54,25 +55,17 @@ static uint8_t I2c1_Transmit(uint8_t dev_addr ,uint8_t * pBuf_in,uint16_t len)
 void Init_Ads7830(void)
 {
 
-    Ads8730_Init(&Ntc_1_8,DEVICE_ID_NTC1,I2c1_Recv,I2c1_Transmit,osDelay); //色轮温度3x
-    #ifdef NTC2_EN
-    Ads8730_Init(&Ntc_9_16,DEVICE_ID_NTC2,I2c1_Recv,I2c1_Transmit,osDelay); //光源温度4x
-    #endif
-    #ifdef NTC3_EN
-    Ads8730_Init(&Ntc_17_24,DEVICE_ID_NTC3,I2c1_Recv,I2c1_Transmit,osDelay); //环境温度1x
-    #endif
+    uint8_t i=0;
+	for(i=0;i<NTC_NUM;i++)
+    	Ads8730_Init(&sNtc_Group[i],DEVICE_ID_NTCS[i],I2c1_Recv,I2c1_Transmit,osDelay); 
 }
 
 
 void Update_Ads7830()
 {
-    Ntc_1_8.temperature_update(&Ntc_1_8);
-	#ifdef NTC2_EN
-	Ntc_9_16.temperature_update(&Ntc_9_16);
-	#endif
-    #ifdef NTC3_EN
-	Ntc_17_24.temperature_update(&Ntc_17_24);
-	#endif
+	uint8_t i=0;
+	for(i=0;i<NTC_NUM;i++)
+		sNtc_Group[i].temperature_update(&sNtc_Group[i]);
 }
 
 

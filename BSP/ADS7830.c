@@ -1,12 +1,6 @@
 #include "ADS7830.h"
 
-Struct_ADS7830  Ntc_1_8;
-#ifdef NTC2_EN
-Struct_ADS7830  Ntc_9_16;
-#endif
-#ifdef NTC3_EN
-Struct_ADS7830  Ntc_17_24;
-#endif
+Struct_ADS7830  sNtc_Group[NTC_NUM];
 
 
 static uint8_t Ads8730_Get_Raw_Adc(struct ADS7830 *thiz, uint8_t channel)

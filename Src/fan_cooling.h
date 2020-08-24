@@ -93,6 +93,7 @@ typedef struct FanCooling
 
 extern struct_FanCooling g_fan_cooling;
 
+
 /* Exported functions ------------------------------------------------------- */
 
 int fan_cooling_init(struct_FanCooling *thiz);

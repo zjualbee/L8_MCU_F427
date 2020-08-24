@@ -44,7 +44,7 @@ static void uart_printf(void)
         printf("Sys: OFF, ");
 	printf("\r\n");
     
-    int i = 0;
+    int i = 0,j=0;
     printf("========All the System Info========\r\n");
 #ifdef TEC_SUPPORT
     // TEC 
@@ -56,6 +56,7 @@ static void uart_printf(void)
 	printf("TEC2_CHANNEL3:%d.%d \r\n",Uart_Tec2.temp3/10,Uart_Tec2.temp3%10);
 	printf("\r\n");
 	#endif
+	
 	printf("TEC3_CHANNEL1:%d.%d \r\n",Uart_Tec3.temp1/10,Uart_Tec3.temp1%10);
     printf("TEC3_CHANNEL2:%d.%d \r\n",Uart_Tec3.temp2/10,Uart_Tec3.temp2%10);
 	printf("TEC3_CHANNEL3:%d.%d \r\n",Uart_Tec3.temp3/10,Uart_Tec3.temp3%10);
@@ -76,24 +77,15 @@ static void uart_printf(void)
 		   #endif
 
 #ifdef NTC_SUPPORT
-	printf("========NTC 1-8 Temperature========\r\n");
-    for(i=0;i<ADS7830_CH_MAX;i++)
-		printf("%.1f¡ãC, ", (float)Ntc_1_8.temperature[i]);
-	printf("\r\n\r\n");
 	
-	#ifdef NTC2_EN
-    printf("========NTC 9-16 Temperature========\r\n");
-    for(i=0;i<ADS7830_CH_MAX;i++)
-		printf("%.1f¡ãC, ", (float)Ntc_9_16.temperature[i]);
+    for(j=0;j<NTC_NUM;j++){
+		printf("========NTC %d Temperature========\r\n",j+1);
+	    for(i=0;i<ADS7830_CH_MAX;i++){
+			printf("%.1f¡ãC, ", (float)sNtc_Group[j].temperature[i]);
+	    	}
+		printf("\r\n\r\n");
+    	}
 	printf("\r\n\r\n");
-	#endif
-
-	#ifdef NTC3_EN
-    printf("========NTC 17-24 Temperature========\r\n");
-    for(i=0;i<ADS7830_CH_MAX;i++)
-		printf("%.1f¡ãC, ", (float)Ntc_17_24.temperature[i]);
-	printf("\r\n\r\n");
-	#endif
 #endif
 
 
@@ -119,82 +111,33 @@ static void uart_printf(void)
 #endif
     
     // Power Info
-    printf("========Power 1 Info========\r\n");
-    printf("Satus:0x%02x, Power_On:0x%02x, Warning:0x%08x, Error:0x%08x \r\n", (uint8_t)g_power1.status, (uint8_t)g_power1.power_on_set, g_power1.warning, g_power1.error);
-    printf("MODULE CURR :");
-    for (i = 0; i < MAX_CURRENT_MODULE; i++){
-        printf("%4dmA, ", g_power1.module_current[i]);
-    }
-    printf("\r\n");
-    printf("LASER CURR  :");
-    for (i = 0; i < POWER_CURRENT_MAX; i++){
-        printf("%4dmA, ", g_power1.laser_current[i]);
-    }
-    printf("\r\n");
-    // printf("FAN  :");
-    // for (i = 0; i < POWER_FAN_USER; i++){
-    //     printf("%4dRPM, ", g_power1.fan_speed[i]);
-    // }
-    // printf("\r\n");
-    printf("TEMP :");
-    for (i = 0; i < POWER_TEMP_USER; i++){
-        printf("%.1f¡ãC, ", (float)g_power1.power_temp[i]/10);
-    }
-    printf("\r\n");
-    printf("%s\r\n", g_power1.ver);
+    for(j=0;j<POWER_NUM;i++)
+	{
+		printf("========Power %d Info========\r\n",i+1);
+		printf("Satus:0x%02x, Power_On:0x%02x, Warning:0x%08x, Error:0x%08x \r\n", (uint8_t)g_powers[j].status, (uint8_t)g_powers[j].power_on_set, g_powers[j].warning, g_powers[j].error);
+		printf("MODULE CURR :");
+		for (i = 0; i < MAX_CURRENT_MODULE; i++){
+		    printf("%4dmA, ", g_powers[j].module_current[i]);
+		}
+		printf("\r\n");
+		printf("LASER CURR  :");
+		for (i = 0; i < POWER_CURRENT_MAX; i++){
+		    printf("%4dmA, ", g_powers[j].laser_current[i]);
+		}
+		printf("\r\n");
+		// printf("FAN  :");
+		// for (i = 0; i < POWER_FAN_USER; i++){
+		//     printf("%4dRPM, ", g_powers[j].fan_speed[i]);
+		// }
+		// printf("\r\n");
+		printf("TEMP :");
+		for (i = 0; i < POWER_TEMP_USER; i++){
+		    printf("%.1f¡ãC, ", (float)g_powers[j].power_temp[i]/10);
+		}
+		printf("\r\n");
+		printf("%s\r\n", g_powers[j].ver);
+	}
     
-#ifdef POWER2_EN
-    printf("========Power 2 Info========\r\n");
-	printf("Satus:0x%02x, Power_On:0x%02x, Warning:0x%08x, Error:0x%08x \r\n", (uint8_t)g_power2.status, (uint8_t)g_power2.power_on_set, g_power2.warning, g_power2.error);
-
-    printf("MODULE CURR :");
-    for (i = 0; i < MAX_CURRENT_MODULE; i++){
-        printf("%4dmA, ", g_power2.module_current[i]);
-    }
-    printf("\r\n");
-    printf("LASER CURR  :");
-    for (i = 0; i < POWER_CURRENT_MAX; i++){
-        printf("%4dmA, ", g_power2.laser_current[i]);
-    }
-    printf("\r\n");
-    // printf("FAN  :");
-    // for (i = 0; i < POWER_FAN_USER; i++){
-    //     printf("%4dRPM, ", g_power2.fan_speed[i]);
-    // }
-    printf("\r\n");
-    printf("TEMP :");
-    for (i = 0; i < POWER_TEMP_USER; i++){
-        printf("%.1f¡ãC, ", (float)g_power2.power_temp[i]/10);
-    }
-	printf("\r\n");
-    printf("%s\r\n", g_power2.ver);
-#endif
-
-   #ifdef POWER3_EN
-    printf("========Power 3 Info========\r\n");
-   printf("Satus:0x%02x, Power_On:0x%02x, Warning:0x%08x, Error:0x%08x \r\n", (uint8_t)g_power3.status, (uint8_t)g_power3.power_on_set, g_power3.warning, g_power3.error);
-    printf("MODULE CURR :");
-    for (i = 0; i < MAX_CURRENT_MODULE; i++){
-        printf("%4dmA, ", g_power3.module_current[i]);
-    }
-    printf("\r\n");
-    printf("LASER CURR  :");
-    for (i = 0; i < POWER_CURRENT_MAX; i++){
-        printf("%4dmA, ", g_power3.laser_current[i]);
-    }
-    printf("\r\n");
-    // printf("FAN  :");
-    // for (i = 0; i < POWER_FAN_USER; i++){
-    //     printf("%4dRPM, ", g_power3.fan_speed[i]);
-    // }
-    printf("\r\n");
-    printf("TEMP :");
-    for (i = 0; i < POWER_TEMP_USER; i++){
-        printf("%.1f¡ãC, ", (float)g_power3.power_temp[i]/10);
-    }
-    printf("\r\n");
-    printf("%s\r\n", g_power3.ver);
-#endif
 
        return;
 }

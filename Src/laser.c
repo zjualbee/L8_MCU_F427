@@ -27,22 +27,15 @@ struct_Laser g_laser;
 *******************************************************************************/
 static int laser_temp_update(struct Laser *thiz)
 {
-    uint8_t i=0;
+    uint8_t i=0,j=0;
+	for(j=0;j<NTC_NUM;j++)
 	for(i=0;i<8;i++)
 	{
-		thiz->temp[i]=Ntc_1_8.temperature[i];
+		thiz->temp[i]=sNtc_Group[j].temperature[i];
 		if(thiz->temp[i]>TEMP_MAX)
-			thiz->useful_flag[i]=0;
+			thiz->useful_flag[i+j*8]=0;
 		else
-			thiz->useful_flag[i]=1;
-		
-	    #ifdef NTC2_EN
-		thiz->temp[i+8]=Ntc_9_16.temperature[i];
-		if(thiz->temp[i+8]>TEMP_MAX)
-			thiz->useful_flag[i+8]=0;
-		else
-			thiz->useful_flag[i+8]=1;
-		#endif
+			thiz->useful_flag[i+j*8]=1;
 	}		
 
 	thiz->dif_motor_Hz = g_CW_speed_cnt*60;
@@ -147,17 +140,11 @@ static int laser_sys_off(struct Laser *thiz)
 {
     // Laser en
     thiz->en_clean(thiz);
+	uint8_t i=0;
 	
-    // POWER
-    g_power1.power_off(&g_power1);
-	
-    #ifdef POWER2_EN
-    g_power2.power_off(&g_power2);
-    #endif
-	
-	#ifdef POWER3_EN
-    g_power3.power_off(&g_power3);
-    #endif
+	for(i=0;i<POWER_NUM;i++)
+        g_powers[i].power_off(&g_powers[i]);
+
 	
     thiz->sys_on_flag = 0;
     return 0;

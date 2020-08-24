@@ -59,14 +59,7 @@ int sys_onoff_laser_off(void)
 {
     // EN
     g_laser.en_clean(&g_laser);
-    // POWER
-    g_power1.power_off(&g_power1);
-    #ifdef POWER2_EN
-    g_power2.power_off(&g_power2);
-    #endif
-	#ifdef POWER3_EN
-    g_power3.power_off(&g_power3);
-    #endif
+    Appo_Power_Off();
     return 0;
 }
 
@@ -82,6 +75,7 @@ int sys_onoff_laser_off(void)
 static void laser_status_check(void)
 {
     int i = 0;
+	int j=0;
     static int s_fan_speed_low[MAX_FAN_GROUP*6] = {0};
     static int s_tec_off[3] = 0;
 	static int temp_high[NTC_CH_NUM] = {0};
@@ -161,49 +155,25 @@ static void laser_status_check(void)
         }
     }
     
-     //power
-	for(i=0;i<POWER_TEMP_USER;i++)
-	{
-	    if(g_power1.power_temp[i]>POWER_TEMP_ERR_MAX)
-			power_temp_high[i]++;
-		else
-			power_temp_high[i]=0;
-		if(power_temp_high[i]>=POWER_TEMP_ERR_CHECK_SEC)
-		{
-            laser_err_handle(&err);
-            printf("\r\nERROR !!!!!!!!!!!!!!! power_temp_err\r\n");
-            return;
-		}
-
-		#ifdef POWER2_EN
-		if(g_power2.power_temp[i]>POWER_TEMP_ERR_MAX)
-			power_temp_high[4+i]++;
-		else
-			power_temp_high[4+i]=0;
-		if(power_temp_high[4+i]>=POWER_TEMP_ERR_CHECK_SEC)
-		{
-            laser_err_handle(&err);
-            printf("\r\nERROR !!!!!!!!!!!!!!! power_temp_err\r\n");
-            return;
-		}
-        #endif
-		
-		#ifdef POWER3_EN
-		if(g_power3.power_temp[i]>POWER_TEMP_ERR_MAX)
-			power_temp_high[8+i]++;
-		else
-			power_temp_high[8+i]=0;
-		
-		
-		if(power_temp_high[8+i]>=POWER_TEMP_ERR_CHECK_SEC)
-		{
-            laser_err_handle(&err);
-            printf("\r\nERROR !!!!!!!!!!!!!!! power_temp_err\r\n");
-            return;
-		}
-		#endif
+     //power temp
+     for(j=0;j<POWER_NUM;j++)
+     	{
+			for(i=0;i<POWER_TEMP_USER;i++)
+			{
+			    if(g_powers[j].power_temp[i]>POWER_TEMP_ERR_MAX)
+					power_temp_high[i+j*POWER_TEMP_USER]++;
+				else
+					power_temp_high[i+j*POWER_TEMP_USER]=0;
+				
+				if(power_temp_high[i+j*POWER_TEMP_USER]>=POWER_TEMP_ERR_CHECK_SEC)
+				{
+		            laser_err_handle(&err);
+		            printf("\r\nERROR !!!!!!!!!!!!!!! power_temp_err\r\n");
+		            return;
+				}
 			
-	}
+			}
+     	}
 
     // ******** Color Wheel ********
 	if(g_CW_speed_cnt*60<MOTOR_36V_SPEED_NORMAL)

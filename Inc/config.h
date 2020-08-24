@@ -15,7 +15,7 @@
 
 #define PUMP_EN
 #define TEC_SUPPORT
-//#define TEC2_EN
+#define TEC2_EN
 
 //#define MOTOR_36V_EN
 
@@ -23,29 +23,14 @@
 
 
 // **************** 电源 ****************
-#define POWER2_EN
-#define POWER3_EN
-
-// **************** 电源设备ID ****************
-#define DEVICE_ID_POWER1    (0x20)
-#define DEVICE_ID_POWER2    (0x21)
-#define DEVICE_ID_POWER3    (0x22)
+#define POWER_NUM  (2)
 
 // **************** NTC ****************
 #define NTC_SUPPORT
-#define NTC2_EN
-#ifdef NTC2_EN
-  #define NTC_CH_NUM  (16)
-#else
-  #define NTC_CH_NUM  (8)
-#endif
-#define TEMP_MAX  (110)
-//#define NTC3_EN
+#define NTC_NUM    (2)
+#define NTC_CH_NUM (NTC_NUM*8)
 
-// **************** NTC设备ID ****************
-#define DEVICE_ID_NTC1    (0x90)
-#define DEVICE_ID_NTC2    (0x96)
-#define DEVICE_ID_NTC3    (0x92)
+#define TEMP_MAX  (110)
 
 // **************** fan **********************
 #define FAN_SUPPORT
