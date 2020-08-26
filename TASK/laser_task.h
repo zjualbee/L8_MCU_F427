@@ -40,7 +40,7 @@
 #define LIGHT_TEMP_ERR_MIN          (-1)
 #define LIGHT_TEMP_ERR_CHECK_SEC    (30)
 
-#define POWER_TEMP_ERR_MAX        (85)
+#define POWER_TEMP_ERR_MAX        (95)
 #define POWER_TEMP_ERR_MIN        (-1)
 #define POWER_TEMP_ERR_CHECK_SEC  (30)
 

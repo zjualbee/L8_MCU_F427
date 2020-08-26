@@ -27,7 +27,7 @@ uint32_t g_uart_pirntf_delay_s = 0;
 static void uart_printf(void)
 {
 
-    printf("\r\n\r\n************Debug Info************\r\n");
+    printf("========All the System Info========\r\n");
     // System
     printf("========System========\r\n");
     if (g_laser.is_on)
@@ -42,23 +42,22 @@ static void uart_printf(void)
         printf("Sys: ON , ");
     else
         printf("Sys: OFF, ");
-    
+    printf("\r\n");
     int i = 0,j=0;
-    printf("========All the System Info========\r\n");
+    
 #ifdef TEC_SUPPORT
     // TEC 
     printf("========TEC Info========\r\n"); 
 
     #ifdef TEC2_EN
-	printf("TEC2_CHANNEL1:%d.%d \r\n",Uart_Tec2.temp1/10,Uart_Tec2.temp1%10);
-    printf("TEC2_CHANNEL2:%d.%d \r\n",Uart_Tec2.temp2/10,Uart_Tec2.temp2%10);
-	printf("TEC2_CHANNEL3:%d.%d \r\n",Uart_Tec2.temp3/10,Uart_Tec2.temp3%10);
-	printf("\r\n");
+	printf("TEC2:%d.%d, ",Uart_Tec2.temp1/10,Uart_Tec2.temp1%10);
+    printf("%d.%d, ",Uart_Tec2.temp2/10,Uart_Tec2.temp2%10);
+	printf("%d.%d.     ",Uart_Tec2.temp3/10,Uart_Tec2.temp3%10);
 	#endif
 	
-	printf("TEC3_CHANNEL1:%d.%d \r\n",Uart_Tec3.temp1/10,Uart_Tec3.temp1%10);
-    printf("TEC3_CHANNEL2:%d.%d \r\n",Uart_Tec3.temp2/10,Uart_Tec3.temp2%10);
-	printf("TEC3_CHANNEL3:%d.%d \r\n",Uart_Tec3.temp3/10,Uart_Tec3.temp3%10);
+	printf("TEC3:%d.%d, ",Uart_Tec3.temp1/10,Uart_Tec3.temp1%10);
+    printf("%d.%d, ",Uart_Tec3.temp2/10,Uart_Tec3.temp2%10);
+	printf("%d.%d \r\n",Uart_Tec3.temp3/10,Uart_Tec3.temp3%10);
 	printf("\r\n");
 #endif
 

@@ -12,13 +12,11 @@
 #define LASER_EN_OFF()  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET)
 #define LASER_EN(X)  (X)?(HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_SET)):HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET);
 
-
 #define PUMP_EN
 #define TEC_SUPPORT
 #define TEC2_EN
 
 #define MOTOR_36V_EN
-
 #define CW_PRINTF_ON
 
 

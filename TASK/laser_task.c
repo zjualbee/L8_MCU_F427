@@ -131,22 +131,6 @@ static void laser_status_check(void)
 		memset((char*)s_tec_off,0,sizeof(s_tec_off));
         return;
     }
-    
-    #if 0
-    // ******** Fan ********
-    for(i=0;i<MAX_FAN_NUM;i++)
-	{
-		if (g_fan_cooling.fan_speed[i] < LIGHT_FAN_SPEED_ERR_MIN)
-		    s_fan_speed_low[i]++;
-		else
-		    s_fan_speed_low[i] = 0;
-		if (s_fan_speed_low[i] >= LIGHT_FAN_SPEED_ERR_CHECK_SEC){
-	        //laser_err_handle(&err);
-	        printf("\r\nERROR !!!!!!!!!!!!!!! Fan %d Speed Low: %d RPM\r\n",i+1, g_fan_cooling.fan_speed[i]);
-	        s_fan_speed_low[i]=0;
-	    }
-	}
-    #endif
 
     //pump
 	for(i=0;i<MAX_PUMP_NUM;i++)
@@ -167,7 +151,7 @@ static void laser_status_check(void)
     #ifdef TEC_SUPPORT
     // ******** TEC ********
     for(i=0;i<3;i++){
-	    if(Uart_Tec3.temp1>TEC_HIGH || Uart_Tec3.temp2>TEC_HIGH || Uart_Tec3.temp3>TEC_HIGH)
+	    if(Uart_Tec3.temp1/10>TEC_HIGH || Uart_Tec3.temp2/10>TEC_HIGH || Uart_Tec3.temp3/10>TEC_HIGH)
             s_tec_off[i]++;
 		else
 		    s_tec_off[i] = 0;
@@ -209,40 +193,40 @@ static void laser_status_check(void)
      //power
 	for(i=0;i<4;i++)
 	{
-	    if(g_power1.power_temp[i]>POWER_TEMP_ERR_MAX)
+	    if(g_power1.power_temp[i]/10>POWER_TEMP_ERR_MAX)
 			power_temp_high[i]++;
 		else
 			power_temp_high[i]=0;
 		if(power_temp_high[i]>=POWER_TEMP_ERR_CHECK_SEC)
 		{
-            //laser_err_handle(&err);
-            printf("\r\nERROR !!!!!!!!!!!!!!! power_temp_err\r\n");
+            laser_err_handle(&err);
+            printf("\r\nERROR !!!!!!!!!!!!!!! power_temp_err  %d\r\n",power_temp_high[i]);
             power_temp_high[i]=0;
 		}
 
 		#ifdef POWER2_EN
-		if(g_power2.power_temp[i]>POWER_TEMP_ERR_MAX)
+		if(g_power2.power_temp[i]/10>POWER_TEMP_ERR_MAX)
 			power_temp_high[4+i]++;
 		else
 			power_temp_high[4+i]=0;
 		if(power_temp_high[4+i]>=POWER_TEMP_ERR_CHECK_SEC)
 		{
-            //laser_err_handle(&err);
-            printf("\r\nERROR !!!!!!!!!!!!!!! power_temp_err\r\n");
+            laser_err_handle(&err);
+            printf("\r\nERROR !!!!!!!!!!!!!!! power_temp_err  %d\r\n",power_temp_high[i+4]);
             power_temp_high[4+i]=0;
 		}
 		#endif
 		
 		#ifdef POWER3_EN
-		if(g_power3.power_temp[i]>POWER_TEMP_ERR_MAX)
+		if(g_power3.power_temp[i]/10>POWER_TEMP_ERR_MAX)
 			power_temp_high[8+i]++;
 		else
 			power_temp_high[8+i]=0;
 		
 		if(power_temp_high[8+i]>=POWER_TEMP_ERR_CHECK_SEC)
 		{
-            //laser_err_handle(&err);
-            printf("\r\nERROR !!!!!!!!!!!!!!! power_temp_err\r\n");
+            laser_err_handle(&err);
+            printf("\r\nERROR !!!!!!!!!!!!!!! power_temp_err %d\r\n",power_temp_high[i+8]);
             power_temp_high[8+i]=0;
 		}
 		#endif
@@ -267,7 +251,7 @@ static portTASK_FUNCTION(laser_task, pvParameters)
     static int s_laser_on_min = 0;
 
     laser_init(&g_laser);
-
+    
     delay_ms(500);
 
     while(1){
@@ -301,6 +285,7 @@ static portTASK_FUNCTION(laser_task, pvParameters)
             
             // ÂÖÑ¯
             g_laser.temp_update(&g_laser);
+			//
             laser_status_check();
         }
     }

@@ -44,6 +44,12 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
     HAL_UART_Transmit(Port,buf+2,len-2,100);
     HAL_UART_Transmit(Port,&sum_byte,1,100);
 
+    #ifdef CW_PRINTF_ON
+	HAL_UART_Transmit(ROUTE_PORT_PC,(uint8_t*)&send_packet,8,100);
+    HAL_UART_Transmit(ROUTE_PORT_PC,buf+2,len-2,100);
+    HAL_UART_Transmit(ROUTE_PORT_PC,&sum_byte,1,100);
+	#endif
+
     return len+7;
 
 }
@@ -51,11 +57,23 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
 int L8_Cmd_Send_OK(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
 {
 
-   // USART_TypeDef * Port;
+    UART_HandleTypeDef * Port;
     uint8_t     sum_byte=0; 
     CMD_PACKET  send_packet={0};
-   
-  //  Port = ROUTE_PORT_PC;
+
+	if(route_to == UART_ADDR_PC)
+    {
+    	Port = ROUTE_PORT_PC;
+    }
+	else if(route_to == UART_ADDR_IMX8)
+	{
+		Port = ROUTE_PORT_IMX8;
+	}
+	else if(route_to == UART_ADDR_PMU)
+	{
+		Port = ROUTE_PORT_PMU;
+	}
+    
 
     send_packet.head_sync_h        = 0x5A;
     send_packet.head_sync_l        = 0xA5;
@@ -69,9 +87,12 @@ int L8_Cmd_Send_OK(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
     sum_byte=Make_5AA5_Sum_Ext(0,(unsigned char *)&send_packet,8);    
     sum_byte=Make_5AA5_Sum_Ext(sum_byte,buf+2,len-2);    
 
-    HAL_UART_Transmit(&huart1,(uint8_t*)&send_packet,8,100);
-    HAL_UART_Transmit(&huart1,buf+2,len-2,100);
-    HAL_UART_Transmit(&huart1,&sum_byte,1,100);
+    HAL_UART_Transmit(Port,(uint8_t*)&send_packet,8,100);
+    HAL_UART_Transmit(Port,buf+2,len-2,100);
+    HAL_UART_Transmit(Port,&sum_byte,1,100);
+
+	#ifdef CW_PRINTF_ON
+	#endif
 
     return len+7;
 
@@ -137,11 +158,23 @@ int On_LightSource_Get(pLS_GET_ST p)
 int On_SysStatus_Get(pSS_GET p)
 {
    SS_GET temp={0};
-   temp.command  = BigLittleSwap16(D_LIGHTSOURCE_W_CMD);
+   temp.command  = BigLittleSwap16(D_READY_R_CMD);
    temp.oknot_status = g_laser.sys_on_flag;
    L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(SS_GET));
 }
 
+
+void OnMCU_GET_OK(pMCU_GET_OK p)
+{
+	MCU_GET_OK temp={0};
+
+	temp.command = (p->command)&0x7fff;
+	temp.value = 0;
+
+
+	L8_Cmd_Send_OK(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(MCU_GET_OK));
+
+}
 
 
 int On_TEC_GetTemperature(pTEC_GET_TEM p)
@@ -199,7 +232,7 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 	cmd = p->command_h<<8 | p->command_l;
 	recv = &(p->packet_route_from);
 
-	        
+	      
 	switch(cmd)
     {
         //²Ù×÷ÀàÃüÁî
@@ -336,18 +369,13 @@ void Do_Message(pDECODE_TABLE decode_table)
     if(decode_table->cmd_flag == 1)
         {
             decode_table->cmd_flag = 0;
-			
-			pCMD_PACKET p= (pCMD_PACKET)(decode_table->cmd_buf);
-			
+			pCMD_PACKET p= (pCMD_PACKET)(decode_table->cmd_buf);		
+			void *recv = 0;
+			recv = &(p->packet_route_from);
 			
             uint16_t len=0;
 			uint8_t i=0;
-            len = (decode_table->cmd_buf[2]<<8) |decode_table->cmd_buf[3];
-			HAL_UART_Transmit(ROUTE_PORT_PC,(uint8_t*)p,len, 100); 
-
-			
-
-            printf("%s",decode_table->cmd_buf);
+            len = (decode_table->cmd_buf[2]<<8) |decode_table->cmd_buf[3];        
 			
             if(len < 11)
                 {
@@ -374,6 +402,18 @@ void Do_Message(pDECODE_TABLE decode_table)
             uint16_t cmd=0;
             cmd = (decode_table->cmd_buf[8]<<8) |decode_table->cmd_buf[9];
 
+   			#ifdef CW_PRINTF_ON
+            printf("Receive data: ");
+            for(i=0;i<len;i++)
+			   printf("0x%2x ",decode_table->cmd_buf[i]);
+			printf("\n");
+			#endif
+			
+             if(flag == 0x80)
+		    {
+		        OnMCU_GET_OK((pMCU_GET_OK)recv);
+		    } 
+			 
 			if(from == UART_ADDR_DLP)
 			{
 				
@@ -400,6 +440,8 @@ void Do_Message(pDECODE_TABLE decode_table)
 			{
 			    
 			    Do_Mcu_Msg((pCMD_PACKET)decode_table->cmd_buf, len);
+				
+					
 			}
             
 			else if(to == UART_ADDR_DLP)

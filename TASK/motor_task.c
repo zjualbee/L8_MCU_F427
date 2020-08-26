@@ -156,8 +156,9 @@ static portTASK_FUNCTION(motor_task, pvParameters)
                 pre_laser_state = 1;
 #ifdef CW_PRINTF_ON
                 printf("laser can on\r\n");
-                printf("g_CW_speed_cnt %d\r\n", g_CW_speed_cnt * 60);
+                printf("g_CW_speed_cnt %d\r\n", g_CW_speed_cnt * 60);	
 				g_motor_36v.ok_flag=1;
+				g_laser.sys_on(&g_laser);
 #endif
             }
         }

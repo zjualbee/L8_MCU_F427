@@ -6,8 +6,6 @@
 #pragma pack(1)
 
 
-
-
 typedef enum
 {
 	D_SOFTWARE_VERSION_W_CMD = 0x0402,   //…Ë÷√MCU»Ìº˛∞Ê±æ
@@ -76,6 +74,14 @@ typedef struct tag_SysStatus
     int8_t oknot_status;
 }SS_GET,*pSS_GET;
 
+typedef struct tag_MCU_GET_OK
+{
+    uint8_t route_from;
+    uint8_t route_to; 
+
+    uint16_t  command;
+    uint8_t   value;  
+}MCU_GET_OK,*pMCU_GET_OK;
 
 
 typedef struct tag_FAN
