@@ -87,7 +87,7 @@ int On_Current_Get(pPOWER_GET_CURRENT p)
 	for(j=0;j<POWER_NUM;j++)
 	{
 		for (i = 0; i < POWER_CURRENT_USER; i++)
-			temp.p_current[i+j*8] = BigLittleSwap16(g_powers[j].laser_current[i]);
+			temp.p_current[i+j*8] = BigLittleSwap16(g_power1.laser_current[i]);
 	}
 
 	L8_Cmd_Send(p->route_to, p->route_from, (uint8_t *)&temp, sizeof(POWER_GET_CURRENT));
@@ -113,6 +113,8 @@ int On_Software_Version_Get(pMCU_GET_SOFTWARE_VERSION p)
     return 0;
 }
 
+
+
 int On_Fan_Rpm_Get(pFAN_GET_RPM p)
 {
     FAN_GET_RPM temp={0};
@@ -128,9 +130,18 @@ int On_LightSource_Get(pLS_GET_ST p)
 {
    LS_GET_ST temp={0};
    temp.command  = BigLittleSwap16(D_LIGHTSOURCE_W_CMD);
-   temp.onoff_status = g_powers[0].power_on_set;
+   temp.onoff_status = g_power1.power_on_set;
    L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(LS_GET_ST));
 }
+
+int On_SysStatus_Get(pSS_GET p)
+{
+   SS_GET temp={0};
+   temp.command  = BigLittleSwap16(D_LIGHTSOURCE_W_CMD);
+   temp.oknot_status = g_laser.sys_on_flag;
+   L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(SS_GET));
+}
+
 
 
 int On_TEC_GetTemperature(pTEC_GET_TEM p)
@@ -188,6 +199,7 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 	cmd = p->command_h<<8 | p->command_l;
 	recv = &(p->packet_route_from);
 
+	        
 	switch(cmd)
     {
         //²Ù×÷ÀàÃüÁî
@@ -201,7 +213,7 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 			 g_Power.current_b=g_CurrentValue;
 		     g_Power.current_g=g_CurrentValue;
 			 g_Power.current_r=g_CurrentValue;
-		     Appo_Power_On(&g_Power);
+		     sys_set_current(&g_Power);
             break;		
         }
 		
@@ -209,7 +221,6 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 		{
 		    uint8_t onoff;
 			onoff = p->pdata[0];
-			g_Power.on_off_flag = onoff;
 			if(onoff)
 				   sys_onoff_laser_on();
 			else
@@ -282,6 +293,12 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 			break;
 		}
 
+		case D_READY_R_CMD:
+		{
+		    On_SysStatus_Get(((pSS_GET)recv));
+			break;
+		}
+
 		case D_FAN_SPEED_R_CMD:
 		{
 		    On_Fan_Rpm_Get((pFAN_GET_RPM)recv);
@@ -319,11 +336,19 @@ void Do_Message(pDECODE_TABLE decode_table)
     if(decode_table->cmd_flag == 1)
         {
             decode_table->cmd_flag = 0;
+			
 			pCMD_PACKET p= (pCMD_PACKET)(decode_table->cmd_buf);
+			
+			
             uint16_t len=0;
 			uint8_t i=0;
             len = (decode_table->cmd_buf[2]<<8) |decode_table->cmd_buf[3];
+			HAL_UART_Transmit(ROUTE_PORT_PC,(uint8_t*)p,len, 100); 
 
+			
+
+            printf("%s",decode_table->cmd_buf);
+			
             if(len < 11)
                 {
                     printf("ERROR cmd len %d  < 12\r\n",len);
@@ -373,6 +398,7 @@ void Do_Message(pDECODE_TABLE decode_table)
 
             if(to == UART_ADDR_MCU)
 			{
+			    
 			    Do_Mcu_Msg((pCMD_PACKET)decode_table->cmd_buf, len);
 			}
             

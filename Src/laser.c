@@ -29,16 +29,14 @@ static int laser_temp_update(struct Laser *thiz)
 {
     uint8_t i=0,j=0;
 	for(j=0;j<NTC_NUM;j++)
-	for(i=0;i<8;i++)
-	{
-		thiz->temp[i]=sNtc_Group[j].temperature[i];
-		if(thiz->temp[i]>TEMP_MAX)
-			thiz->useful_flag[i+j*8]=0;
-		else
-			thiz->useful_flag[i+j*8]=1;
-	}		
-
-	thiz->dif_motor_Hz = g_CW_speed_cnt*60;
+		for(i=0;i<8;i++)
+		{
+			thiz->temp[i]=sNtc_Group[j].temperature[i];
+			if(thiz->temp[i]>TEMP_MAX)
+				thiz->useful_flag[i+j*8]=0;
+			else
+				thiz->useful_flag[i+j*8]=1;
+		}		
     return 0;
 }
 
@@ -88,13 +86,14 @@ static int laser_sys_on(struct Laser *thiz)
     int ret = 0;
     uint16_t pwm= 100;
     struct_SysErr sys_err = {0};
-
+ 
     // FAN
     #ifdef FAN_SUPPORT
-    //g_fan_cooling.fan_on(&g_fan_cooling,pwm);
+    g_fan_cooling.fan_on(&g_fan_cooling,pwm);
     #endif
 	
-    // Motor
+	//色轮转速达到80Hz以上，
+    // Motor1    #if 0
     #ifdef MOTOR_36V_EN
     if (0 == g_motor_36v.ok_flag){
         // 启动
@@ -117,15 +116,55 @@ static int laser_sys_on(struct Laser *thiz)
             i++;
             if (i >= 10){
                 laser_err_handle(&sys_err);
+				printf("Motor Error, Speed too low, laser sys task\n");
                 return 1;
             }
         }
     }
     #endif
+
+	#ifdef TEC_SUPPORT
+	ret = 1;
+	for(i=0;i<5;i++)
+	{
+		if(Uart_Tec2.temp1>0 && Uart_Tec2.temp1<50)
+		{
+		    ret=0;
+			break;
+		}
+		delay_ms(500);
+		
+	}
+	if(ret!=0)
+		{
+			laser_err_handle(&sys_err);
+			printf("TEC Error, Temp not normal, laser sys task\n");
+            return ret;
+		}
+	#endif
+
+	#ifdef PUMP_EN
+	ret=MAX_PUMP_NUM;
+	for(i=0;i<MAX_PUMP_NUM;i++)
+	{
+	    if(g_fan_cooling.fan_speed[Pump1+i]>LIGHT_PUMP_SPEED_ERR_MIN){
+			ret--;
+	    	}
+		delay_ms(500);
+	}
+	if(ret!=0)
+	{
+        laser_err_handle(&sys_err);
+        printf("\r\nERROR !!!!!!!!!!!!!!! Pump %d Speed Low: %d RPM\r\n",i+1, g_fan_cooling.fan_speed[Pump1+i]);
+        return ret;
+	}
+
+	#endif
 	
     delay_ms(50);
     // Flag
     thiz->sys_on_flag = 1;
+	//send msg to imx8
     return 0;
 }
 
@@ -142,8 +181,7 @@ static int laser_sys_off(struct Laser *thiz)
     thiz->en_clean(thiz);
 	uint8_t i=0;
 	
-	for(i=0;i<POWER_NUM;i++)
-        g_powers[i].power_off(&g_powers[i]);
+	Appo_Power_Off();
 
 	
     thiz->sys_on_flag = 0;

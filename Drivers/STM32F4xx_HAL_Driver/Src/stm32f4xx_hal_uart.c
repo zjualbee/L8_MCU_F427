@@ -3004,6 +3004,7 @@ static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
    if(huart->Instance == USART1)
     {
         ppfifo_in(&Decode_PMU,&temp,1);
+		//vdebug_buf_in(temp);
 		   decode_it_flag=1;
         
     }

@@ -205,6 +205,8 @@ void EXTI0_IRQHandler(void)
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
   /* USER CODE BEGIN EXTI0_IRQn 1 */
   g_CW_speed_cnt++;
+  g_motor_36v.speed_ISR_set_Hz(&g_motor_36v,g_CW_speed_cnt);
+  g_motor_36v.speed_ISR_set_Hz_sensor(&g_motor_36v,g_CW_speed_cnt);
 
   /* USER CODE END EXTI0_IRQn 1 */
 }

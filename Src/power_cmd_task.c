@@ -176,20 +176,22 @@ static int power_cmd_task_send_cmd_query(uint8_t device_id, uint8_t cmd, uint8_t
 *******************************************************************************/
 int power_cmd_task_cmd_frame_capture(struct_PowerFrame *pFrame)
 {
-    int i = 0, flag=0;
+    int i = 0;
     struct_Power *pPower = NULL;
 
     // check device_id
-    for(i=0;i<POWER_NUM;i++){
-		if (pFrame->buf[POWER_FRAME_DEVICE_ID] == g_powers[i].device_id)
-			{
-		    pPower = &g_powers[i];
-  			flag=1;
-			}
-    	}
-	if(!flag)
-		return 1;
-		 
+    if (pFrame->buf[POWER_FRAME_DEVICE_ID] == g_power1.device_id)
+        pPower = &g_power1;
+    #ifdef POWER2_EN
+    else if (pFrame->buf[POWER_FRAME_DEVICE_ID] == g_power2.device_id)
+        pPower = &g_power2;
+    #endif
+	#ifdef POWER3_EN
+    else if (pFrame->buf[POWER_FRAME_DEVICE_ID] == g_power3.device_id)
+        pPower = &g_power3;
+    #endif
+    else
+        return 1;
         
     switch (pFrame->buf[POWER_FRAME_CMD_ID]){
     case POWER_CMD_ID_ONOFF_POWER:
@@ -216,20 +218,23 @@ int power_cmd_task_cmd_frame_capture(struct_PowerFrame *pFrame)
 *******************************************************************************/
 int power_cmd_task_ack_frame_capture(struct_PowerFrame *pFrame)
 {
-	int i = 0, flag=0;
-	int result_ok = 0;
+    int i = 0;
+    int result_ok = 0;
     struct_Power *pPower = NULL;
 
     // check device_id
-    for(i=0;i<POWER_NUM;i++){
-		if (pFrame->buf[POWER_FRAME_DEVICE_ID] == g_powers[i].device_id)
-			{
-		    pPower = &g_powers[i];
-  			flag=1;
-			}
-    	}
-	if(!flag)
-		return 1;
+    if (pFrame->buf[POWER_FRAME_DEVICE_ID] == g_power1.device_id)
+        pPower = &g_power1;
+    #ifdef POWER2_EN
+    else if (pFrame->buf[POWER_FRAME_DEVICE_ID] == g_power2.device_id)
+        pPower = &g_power2;
+    #endif
+	#ifdef POWER3_EN
+    else if (pFrame->buf[POWER_FRAME_DEVICE_ID] == g_power3.device_id)
+        pPower = &g_power3;
+    #endif
+    else
+        return 1;
     // check result
     result_ok = pFrame->buf[POWER_FRAME_RESULT_ID];
         

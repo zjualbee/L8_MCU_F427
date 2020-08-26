@@ -17,13 +17,19 @@
 #define TEC_SUPPORT
 #define TEC2_EN
 
-//#define MOTOR_36V_EN
+#define MOTOR_36V_EN
 
 #define CW_PRINTF_ON
 
 
 // **************** 电源 ****************
-#define POWER_NUM  (2)
+#define POWER2_EN
+//#define POWER3_EN
+
+// **************** 电源设备ID ****************
+#define DEVICE_ID_POWER1    (0x20)
+#define DEVICE_ID_POWER2    (0x21)
+#define DEVICE_ID_POWER3    (0x22)
 
 // **************** NTC ****************
 #define NTC_SUPPORT

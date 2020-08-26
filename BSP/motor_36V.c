@@ -968,7 +968,6 @@ static int motor_36V_temp_update(struct Motor *thiz)
 *******************************************************************************/
 static int motor_36V_ok(struct Motor *thiz)
 {
-    // g_laser.en(&g_laser);
     thiz->ok_flag = 1;
     return 0;
 }
@@ -982,7 +981,7 @@ static int motor_36V_ok(struct Motor *thiz)
 *******************************************************************************/
 static int motor_36V_ok_clean(struct Motor *thiz)
 {
-   // g_laser.en_clean(&g_laser);
+    g_laser.en_clean(&g_laser);
     thiz->ok_flag = 0;
     return 0;
 }

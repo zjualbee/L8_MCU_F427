@@ -29,8 +29,15 @@
 #define POWER_CM5_CURRENT_MAX (3000)    // 3500
 
 /* Private variables ---------------------------------------------------------*/
+struct_Power g_power1;
 
-struct_Power g_powers[POWER_NUM];
+#ifdef POWER2_EN
+struct_Power g_power2;
+#endif
+
+#ifdef POWER3_EN
+struct_Power g_power3;
+#endif
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -321,7 +328,7 @@ int power_init(struct_Power *thiz, uint32_t device_id)
     thiz->laser_current_update      = power_laser_current_update;
 
     for (i = 0; i < MAX_CURRENT_MODULE; i++)
-        thiz->module_current[i] = 1000;
+        thiz->module_current[i] = 700;
     
     // 关闭本地外设
 

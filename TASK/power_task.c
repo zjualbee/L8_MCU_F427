@@ -10,8 +10,7 @@
 /* Private macro -------------------------------------------------------------*/
 #define POWER_ACK_BUF_SIZE  260
 
-G_POWER g_Power;
-uint32_t DEVICE_ID_POWERS[POWER_NUM]={0X20,0X21};
+
 xQueueHandle gQueuePowerAck  = NULL;
 /* Private variables ---------------------------------------------------------*/
 
@@ -20,30 +19,33 @@ xTaskHandle g_xTaskHandle_power = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-uint32_t Appo_Set_Current(pG_POWER p)
-{
-    uint8_t i=0;
-	for(i=0;i<POWER_NUM;i++)
-        g_powers[i].power_on(&g_powers[i],p->current_b,p->current_g,p->current_r,0,0);
-	return 1;
 
-}
 
 uint32_t Appo_Power_On(pG_POWER p)
 {
-	uint8_t i=0;
-	for(i=0;i<POWER_NUM;i++)
-        g_powers[i].power_on(&g_powers[i],p->current_b,p->current_g,p->current_r,0,0);
+    g_power1.power_on(&g_power1,p->current_b,p->current_g,p->current_r,0,0);
+	#ifdef POWER2_EN
+	g_power2.power_on(&g_power2,p->current_b,p->current_g,p->current_r,0,0);
+	#endif
+	#ifdef POWER3_EN
+	g_power3.power_on(&g_power3,p->current_b,p->current_g,p->current_r,0,0);
+	#endif
+
 	return 1;
 }
 
 uint32_t Appo_Power_Off()
 {
-	uint8_t i=0;
-	for(i=0;i<POWER_NUM;i++)
-        g_powers[i].power_off(&g_powers[i]);
+	g_power1.power_off(&g_power1);
+	#ifdef POWER2_EN
+	g_power2.power_off(&g_power2);
+	#endif
+	#ifdef POWER3_EN
+	g_power3.power_off(&g_power3);
+	#endif
 
-	LASER_EN_OFF();
+	g_laser.en_clean(&g_laser);
+	
 	return 1;
 }
 
@@ -64,9 +66,13 @@ static portTASK_FUNCTION(power_task, pvParameters)
 
         protocol_power_init();
 		
-		for(i=0;i<POWER_NUM;i++)
-			power_init(&g_powers[i], DEVICE_ID_POWERS[i]);
-		
+		power_init(&g_power1, DEVICE_ID_POWER1);
+        #ifdef POWER2_EN
+		power_init(&g_power2, DEVICE_ID_POWER2);
+        #endif
+		#ifdef POWER3_EN
+		power_init(&g_power3, DEVICE_ID_POWER3);
+        #endif
 		power_cmd_task_create();
 	    delay_ms(1000);
 
@@ -77,11 +83,23 @@ static portTASK_FUNCTION(power_task, pvParameters)
 			tick_cur = xTaskGetTickCount();
 			if ((tick_cur>tick_last) && ((tick_cur-tick_last)>=1000)){
 				tick_last = xTaskGetTickCount();
-	        for(i=0;i<POWER_NUM;i++)
-				g_powers[i].power_read_ver(&g_powers[i]);
-				g_powers[i].laser_current_update(&g_powers[i]);
-				g_powers[i].fan_speed_update(&g_powers[i]);
-				g_powers[i].power_temp_update(&g_powers[i]);
+	        
+				g_power1.power_read_ver(&g_power1);
+				g_power1.laser_current_update(&g_power1);
+				g_power1.fan_speed_update(&g_power1);
+				g_power1.power_temp_update(&g_power1);
+	        #ifdef POWER2_EN
+				g_power2.power_read_ver(&g_power2);
+				g_power2.laser_current_update(&g_power2);
+				g_power2.fan_speed_update(&g_power2);
+				g_power2.power_temp_update(&g_power2);
+	        #endif
+			#ifdef POWER3_EN
+				g_power3.power_read_ver(&g_power3);
+				g_power3.laser_current_update(&g_power3);
+				g_power3.fan_speed_update(&g_power3);
+				g_power3.power_temp_update(&g_power3);
+	        #endif
 			}
 		}
     

@@ -21,7 +21,8 @@ typedef enum
 	D_CW_SPEED_W_CMD = 0x0818,    //设置色轮转速
 		
 		
-	D_SOFTWARE_VERSION_R_CMD = 0x8402,   //读MCU软件版本	
+	D_SOFTWARE_VERSION_R_CMD = 0x8402,   //读MCU软件版本
+	D_READY_R_CMD = 0x842F,       //读系统状态是否准备完成
 	D_CW_MODEL_R_CMD = 0x8801,    //读色轮模型
 	D_CURRENT_R_CMD = 0x8803,	  //读分段电流
 	D_LIGHTSOURCE_R_CMD = 0x8805, //读开关激光
@@ -66,6 +67,15 @@ typedef struct tag_LightSource
     uint16_t  command;
     int8_t onoff_status;
 }LS_GET_ST,*pLS_GET_ST;
+
+typedef struct tag_SysStatus
+{
+    uint8_t route_from;
+    uint8_t route_to; 
+    uint16_t  command;
+    int8_t oknot_status;
+}SS_GET,*pSS_GET;
+
 
 
 typedef struct tag_FAN

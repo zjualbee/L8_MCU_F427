@@ -22,7 +22,15 @@
 
 /* Exported types ------------------------------------------------------------*/
 
-#define POWER_TEMP_USER     (4)
+#ifdef POWER3_EN
+#define POWER_NUM           (3)
+#elif defined(POWER2_EN)
+#define POWER_NUM           (2)
+#else
+#define POWER_NUM           (1)
+#endif
+
+#define POWER_TEMP_USER     (6)
 #define POWER_TEMP_MAX      (10)
 #define POWER_FAN_USER      (0)
 #define POWER_FAN_MAX       (8)
@@ -82,9 +90,13 @@ typedef struct Power
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
-extern struct_Power g_powers[POWER_NUM];
-
-
+extern struct_Power g_power1;
+#ifdef POWER2_EN
+extern struct_Power g_power2;
+#endif
+#ifdef POWER3_EN
+extern struct_Power g_power3;
+#endif
 
 
 /* Exported functions ------------------------------------------------------- */
