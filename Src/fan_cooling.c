@@ -141,7 +141,13 @@ static int fan_cooling_fan_on(struct FanCooling *thiz,uint16_t duty)
 				thiz->fan_pwm[j+FAN_NUM*i] = duty;
 		thiz->fan_ctr_status[i]=fan_status_on;
 	}
-	
+	//0x40 11.3V, 0x82 7.0V
+	bsp_dac_set(&hdac,DAC_CHANNEL_1,(FAN_DAC_MAX-duty*(FAN_DAC_MAX-FAN_DAC_MIN)/100));
+	bsp_dac_set(&hdac,DAC_CHANNEL_2,(FAN_DAC_MAX-duty*(FAN_DAC_MAX-FAN_DAC_MIN)/100));
+
+    //50，9.42V; 0, 11.73V   ;5, 11.63V; 10, 11.38V; 100, 6.98V;
+	bsp_tim_pwm_pulse_set(&htim4,TIM_CHANNEL_2,(FAN_PWM_MAX-duty*(FAN_PWM_MAX-FAN_PWM_MIN)/100));
+	HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
     xSemaphoreGive(thiz->mutex);
 	
     return ret;
@@ -264,7 +270,7 @@ int fan_cooling_init(struct_FanCooling *thiz)
 
 
     // 关闭本地外设
-    //thiz->fan_off_all(thiz);
+    thiz->fan_off(thiz);
     return 0;
 }
 
