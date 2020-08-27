@@ -31,8 +31,8 @@ static int laser_temp_update(struct Laser *thiz)
 	for(j=0;j<NTC_NUM;j++)
 		for(i=0;i<8;i++)
 		{
-			thiz->temp[i]=sNtc_Group[j].temperature[i];
-			if(thiz->temp[i]>TEMP_MAX)
+			thiz->temp[i+j*8]=sNtc_Group[j].temperature[i];
+			if(sNtc_Group[j].temperature[i]>TEMP_MAX)
 				thiz->useful_flag[i+j*8]=0;
 			else
 				thiz->useful_flag[i+j*8]=1;
