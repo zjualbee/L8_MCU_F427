@@ -107,11 +107,11 @@ static int fan_cooling_fan_init(struct FanCooling *thiz,uint16_t duty)
 	}
 
 	//0x40 11.3V, 0x82 7.0V
-	bsp_dac_set(&hdac,DAC_CHANNEL_1,(FAN_DAC_MAX-100*(FAN_DAC_MAX-FAN_DAC_MIN)/100));
-	bsp_dac_set(&hdac,DAC_CHANNEL_2,(FAN_DAC_MAX-100*(FAN_DAC_MAX-FAN_DAC_MIN)/100));
+	bsp_dac_set(&hdac,DAC_CHANNEL_1,(FAN_DAC_MAX-duty*(FAN_DAC_MAX-FAN_DAC_MIN)/100));
+	bsp_dac_set(&hdac,DAC_CHANNEL_2,(FAN_DAC_MAX-duty*(FAN_DAC_MAX-FAN_DAC_MIN)/100));
 
     //50£¬9.42V; 0, 11.73V   ;5, 11.63V; 10, 11.38V; 100, 6.98V;
-	bsp_tim_pwm_pulse_set(&htim4,TIM_CHANNEL_2,(FAN_PWM_MAX-100*(FAN_PWM_MAX-FAN_PWM_MIN)/100));
+	bsp_tim_pwm_pulse_set(&htim4,TIM_CHANNEL_2,(FAN_PWM_MAX-duty*(FAN_PWM_MAX-FAN_PWM_MIN)/100));
 	HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
 	#if 0
 	//0x40 11.3V, 0x82 7.0V
@@ -222,6 +222,17 @@ static int fan_cooling_fan_speed_update(struct FanCooling *thiz)
 		for(j=0;j<FAN_NUM;j++)
 				thiz->fan_speed[j+FAN_NUM*i]=sFan_Group[i].rpm_value[j];
 	}
+	for(i=BlowerDMDR;i<BlowerDMDR+4;i++){
+		if(thiz->fan_speed[i]==480)
+			thiz->fan_speed[i]=1888;
+		else
+			thiz->fan_speed[i]=0;
+		}
+	
+	if(thiz->fan_speed[BlowerSquare]==480)
+		thiz->fan_speed[BlowerSquare]=1888;
+	else
+		thiz->fan_speed[BlowerSquare]=0;
 
     xSemaphoreGive(thiz->mutex);                                                            
     return 0;

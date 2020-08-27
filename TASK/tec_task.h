@@ -28,7 +28,9 @@
 /* Exported variables --------------------------------------------------------*/
 extern xQueueHandle g_queue_tec_cmd;
 //extern UART_TEC Uart_Tec1;
+#ifdef TEC2_EN
 extern UART_TEC Uart_Tec2;
+#endif
 extern UART_TEC Uart_Tec3;
 
 /* Exported functions --------------------------------------------------------*/

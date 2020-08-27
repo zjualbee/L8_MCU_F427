@@ -328,7 +328,7 @@ int power_init(struct_Power *thiz, uint32_t device_id)
     thiz->laser_current_update      = power_laser_current_update;
 
     for (i = 0; i < MAX_CURRENT_MODULE; i++)
-        thiz->module_current[i] = 700;
+        thiz->module_current[i] = 500;
     
     // 关闭本地外设
 

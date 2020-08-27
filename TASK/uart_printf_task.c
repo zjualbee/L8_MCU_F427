@@ -66,7 +66,7 @@ static void uart_printf(void)
 	#ifdef MOTOR_36V_EN
     // MOTOR 36V
     printf("========Wheel Motor========\r\n");
-    printf("MOTOR 36V OK:%2d,  Speed:%4dRPM(%4d),  %4dHz(%4d),  PWM:%.1f%%,  TEMP:%3d°„C,  status:0x%04X,  dt:%d(%d)\r\n", g_motor_36v.ok_flag,
+    printf("MOTOR 36V OK:%2d,  Speed:%4d RPM(%4d),  %4dHz(%4d),  PWM:%.1f%%,  TEMP:%3d°„C,  status:0x%04X,  dt:%d(%d)\r\n", g_motor_36v.ok_flag,
            (uint16_t)g_motor_36v.speed_sensor, (uint16_t)g_motor_36v.speed, (uint16_t)g_motor_36v.Hz_sensor, (uint16_t)g_motor_36v.Hz_chip, 
            (float)g_motor_36v.duty_cycle/10.0, (int16_t)g_motor_36v.temp, (uint16_t)g_motor_36v.A4960_reg_status, (int32_t)g_motor_36v.speed_dt_sensor, 
            (int32_t)g_motor_36v.speed_dt_chip);

@@ -232,7 +232,11 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 	cmd = p->command_h<<8 | p->command_l;
 	recv = &(p->packet_route_from);
 
-	      
+   if(p->packet_flag == 0x80)
+    {
+        OnMCU_GET_OK((pMCU_GET_OK)recv);
+    } 
+  
 	switch(cmd)
     {
         //²Ù×÷ÀàÃüÁî
@@ -370,8 +374,6 @@ void Do_Message(pDECODE_TABLE decode_table)
         {
             decode_table->cmd_flag = 0;
 			pCMD_PACKET p= (pCMD_PACKET)(decode_table->cmd_buf);		
-			void *recv = 0;
-			recv = &(p->packet_route_from);
 			
             uint16_t len=0;
 			uint8_t i=0;
@@ -409,10 +411,6 @@ void Do_Message(pDECODE_TABLE decode_table)
 			printf("\n");
 			#endif
 			
-             if(flag == 0x80)
-		    {
-		        OnMCU_GET_OK((pMCU_GET_OK)recv);
-		    } 
 			 
 			if(from == UART_ADDR_DLP)
 			{

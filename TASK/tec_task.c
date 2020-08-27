@@ -20,7 +20,10 @@
 // ÈÎÎñ¾ä±ú
 xTaskHandle g_xTaskHandle_tec = NULL;
 //UART_TEC Uart_Tec1;
+#ifdef TEC2_EN
 UART_TEC Uart_Tec2;
+#endif
+
 UART_TEC Uart_Tec3;
 
 
@@ -85,6 +88,7 @@ static portTASK_FUNCTION(tec_task, pvParameters)
     #ifdef TEC2_EN
     TEC_SetPowerDown(&Uart_Tec2);
 	#endif
+	
     TEC_SetPowerDown(&Uart_Tec3);
     
     osDelay(3000);

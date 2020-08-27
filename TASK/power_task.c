@@ -20,35 +20,6 @@ xTaskHandle g_xTaskHandle_power = NULL;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
-
-uint32_t Appo_Power_On(pG_POWER p)
-{
-    g_power1.power_on(&g_power1,p->current_b,p->current_g,p->current_r,0,0);
-	#ifdef POWER2_EN
-	g_power2.power_on(&g_power2,p->current_b,p->current_g,p->current_r,0,0);
-	#endif
-	#ifdef POWER3_EN
-	g_power3.power_on(&g_power3,p->current_b,p->current_g,p->current_r,0,0);
-	#endif
-
-	return 1;
-}
-
-uint32_t Appo_Power_Off()
-{
-	g_power1.power_off(&g_power1);
-	#ifdef POWER2_EN
-	g_power2.power_off(&g_power2);
-	#endif
-	#ifdef POWER3_EN
-	g_power3.power_off(&g_power3);
-	#endif
-
-	g_laser.en_clean(&g_laser);
-	
-	return 1;
-}
-
 /*******************************************************************************
 * Function Name  : msg_task
 * Description    : 任务处理入口

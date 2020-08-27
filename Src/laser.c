@@ -179,10 +179,15 @@ static int laser_sys_off(struct Laser *thiz)
 {
     // Laser en
     thiz->en_clean(thiz);
-	uint8_t i=0;
 	
-	Appo_Power_Off();
-
+	// POWER
+    g_power1.power_off(&g_power1);
+    #ifdef POWER2_EN
+    g_power2.power_off(&g_power2);
+    #endif
+    #ifdef POWER3_EN
+	g_power3.power_off(&g_power3);
+	#endif
 	
     thiz->sys_on_flag = 0;
     return 0;
@@ -205,12 +210,15 @@ int laser_init(struct_Laser *thiz)
     thiz->mutex_brightness = xSemaphoreCreateMutex();
     if(thiz->mutex_brightness == NULL)
         return 1;
-    
+	
     thiz->temp_update               = laser_temp_update;
     thiz->en                        = laser_en;
     thiz->en_clean                  = laser_en_clean;
     thiz->sys_on                    = laser_sys_on;
     thiz->sys_off                   = laser_sys_off;
+
+	
+	thiz->sys_off(thiz);
     
     return 0;
 }
