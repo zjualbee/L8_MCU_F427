@@ -14,7 +14,7 @@
 
 #define PUMP_EN
 #define TEC_SUPPORT
-#define TEC2_EN
+//#define TEC2_EN
 
 #define MOTOR_36V_EN
 #define CW_PRINTF_ON

@@ -40,7 +40,6 @@ static int laser_temp_update(struct Laser *thiz)
     return 0;
 }
 
-
 /*******************************************************************************
 * Function Name  : laser_en
 * Description    : laser_en
@@ -147,7 +146,7 @@ static int laser_sys_on(struct Laser *thiz)
 	ret=MAX_PUMP_NUM;
 	for(i=0;i<MAX_PUMP_NUM;i++)
 	{
-	    if(g_fan_cooling.fan_speed[Pump1+i]>LIGHT_PUMP_SPEED_ERR_MIN){
+	    if(g_fan_cooling.fan_speed[Pump1+i]>LIGHT_PUMP_SPEED_ERR_MIN && g_fan_cooling.fan_speed[Pump1+i]<LIGHT_PUMP_SPEED_ERR_MAX){
 			ret--;
 	    	}
 		delay_ms(500);

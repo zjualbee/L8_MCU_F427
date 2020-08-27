@@ -9,6 +9,7 @@
 typedef enum
 {
 	D_SOFTWARE_VERSION_W_CMD = 0x0402,   //设置MCU软件版本
+	D_SYS_W_CMD = 0x042F,         //设置系统状态
     D_CW_MODEL_W_CMD = 0x0801,    //设置色轮模型
     D_CURRENT_W_CMD = 0x0803,     //设置分段电流
 	D_LIGHTSOURCE_W_CMD = 0x0805, //设置开关激光
@@ -17,10 +18,11 @@ typedef enum
 	D_TEC_W_CMD = 0x0811,         //设置TEC状态
 	D_NTC_W_CMD = 0x0812,         //设置NTC温度
 	D_CW_SPEED_W_CMD = 0x0818,    //设置色轮转速
+	
 		
 		
 	D_SOFTWARE_VERSION_R_CMD = 0x8402,   //读MCU软件版本
-	D_READY_R_CMD = 0x842F,       //读系统状态是否准备完成
+	D_SYS_R_CMD = 0x842F,       //读系统状态是否准备完成
 	D_CW_MODEL_R_CMD = 0x8801,    //读色轮模型
 	D_CURRENT_R_CMD = 0x8803,	  //读分段电流
 	D_LIGHTSOURCE_R_CMD = 0x8805, //读开关激光

@@ -3016,7 +3016,9 @@ static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
     }
   else if(huart->Instance == USART2)
     {
+	  #ifdef TEC2_EN
       TEC_Recv_Buf_In(&Uart_Tec2,temp);
+		#endif
 	  decode_it_flag=2;
 
     }

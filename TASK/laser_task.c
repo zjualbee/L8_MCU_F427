@@ -102,6 +102,7 @@ uint32_t sys_set_current(pG_POWER p)
 }
 
 
+
 /*******************************************************************************
 * Function Name  : laser_status_check
 * Description    : laser_status_check
@@ -135,14 +136,14 @@ static void laser_status_check(void)
     //pump
 	for(i=0;i<MAX_PUMP_NUM;i++)
 	{
-	    if(g_fan_cooling.fan_speed[Pump1+i]<LIGHT_PUMP_SPEED_ERR_MIN)
+	    if(g_fan_cooling.fan_speed[Pump1+i]<LIGHT_PUMP_SPEED_ERR_MIN || g_fan_cooling.fan_speed[Pump1+i]>LIGHT_PUMP_SPEED_ERR_MAX)
 			s_fan_speed_low[Pump1+i]++;
 		else
 			s_fan_speed_low[Pump1+i]=0;
 		if(s_fan_speed_low[Pump1+i] >= LIGHT_PUMP_SPEED_ERR_CHECK_SEC)
 		{
 	        
-	        printf("\r\nERROR !!!!!!!!!!!!!!! Pump %d Speed Low: %d RPM\r\n",i+1, g_fan_cooling.fan_speed[Pump1+i]);
+	        printf("\r\nERROR !!!!!!!!!!!!!!! Pump %d Speed Low or High: %d RPM\r\n",i+1, g_fan_cooling.fan_speed[Pump1+i]);
 			laser_err_handle(&err);
 	        return;
 		}
@@ -164,61 +165,59 @@ static void laser_status_check(void)
     }
     #endif
 
-    // ******** Temp ********,DMD, Laser, CW温度过高关灯
-    for (i = 0; i < 9; i++){
-        if (g_laser.temp[i] > LIGHT_TEMP_ERR_MAX && g_laser.useful_flag[i])
+    // ******** Temp ******** Laser, Len温度过高关灯
+    for (i = Laser1; i <= Laser6; i++){
+        if ((g_laser.temp[i] > LIGHT_TEMP_ERR_MAX || g_laser.temp[i]<LIGHT_TEMP_ERR_MIN) && g_laser.useful_flag[i])
             temp_high[i]++;
         else
             temp_high[i] = 0;
         if (temp_high[i] >= LIGHT_TEMP_ERR_CHECK_SEC){
             
-            printf("\r\nERROR !!!!!!!!!!!!!!! temp_err, NTC %d\r\n",i+1);
+            printf("\r\nERROR !!!!!!!!!!!!!!! temp_err, NTC %d, TEMP: %.1f°C\r\n",i+1,g_laser.temp[i]);
 			laser_err_handle(&err);
             return;
         }
     }
 
-	for (i = 9; i < 15; i++){
-        if (g_laser.temp[i] > LIGHT_TEMP_ERR_MAX && g_laser.useful_flag[i])
-            temp_high[i]++;
+        if ((g_laser.temp[LEN] > LEN_TEMP_ERR_MAX || g_laser.temp[LEN]<LEN_TEMP_ERR_MIN) && g_laser.useful_flag[LEN])
+            temp_high[LEN]++;
         else
-            temp_high[i] = 0;
-        if (temp_high[i] >= LIGHT_TEMP_ERR_CHECK_SEC){
+            temp_high[LEN] = 0;
+        if (temp_high[LEN] >= LIGHT_TEMP_ERR_CHECK_SEC){
             //laser_err_handle(&err);
-            printf("\r\nERROR !!!!!!!!!!!!!!! temp_err, NTC %d\r\n",i+1);
+            printf("\r\nERROR !!!!!!!!!!!!!!! temp_err, NTC %d, TEMP: %.1f°C\r\n",LEN+1,g_laser.temp[LEN]);
             temp_high[i] = 0;
         }
-    }
     
      //power
 	for(i=0;i<4;i++)
 	{
-	    if(g_power1.power_temp[i]/10>POWER_TEMP_ERR_MAX)
+	    if(g_power1.power_temp[i]/10>POWER_TEMP_ERR_MAX || g_power1.power_temp[i]/10<POWER_TEMP_ERR_MIN)
 			power_temp_high[i]++;
 		else
 			power_temp_high[i]=0;
 		if(power_temp_high[i]>=POWER_TEMP_ERR_CHECK_SEC)
 		{
             laser_err_handle(&err);
-            printf("\r\nERROR !!!!!!!!!!!!!!! power_temp_err  %d\r\n",power_temp_high[i]);
+            printf("\r\nERROR !!!!!!!!!!!!!!! power1_temp_err %d,  TEMP: %.1f°C\r\n",i,g_power1.power_temp[i]/10);
             power_temp_high[i]=0;
 		}
 
 		#ifdef POWER2_EN
-		if(g_power2.power_temp[i]/10>POWER_TEMP_ERR_MAX)
+		if(g_power2.power_temp[i]/10>POWER_TEMP_ERR_MAX || g_power2.power_temp[i]/10<POWER_TEMP_ERR_MIN)
 			power_temp_high[4+i]++;
 		else
 			power_temp_high[4+i]=0;
 		if(power_temp_high[4+i]>=POWER_TEMP_ERR_CHECK_SEC)
 		{
             laser_err_handle(&err);
-            printf("\r\nERROR !!!!!!!!!!!!!!! power_temp_err  %d\r\n",power_temp_high[i+4]);
+            printf("\r\nERROR !!!!!!!!!!!!!!! power2_temp_err %d,  TEMP: %.1f°C\r\n",g_power2.power_temp[i]/10);
             power_temp_high[4+i]=0;
 		}
 		#endif
 		
 		#ifdef POWER3_EN
-		if(g_power3.power_temp[i]/10>POWER_TEMP_ERR_MAX)
+		if(g_power3.power_temp[i]/10>POWER_TEMP_ERR_MAX || g_power3.power_temp[i]/10<POWER_TEMP_ERR_MIN)
 			power_temp_high[8+i]++;
 		else
 			power_temp_high[8+i]=0;
@@ -226,7 +225,7 @@ static void laser_status_check(void)
 		if(power_temp_high[8+i]>=POWER_TEMP_ERR_CHECK_SEC)
 		{
             laser_err_handle(&err);
-            printf("\r\nERROR !!!!!!!!!!!!!!! power_temp_err %d\r\n",power_temp_high[i+8]);
+            printf("\r\nERROR !!!!!!!!!!!!!!! power3_temp_err %d,  TEMP: %.1f°C\r\n",g_power3.power_temp[i]/10);
             power_temp_high[8+i]=0;
 		}
 		#endif

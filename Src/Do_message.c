@@ -158,7 +158,7 @@ int On_LightSource_Get(pLS_GET_ST p)
 int On_SysStatus_Get(pSS_GET p)
 {
    SS_GET temp={0};
-   temp.command  = BigLittleSwap16(D_READY_R_CMD);
+   temp.command  = BigLittleSwap16(D_SYS_W_CMD);
    temp.oknot_status = g_laser.sys_on_flag;
    L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(SS_GET));
 }
@@ -310,6 +310,15 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 		break;
 		}
 
+		case D_SYS_W_CMD:
+		{
+		    if(p->pdata[0]==1)
+				g_laser.sys_on(&g_laser);
+			else
+				g_laser.sys_off(&g_laser);
+		break;
+		}
+
 		//≤È—Ø∂¡»°¿‡√¸¡Ó
 
 		case D_SOFTWARE_VERSION_R_CMD:
@@ -330,7 +339,7 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 			break;
 		}
 
-		case D_READY_R_CMD:
+		case D_SYS_R_CMD:
 		{
 		    On_SysStatus_Get(((pSS_GET)recv));
 			break;

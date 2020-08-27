@@ -37,11 +37,16 @@
 #define LIGHT_TEC_ON_ERR_CHECK_SEC      (20)
 
 #define LIGHT_TEMP_ERR_MAX          (85)
-#define LIGHT_TEMP_ERR_MIN          (-1)
+#define LIGHT_TEMP_ERR_MIN          (-5)
 #define LIGHT_TEMP_ERR_CHECK_SEC    (30)
 
+#define LEN_TEMP_ERR_MAX          (75)
+#define LEN_TEMP_ERR_MIN          (-5)
+#define LEN_TEMP_ERR_CHECK_SEC    (30)
+
+
 #define POWER_TEMP_ERR_MAX        (95)
-#define POWER_TEMP_ERR_MIN        (-1)
+#define POWER_TEMP_ERR_MIN        (-5)
 #define POWER_TEMP_ERR_CHECK_SEC  (30)
 
 
