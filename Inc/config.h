@@ -34,7 +34,7 @@
 #define NTC_NUM    (2)
 #define NTC_CH_NUM (NTC_NUM*8)
 
-#define TEMP_MAX  (110)
+#define TEMP_MAX  (150)
 
 // **************** fan **********************
 #define FAN_SUPPORT

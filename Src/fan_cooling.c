@@ -191,18 +191,18 @@ static	int fan_cooling_fan_set_pwm_single(struct FanCooling *thiz, FAN_ENUM id, 
     if(id<0 || id>=MAX_FAN_NUM)
 		return -1;
 	
-    if(id<20 || id==24 || id==25)
+    if(id<20 || id==FrontPower1 || id==FrontPower2)
 	{
 		Max31790_Pwm_Set(&sFan_Group[index],j,duty);
 		thiz->fan_pwm[id]=duty;
 	}
-	else if(id>=20 && id<=23)
+	else if(id>=BlowerDMDR && id<=BlowerLen)
 	{
 		bsp_dac_set(&hdac,DAC_CHANNEL_1,(FAN_DAC_MAX-duty*(FAN_DAC_MAX-FAN_DAC_MIN)/100));
 		bsp_dac_set(&hdac,DAC_CHANNEL_2,(FAN_DAC_MAX-duty*(FAN_DAC_MAX-FAN_DAC_MIN)/100));
 	}
 	
-	else if(id==26)
+	else if(id==BlowerSquare)
 	{
 	    bsp_tim_pwm_pulse_set(&htim4,TIM_CHANNEL_2,(FAN_PWM_MAX-duty*(FAN_PWM_MAX-FAN_PWM_MIN)/100));
 		HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);

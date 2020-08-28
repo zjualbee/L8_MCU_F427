@@ -14,11 +14,11 @@ void On_Set_System(pONE_ELEMENT p)
     {
     if(p->value_id == DPV_SYSTEM_STATUS_ON)
         {
-        ;
+        g_laser.sys_on(&g_laser);
         }
     else if(p->value_id == DPV_SYSTEM_STATUS_OFF)
         {
-        ;
+        g_laser.sys_off(&g_laser);
         }
     }
 }
@@ -164,7 +164,7 @@ void On_Set_SetFan(pONE_ELEMENT p)
         }
         else
         {
-		   g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,p->key_id,PWM);
+		   g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,p->key_id-1,PWM);
         }
     }
 }

@@ -187,7 +187,7 @@ static int laser_sys_off(struct Laser *thiz)
     #ifdef POWER3_EN
 	g_power3.power_off(&g_power3);
 	#endif
-	
+
     thiz->sys_on_flag = 0;
     return 0;
 }

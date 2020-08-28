@@ -277,7 +277,7 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 			     select = p->pdata[1];
 				 if(select == 0xFF)
 			 	{
-			 	    for(i=0;i<36;i++)
+			 	    for(i=0;i<MAX_FAN_NUM;i++)
 						g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,i,p->pdata[2+i]);
 			 	}
 				 else
