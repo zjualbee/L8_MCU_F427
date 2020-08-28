@@ -34,8 +34,6 @@ int laser_err_handle(struct_SysErr *pErr)
 
 
 
-
-
 /*******************************************************************************
 * Function Name  : laser_status_check
 * Description    : laser_status_check
