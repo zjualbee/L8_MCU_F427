@@ -57,24 +57,10 @@
 /* Exported variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 
-typedef struct _G_POWER
-{
-    uint8_t  on_off_flag;   //  0 off     1  on
-    uint16_t current_r;
-    uint16_t current_g;
-    uint16_t current_b;
-
-
-}G_POWER,*pG_POWER;
-
-extern G_POWER g_Power;
 
 // 建立任务
 portBASE_TYPE laser_task_create(void);
 int laser_err_handle(struct_SysErr *pErr);
-int sys_onoff_laser_on(void);
-int sys_onoff_laser_off(void);
-uint32_t sys_set_current(pG_POWER p);
 
 
 

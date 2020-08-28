@@ -9,7 +9,6 @@
 #define TASK_PRIORITY     (tskIDLE_PRIORITY + 1)
 #define TASK_STACK_SIZE   (512) // *4 ×Ö½Ú
 xTaskHandle g_xTaskHandle_laser = NULL;
-G_POWER g_Power;
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -33,73 +32,7 @@ int laser_err_handle(struct_SysErr *pErr)
     return 0;
 }
 
-int sys_onoff_laser_on(void)
-{
-    int ret = 0;
 
-    //g_system.err_clean(&g_system);
-    //g_system.warning_clean(&g_system);
-    if (0 == g_laser.sys_on(&g_laser)) {
-        // EN
-        g_laser.en(&g_laser);
-        delay_ms(100);
-        // POWER
-        g_power1.power_on(&g_power1,g_power1.module_current[0],g_power1.module_current[1],g_power1.module_current[2],0,0);
-		#ifdef POWER2_EN
-		g_power2.power_on(&g_power2,g_power2.module_current[0],g_power2.module_current[1],g_power2.module_current[2],0,0);
-		#endif
-		#ifdef POWER3_EN
-		g_power3.power_on(&g_power3,g_power3.module_current[0],g_power3.module_current[1],g_power3.module_current[2],0,0);
-		#endif
-		
-        if (0 == ret){
-            g_laser.is_on = 1;
-            //g_system.status = SYS_STATUS_LASER_ON;
-        }
-    }
-    return 0;
-}
-
-int sys_onoff_laser_off(void)
-{
-    // EN
-    g_laser.en_clean(&g_laser);
-    g_power1.power_off(&g_power1);
-	#ifdef POWER2_EN
-	g_power2.power_off(&g_power2);
-	#endif
-	#ifdef POWER3_EN
-	g_power3.power_off(&g_power3);
-	#endif
-    return 0;
-}
-
-
-uint32_t sys_set_current(pG_POWER p)
-{
-    int ret = 0;
-    if(g_laser.sys_on_flag==1)
-	{
-	    // EN
-        g_laser.en(&g_laser);
-        delay_ms(100);
-	    g_power1.power_on(&g_power1,p->current_b,p->current_g,p->current_r,0,0);
-		#ifdef POWER2_EN
-		g_power2.power_on(&g_power2,p->current_b,p->current_g,p->current_r,0,0);
-		#endif
-		#ifdef POWER3_EN
-		g_power3.power_on(&g_power3,p->current_b,p->current_g,p->current_r,0,0);
-		#endif
-
-		if (0 == ret){
-            g_laser.is_on = 1;
-            //g_system.status = SYS_STATUS_LASER_ON;
-        }
-	}
-	else
-		printf("Can't be defined\n");
-	return 1;
-}
 
 
 

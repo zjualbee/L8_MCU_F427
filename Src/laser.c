@@ -192,6 +192,109 @@ static int laser_sys_off(struct Laser *thiz)
     return 0;
 }
 
+
+static int laser_laser_on(struct Laser *thiz)
+{
+    int ret = 0;
+
+    //g_system.err_clean(&g_system);
+    //g_system.warning_clean(&g_system);
+    if (0 == thiz->sys_on(thiz)) {
+        // EN
+        thiz->en(thiz);
+        delay_ms(100);
+        // POWER
+        g_power1.power_on(&g_power1,g_power1.module_current[0],g_power1.module_current[1],g_power1.module_current[2],0,0);
+		#ifdef POWER2_EN
+		g_power2.power_on(&g_power2,g_power2.module_current[0],g_power2.module_current[1],g_power2.module_current[2],0,0);
+		#endif
+		#ifdef POWER3_EN
+		g_power3.power_on(&g_power3,g_power3.module_current[0],g_power3.module_current[1],g_power3.module_current[2],0,0);
+		#endif
+		
+        if (0 == ret){
+            thiz->is_on = 1;
+            //g_system.status = SYS_STATUS_LASER_ON;
+        }
+    }
+    return 0;
+}
+
+static int laser_laser_off(struct Laser *thiz)
+{
+    // EN
+    thiz->en_clean(thiz);
+    g_power1.power_off(&g_power1);
+	#ifdef POWER2_EN
+	g_power2.power_off(&g_power2);
+	#endif
+	#ifdef POWER3_EN
+	g_power3.power_off(&g_power3);
+	#endif
+    return 0;
+}
+
+
+int sys_set_current(uint8_t select,uint16_t value)
+{
+    int ret = 0;
+    if(g_laser.sys_on_flag==1)
+	{
+	    // EN
+        g_laser.en(&g_laser);
+        delay_ms(100);
+
+		if(select==3)
+			{
+			    g_power1.power_on(&g_power1,value,value,value,0,0);
+				#ifdef POWER2_EN
+				g_power2.power_on(&g_power2,value,value,value,0,0);
+				#endif
+				#ifdef POWER3_EN
+				g_power3.power_on(&g_power3,value,value,value,0,0);
+				#endif
+			}
+		else if(select == 0)
+			{
+			    g_power1.power_on(&g_power1,g_power1.module_current[0],g_power1.module_current[1],value,0,0);
+				#ifdef POWER2_EN
+				g_power2.power_on(&g_power2,g_power2.module_current[0],g_power2.module_current[1],value,0,0);
+				#endif
+				#ifdef POWER3_EN
+				g_power3.power_on(&g_power3,g_power3.module_current[0],g_power3.module_current[1],value,0,0);
+				#endif
+			}
+		else if(select == 1)
+			{
+			    g_power1.power_on(&g_power1,g_power1.module_current[0],value,g_power1.module_current[2],0,0);
+				#ifdef POWER2_EN
+				g_power2.power_on(&g_power2,g_power2.module_current[0],value,g_power2.module_current[2],0,0);
+				#endif
+				#ifdef POWER3_EN
+				g_power3.power_on(&g_power3,g_power3.module_current[0],value,g_power3.module_current[2],0,0);
+				#endif
+			}
+		else if(select == 2)
+			{
+			    g_power1.power_on(&g_power1,value,g_power1.module_current[1],g_power1.module_current[2],0,0);
+				#ifdef POWER2_EN
+				g_power2.power_on(&g_power2,value,g_power2.module_current[1],g_power2.module_current[2],0,0);
+				#endif
+				#ifdef POWER3_EN
+				g_power3.power_on(&g_power3,value,g_power3.module_current[1],g_power3.module_current[2],0,0);
+				#endif
+			}
+
+		if (0 == ret){
+            g_laser.is_on = 1;
+            //g_system.status = SYS_STATUS_LASER_ON;
+        }
+	}
+	else
+		printf("Can't be defined\n");
+	return 1;
+}
+
 /*******************************************************************************
 * Function Name  : laser_init
 * Description    : init
@@ -215,6 +318,8 @@ int laser_init(struct_Laser *thiz)
     thiz->en_clean                  = laser_en_clean;
     thiz->sys_on                    = laser_sys_on;
     thiz->sys_off                   = laser_sys_off;
+	thiz->laser_on                  = laser_laser_on;
+	thiz->laser_off                 = laser_laser_off;
 
 	
 	thiz->sys_off(thiz);

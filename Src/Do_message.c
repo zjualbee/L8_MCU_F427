@@ -247,10 +247,7 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 		     current_l = p->pdata[1];
 			 uint16_t g_CurrentValue=1000;
 			 g_CurrentValue = current_h*1000+current_l*10;
-			 g_Power.current_b=g_CurrentValue;
-		     g_Power.current_g=g_CurrentValue;
-			 g_Power.current_r=g_CurrentValue;
-		     sys_set_current(&g_Power);
+		     sys_set_current(3,g_CurrentValue);
             break;		
         }
 		
@@ -259,9 +256,9 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 		    uint8_t onoff;
 			onoff = p->pdata[0];
 			if(onoff)
-				   sys_onoff_laser_on();
+				   g_laser.laser_on(&g_laser);
 			else
-			  sys_onoff_laser_off();
+			  g_laser.laser_off(&g_laser);
 			break;
 		}
 

@@ -48,6 +48,8 @@ typedef struct Laser
     int (*en_clean)(struct Laser *thiz);
     int (*sys_on)(struct Laser *thiz);
     int (*sys_off)(struct Laser *thiz);
+	int (*laser_on)(struct Laser *thiz);
+    int (*laser_off)(struct Laser *thiz);
 }struct_Laser;
 
 /* Exported constants --------------------------------------------------------*/
@@ -59,6 +61,7 @@ typedef struct Laser
 extern struct_Laser g_laser;
 
 /* Exported functions ------------------------------------------------------- */
+int sys_set_current(uint8_t select,uint16_t value);
 
 int laser_init(struct_Laser *thiz);
 

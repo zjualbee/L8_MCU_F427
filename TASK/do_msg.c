@@ -32,16 +32,13 @@ void On_Set_LightSource(pONE_ELEMENT p)
     {
     if(p->value_id == DPV_LIGHTSOURCE_STATUS_ON)
         {
-            //g_Power.on_off_flag = 1;
-			//Appo_Power_On(&g_Power);
-			sys_onoff_laser_on();
+			g_laser.laser_on(&g_laser);
 
         }
     else if(p->value_id == DPV_LIGHTSOURCE_STATUS_OFF)
         {
-        //g_Power.on_off_flag = 0;
-        //Appo_Power_Off();
-        sys_onoff_laser_off();
+
+            g_laser.laser_off(&g_laser);
         }
     }
 }
@@ -51,41 +48,24 @@ void On_Set_SetCurrent(pONE_ELEMENT p)
     PRINT_FUNCTION
     uint8_t send_buf[30]={0};
     memset(send_buf,0,30);
+	uint16_t value;
     //printf("p->key_id %d\r\n",p->key_id);
     if(p->cmd_id == DC_SETCURRENT)
     {
         if(p->key_id == DPK_SETCURRENT_ALL)
             {
             printf("DPK_SETCURRENT_ALL\r\n");
-            g_Power.current_r = p->value_int&0xffff;
-            g_Power.current_g = p->value_int&0xffff;
-            g_Power.current_b = p->value_int&0xffff;
-			sys_set_current(&g_Power);
+            value=p->value_int&0xffff;
+			sys_set_current(3,value);
             
             }
-        else if(p->key_id == DPK_SETCURRENT_R)
+        else
             {
             printf("DPK_SETCURRENT_R\r\n");
-            g_Power.current_r = p->value_int&0xffff;
-            sys_set_current(&g_Power);
-            }  
-        else if(p->key_id == DPK_SETCURRENT_G)
-            {
-            
-            printf("DPK_SETCURRENT_G\r\n");
-             g_Power.current_g = p->value_int&0xffff;
-             sys_set_current(&g_Power);
+			value = p->value_int&0xffff;
+			sys_set_current(p->key_id-1,value);
 
             }  
-        else if(p->key_id == DPK_SETCURRENT_B)
-            {
-            
-            printf("DPK_SETCURRENT_B\r\n");           
-            g_Power.current_b = p->value_int&0xffff;
-            sys_set_current(&g_Power);
-            }  
-
-
         
     }
 
