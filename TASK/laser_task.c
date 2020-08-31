@@ -131,7 +131,7 @@ static void laser_status_check(void)
 		{
             laser_err_handle(&err);
             printf("\r\nERROR !!!!!!!!!!!!!!! power1_temp_err %d,  TEMP: %.1f°„C\r\n",i,g_power1.power_temp[i]/10);
-            power_temp_high[i]=0;
+			return;
 		}
 
 		#ifdef POWER2_EN
@@ -143,7 +143,7 @@ static void laser_status_check(void)
 		{
             laser_err_handle(&err);
             printf("\r\nERROR !!!!!!!!!!!!!!! power2_temp_err %d,  TEMP: %.1f°„C\r\n",g_power2.power_temp[i]/10);
-            power_temp_high[4+i]=0;
+            return;
 		}
 		#endif
 		
@@ -157,7 +157,7 @@ static void laser_status_check(void)
 		{
             laser_err_handle(&err);
             printf("\r\nERROR !!!!!!!!!!!!!!! power3_temp_err %d,  TEMP: %.1f°„C\r\n",g_power3.power_temp[i]/10);
-            power_temp_high[8+i]=0;
+            return;
 		}
 		#endif
 		}

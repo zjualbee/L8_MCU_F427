@@ -1,3 +1,13 @@
+/**
+ * @file motor_task.c
+ * @author cao ting (tingcao@appotronics.com)
+ * @brief task to control the cw motor
+ * @version 1.02
+ * @date 2020-08-28
+ * 
+ * @copyright Copyright@appotronics 2020. All Rights Reserved
+ * 
+ */
 /* Includes ------------------------------------------------------------------*/
 #include "motor_task.h"
 #include "main.h"
@@ -5,7 +15,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 
-// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿??
 #define TASK_PRIORITY (tskIDLE_PRIORITY + 1)
 
 /* Private macro -------------------------------------------------------------*/
@@ -60,7 +70,7 @@ static void motor_status_check(void)
 
 /*******************************************************************************
 * Function Name  : msg_task
-* Description    : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+* Description    : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿??
 * Input          : None
 * Output         : None
 * Return         : None
@@ -71,7 +81,6 @@ static portTASK_FUNCTION(motor_task, pvParameters)
     uint32_t tick_last = xTaskGetTickCount();
     static int Speed_Ok_Cnt = 0;
     static int Speed_Error_Cnt = 0;
-    static int pre_cw_speed_cnt = 0;
 
     osDelay(4000);
 
@@ -92,18 +101,7 @@ static portTASK_FUNCTION(motor_task, pvParameters)
             tick_last = xTaskGetTickCount();
             g_motor_36v.speed_update(&g_motor_36v);
             g_motor_36v.run_need_reset(&g_motor_36v);
-            //motor_status_check();
         }
-		
-   #if 0
-        if (pre_cw_speed_cnt != g_CW_speed_cnt)
-        {
-            pre_cw_speed_cnt = g_CW_speed_cnt;
-#ifdef CW_PRINTF_ON
-            printf("g_CW_speed_cnt %d\r\n", g_CW_speed_cnt * 60);
-#endif
-        }
-#endif
         
         if (g_CW_speed_cnt > 80)
         {
@@ -160,24 +158,6 @@ static portTASK_FUNCTION(motor_task, pvParameters)
         g_CW_speed_cnt = 0;
     }
 #endif
-
-#if 0
-    while (1)
-    {
-        osDelay(100);
-        tick_cur = xTaskGetTickCount();
-        if ((tick_cur > tick_last) && ((tick_cur - tick_last) > 1000))
-        {
-            tick_last = xTaskGetTickCount();
-            g_motor_36v.speed_update(&g_motor_36v);
-            //g_motor_36v.temp_update(&g_motor_36v);
-            g_motor_36v.closed_loop(&g_motor_36v);
-            g_motor_36v.run_need_reset(&g_motor_36v);
-            motor_status_check();
-        }
-    }
-#endif
-
 }
 
 /*******************************************************************************
@@ -189,10 +169,9 @@ static portTASK_FUNCTION(motor_task, pvParameters)
 *******************************************************************************/
 #define QUEUE_LEN_MOTOR_CMD        4                                // 
 #define QUEUE_MSG_SIZE_MOTOR_CMD   (sizeof(uint8_t))
-xQueueHandle g_queue_motor_ok  = NULL; // 
+
 portBASE_TYPE motor_task_create(void)
 {
-    g_queue_motor_ok = xQueueCreate(QUEUE_LEN_MOTOR_CMD,  QUEUE_MSG_SIZE_MOTOR_CMD); 
     return xTaskCreate(motor_task, "motor", 512, NULL, TASK_PRIORITY + 1, &g_xTaskHandle_motor);
 }
 
