@@ -1,6 +1,12 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
+
+/*Èí¼þ°æ±¾*/
+#define VERSION_MAIN   1
+#define VERSION_SLAVE  7
+#define VERSION_BUILDTIME  0x20200831
+
 //LED
 #define LED_ON  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_10,GPIO_PIN_SET)
 #define LED_OFF  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_10,GPIO_PIN_RESET)

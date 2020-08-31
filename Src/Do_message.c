@@ -1,31 +1,11 @@
 #include "Do_message.h"
 
-
-/*开机标志*/
-#define VERSION_MAIN   1
-#define VERSION_SLAVE  1
-#define VERSION_BUILDTIME  0x20200713
-
-
 int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
 {
 
-    UART_HandleTypeDef * Port;
+    UART_HandleTypeDef * Port=ROUTE_PORT_PMU;
     uint8_t     sum_byte=0; 
     CMD_PACKET  send_packet={0};
-
-	if(route_to == UART_ADDR_PC)
-    {
-    	Port = ROUTE_PORT_PC;
-    }
-	else if(route_to == UART_ADDR_IMX8)
-	{
-		Port = ROUTE_PORT_IMX8;
-	}
-	else if(route_to == UART_ADDR_PMU)
-	{
-		Port = ROUTE_PORT_PMU;
-	}
 
     send_packet.head_sync_h        = 0x5A;
     send_packet.head_sync_l        = 0xA5;
@@ -45,9 +25,15 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
     HAL_UART_Transmit(Port,&sum_byte,1,100);
 
     #ifdef CW_PRINTF_ON
-	HAL_UART_Transmit(ROUTE_PORT_PC,(uint8_t*)&send_packet,8,100);
-    HAL_UART_Transmit(ROUTE_PORT_PC,buf+2,len-2,100);
-    HAL_UART_Transmit(ROUTE_PORT_PC,&sum_byte,1,100);
+	uint8_t i=0;
+	printf("Send data: ");
+	uint8_t *senddata = (uint8_t *)&send_packet;
+	for(i=0;i<8;i++)
+		printf("0x%02x ",senddata[i]);
+    for(i=2;i<len;i++)
+	   printf("0x%02x ",buf[i]);
+	printf("0x%02x\n",sum_byte);
+	printf("\n");
 	#endif
 
     return len+7;
@@ -57,23 +43,9 @@ int L8_Cmd_Send(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
 int L8_Cmd_Send_OK(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
 {
 
-    UART_HandleTypeDef * Port;
+    UART_HandleTypeDef * Port=ROUTE_PORT_PMU;
     uint8_t     sum_byte=0; 
     CMD_PACKET  send_packet={0};
-
-	if(route_to == UART_ADDR_PC)
-    {
-    	Port = ROUTE_PORT_PC;
-    }
-	else if(route_to == UART_ADDR_IMX8)
-	{
-		Port = ROUTE_PORT_IMX8;
-	}
-	else if(route_to == UART_ADDR_PMU)
-	{
-		Port = ROUTE_PORT_PMU;
-	}
-    
 
     send_packet.head_sync_h        = 0x5A;
     send_packet.head_sync_l        = 0xA5;
@@ -92,6 +64,15 @@ int L8_Cmd_Send_OK(uint8_t route_from,uint8_t route_to,uint8_t* buf,int len)
     HAL_UART_Transmit(Port,&sum_byte,1,100);
 
 	#ifdef CW_PRINTF_ON
+	uint8_t i=0;
+	printf("Send data: ");
+	uint8_t *senddata = (uint8_t *)&send_packet;
+	for(i=0;i<8;i++)
+		printf("0x%02x ",senddata[i]);
+    for(i=2;i<len;i++)
+	   printf("0x%02x ",buf[i]);
+	printf("0x%02x\n",sum_byte);
+	printf("\n");
 	#endif
 
     return len+7;
@@ -105,11 +86,17 @@ int On_Current_Get(pPOWER_GET_CURRENT p)
 	temp.command = BigLittleSwap16(D_CURRENT_W_CMD);
 	uint8_t i = 0;
 	uint8_t j=0;
-	for(j=0;j<POWER_NUM;j++)
-	{
-		for (i = 0; i < POWER_CURRENT_USER; i++)
-			temp.p_current[i+j*8] = BigLittleSwap16(g_power1.laser_current[i]);
-	}
+
+	for (i = 0; i < POWER_CURRENT_USER; i++)
+		temp.p_current[i] = BigLittleSwap16(g_power1.laser_current[i]);
+	#ifdef POWER2_EN
+	for (i = 0; i < POWER_CURRENT_USER; i++)
+		temp.p_current[i+8] = BigLittleSwap16(g_power2.laser_current[i]);
+	#endif
+	#ifdef POWER3_EN
+	for (i = 0; i < POWER_CURRENT_USER; i++)
+		temp.p_current[i+16] = BigLittleSwap16(g_power3.laser_current[i]);
+	#endif
 
 	L8_Cmd_Send(p->route_to, p->route_from, (uint8_t *)&temp, sizeof(POWER_GET_CURRENT));
 
@@ -214,14 +201,6 @@ int Do_Pmu_Route(pCMD_PACKET p,uint16_t len)
 	return 0;		
 }
 
-
-int Do_Pc_Route(pCMD_PACKET p,uint16_t len)
-{
-	 	 
-		HAL_UART_Transmit(ROUTE_PORT_PC,(uint8_t*)p,len, 100);
-	
-	return 0;		
-}
 
 
 int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
@@ -413,7 +392,7 @@ void Do_Message(pDECODE_TABLE decode_table)
    			#ifdef CW_PRINTF_ON
             printf("Receive data: ");
             for(i=0;i<len;i++)
-			   printf("0x%2x ",decode_table->cmd_buf[i]);
+			   printf("0x%02x ",decode_table->cmd_buf[i]);
 			printf("\n");
 			#endif
 			
@@ -475,19 +454,9 @@ void Do_Message(pDECODE_TABLE decode_table)
 					HAL_UART_Transmit(ROUTE_PORT_DLP_6,(uint8_t*)p,len,100);
 				}   
 			}
-			else if(to == UART_ADDR_PMU)
+			else if(to == UART_ADDR_PMU || to == UART_ADDR_IMX8 || to == UART_ADDR_PC)
 			{
                 Do_Pmu_Route((pCMD_PACKET)decode_table->cmd_buf, len);
-			}
-
-			else if(to == UART_ADDR_IMX8)
-			{
-				Do_Pmu_Route((pCMD_PACKET)decode_table->cmd_buf, len);
-			}
-
-			else if(to == UART_ADDR_PC)
-			{
-			    Do_Pc_Route((pCMD_PACKET)decode_table->cmd_buf, len);
 			}
 			
 			
