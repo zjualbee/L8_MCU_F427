@@ -126,7 +126,7 @@ static int laser_sys_on(struct Laser *thiz)
 	ret = 1;
 	for(i=0;i<5;i++)
 	{
-		if(Uart_Tec3.temp1>0 && Uart_Tec3.temp1<500)
+		if(Uart_Tec3.cool_temp[0]>0 && Uart_Tec3.cool_temp[0]<500)
 		{
 		    ret=0;
 			break;

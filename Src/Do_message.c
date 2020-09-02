@@ -121,8 +121,6 @@ int On_Software_Version_Get(pMCU_GET_SOFTWARE_VERSION p)
     return 0;
 }
 
-
-
 int On_Fan_Rpm_Get(pFAN_GET_RPM p)
 {
     FAN_GET_RPM temp={0};
@@ -142,6 +140,14 @@ int On_LightSource_Get(pLS_GET_ST p)
    L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(LS_GET_ST));
 }
 
+int On_CwRpm_Get(pCC_GET p)
+{
+   CC_GET temp={0};
+   temp.command  = BigLittleSwap16(D_CW_SPEED_W_CMD);
+   temp.rpm = BigLittleSwap16(g_motor_36v.speed);
+   L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(CC_GET));
+}
+
 int On_SysStatus_Get(pSS_GET p)
 {
    SS_GET temp={0};
@@ -158,7 +164,6 @@ void OnMCU_GET_OK(pMCU_GET_OK p)
 	temp.command = (p->command)&0x7fff;
 	temp.value = 0;
 
-
 	L8_Cmd_Send_OK(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(MCU_GET_OK));
 
 }
@@ -168,19 +173,18 @@ int On_TEC_GetTemperature(pTEC_GET_TEM p)
 {
 	TEC_GET_TEM temp={0};
 	temp.command = BigLittleSwap16(D_TEC_W_CMD);
-	temp.tecTemp[0]=BigLittleSwap16(Uart_Tec3.temp1);
-	temp.tecTemp[1]=BigLittleSwap16(Uart_Tec3.temp2);
-	temp.tecTemp[2]=BigLittleSwap16(Uart_Tec3.temp3);
+	uint8_t i=0;
+	for(i=0;i<TEC_CH_MAX;i++)
+	{
+	    temp.objTemp[i]=BigLittleSwap16(Uart_Tec3.obj_temp[i]);
+		temp.coolTemp[i]=BigLittleSwap16(Uart_Tec3.cool_temp[i]);
+		temp.hotTemp[i]=BigLittleSwap16(Uart_Tec3.hot_temp[i]);
+	}
 	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(TEC_GET_TEM));
 
 }
 int On_NTC_GetTemperature(pNTC_GET_TEM p)
 {
-
-		uint8_t reg=0;
-		int16_t temprature=0;
-		uint8_t index=0;
-
 		NTC_GET_TEM temp={0};
 		temp.command = BigLittleSwap16(D_NTC_R_CMD);
 		
@@ -190,8 +194,22 @@ int On_NTC_GetTemperature(pNTC_GET_TEM p)
 			   temp.temperature[i+8*j]=BigLittleSwap16(sNtc_Group[j].temperature[i]);
 		
 		L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(NTC_GET_TEM));
-
 }
+
+int On_Power_GetTemperature(pPOWER_GET_TEM p)
+{
+	POWER_GET_TEM temp={0};
+	temp.command = BigLittleSwap16(D_POWERTEMP_W_CMD);
+	
+    uint8_t i;
+    for(i=0;i<4;i++)
+	   temp.temperature[i]=BigLittleSwap16(g_power1.power_temp[i]);
+	for(i=0;i<4;i++)
+	   temp.temperature[i+4]=BigLittleSwap16(g_power2.power_temp[i]);
+	
+	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(POWER_GET_TEM));
+}
+
 
 int Do_Pmu_Route(pCMD_PACKET p,uint16_t len)
 {
@@ -207,6 +225,8 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 {
     uint16_t cmd = 0;
 	void *recv = 0;
+	uint8_t i=0;
+	uint8_t type;
 
 	cmd = p->command_h<<8 | p->command_l;
 	recv = &(p->packet_route_from);
@@ -243,9 +263,6 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 
 		case D_FAN_PWM_W_CMD:
 		{
-		    
-			uint8_t type;
-			uint8_t i=0;
 			type = p->pdata[0];
 			if(type)
 			{
@@ -271,13 +288,17 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 		
 		case D_TEC_W_CMD:
         {
-             int8_t temp_h,temp_l;
-			 int16_t g_TecTemp=20;
-			 temp_h = p->pdata[0];
-			 temp_l = p->pdata[1];
-			 g_TecTemp = temp_h+temp_l/100; 
-			 
-			 TEC_SetTemprature(&Uart_Tec3,g_TecTemp,g_TecTemp);
+			 type=p->pdata[0];
+			 if(type)
+			 	{
+			 	   for(i=0;i<TEC_CH_MAX;i++)
+			           Uart_Tec3.obj_temp[i]=p->pdata[1+2*i]<<8 | p->pdata[2+2*i];
+			       TEC_SetTemprature(&Uart_Tec3,Uart_Tec3.obj_temp[0],Uart_Tec3.obj_temp[1],Uart_Tec3.obj_temp[2]);
+			 	}
+			 else
+			 	{
+			 	   TEC_SetPowerDown(&Uart_Tec3);
+			 	}
              break;		
         }
 
@@ -339,8 +360,15 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
              break;		
         }
 
+		case D_POWERTEMP_R_CMD:
+		{
+		     On_Power_GetTemperature((pPOWER_GET_TEM)recv);
+		     break;
+		}
+
 		case D_CW_SPEED_R_CMD:
 		{
+		     On_CwRpm_Get((pCC_GET)recv);
 		     break;
 		}
 		

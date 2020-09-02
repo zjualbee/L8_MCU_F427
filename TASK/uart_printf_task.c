@@ -48,17 +48,12 @@ static void uart_printf(void)
 #ifdef TEC_SUPPORT
     // TEC 
     printf("========TEC Info========\r\n"); 
-
-    #ifdef TEC2_EN
-	printf("TEC2:%d.%d, ",Uart_Tec2.temp1/10,Uart_Tec2.temp1%10);
-    printf("%d.%d, ",Uart_Tec2.temp2/10,Uart_Tec2.temp2%10);
-	printf("%d.%d.     ",Uart_Tec2.temp3/10,Uart_Tec2.temp3%10);
-	#endif
-	
-	printf("TEC3:%d.%d, ",Uart_Tec3.temp1/10,Uart_Tec3.temp1%10);
-    printf("%d.%d, ",Uart_Tec3.temp2/10,Uart_Tec3.temp2%10);
-	printf("%d.%d \r\n",Uart_Tec3.temp3/10,Uart_Tec3.temp3%10);
-	printf("\r\n");
+    for(i=0;i<TEC_CH_MAX;i++){
+		printf("Channel %d ObjTemp: %d.%d, ",i+1,Uart_Tec3.obj_temp[i]/10,Uart_Tec3.obj_temp[i]%10);
+	    printf("CoolTemp: %d.%d, ",Uart_Tec3.cool_temp[i]/10,Uart_Tec3.cool_temp[i]%10);
+		printf("HotTemp: %d.%d \r\n",Uart_Tec3.hot_temp[i]/10,Uart_Tec3.hot_temp[i]%10);
+    }
+		printf("\r\n");
 #endif
 
     
