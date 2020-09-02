@@ -24,7 +24,7 @@ extern "C" {
 #define CMD_ON  0XFF00
 #define CMD_OFF 0X0000
 
-#define TEC_CH_MAX      (3)
+
 
 #define INPUT_REG_ADDR_TEC_CH1_COOL_TEMP    (0)
 #define INPUT_REG_ADDR_TEC_CH2_COOL_TEMP    (2)

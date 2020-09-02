@@ -3024,7 +3024,7 @@ static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
     }
   else if(huart->Instance == UART5)
     {
-      TEC_Recv_Buf_In(&Uart_Tec3,temp);
+      //TEC_Recv_Buf_In(&Uart_Tec3,temp);
 	  decode_it_flag=5;
     }
   else if(huart->Instance == UART7)

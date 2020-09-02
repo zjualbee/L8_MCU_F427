@@ -80,7 +80,7 @@ static void laser_status_check(void)
 		}
 	}
 
-    #ifdef TEC_SUPPORT
+    #if 0
     // ******** TEC ********
     for(i=0;i<3;i++){
 	    if(Uart_Tec3.cool_temp[0]/10>TEC_HIGH || Uart_Tec3.cool_temp[0]/10>TEC_HIGH)

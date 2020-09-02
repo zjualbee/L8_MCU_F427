@@ -176,9 +176,9 @@ int On_TEC_GetTemperature(pTEC_GET_TEM p)
 	uint8_t i=0;
 	for(i=0;i<TEC_CH_MAX;i++)
 	{
-	    temp.objTemp[i]=BigLittleSwap16(Uart_Tec3.obj_temp[i]);
-		temp.coolTemp[i]=BigLittleSwap16(Uart_Tec3.cool_temp[i]);
-		temp.hotTemp[i]=BigLittleSwap16(Uart_Tec3.hot_temp[i]);
+	    temp.objTemp[i]=BigLittleSwap16(g_tec.sw_obj_temp[i]);
+		temp.coolTemp[i]=BigLittleSwap16(g_tec.cool_temp[i]);
+		temp.hotTemp[i]=BigLittleSwap16(g_tec.hot_temp[i]);
 	}
 	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(TEC_GET_TEM));
 
@@ -292,12 +292,13 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 			 if(type)
 			 	{
 			 	   for(i=0;i<TEC_CH_MAX;i++)
-			           Uart_Tec3.obj_temp[i]=p->pdata[1+2*i]<<8 | p->pdata[2+2*i];
-			       TEC_SetTemprature(&Uart_Tec3,Uart_Tec3.obj_temp[0],Uart_Tec3.obj_temp[1],Uart_Tec3.obj_temp[2]);
+			           g_tec.sw_obj_temp[i]=p->pdata[1+2*i]<<8 | p->pdata[2+2*i];
+				   g_tec.set_obj_temp(&g_tec,g_tec.sw_obj_temp[0],g_tec.sw_obj_temp[1],g_tec.sw_obj_temp[2]);
+			       
 			 	}
 			 else
 			 	{
-			 	   TEC_SetPowerDown(&Uart_Tec3);
+			 	   g_tec.off(&g_tec);
 			 	}
              break;		
         }

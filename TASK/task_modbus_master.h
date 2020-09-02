@@ -1,9 +1,9 @@
-/******************** (C) COPYRIGHT 2017 APPOTRONICS ***************************
-* File Name          : tec_task.h
+/******************** (C) COPYRIGHT 2016 APPOTRONICS ***************************
+* File Name          : task_modbus_master.h
 * Author             : WWZ
 * Version            : V1.0.0
-* Date(mm/dd/yy)     : 2017-12-13
-* Description        : Header for tec_task.c file. 
+* Date(mm/dd/yy)     : 2016-06-23
+* Description        : Header for task_modbus_master.c file. 
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
@@ -14,29 +14,25 @@
 *******************************************************************************/
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __TEC_TASK_H
-#define __TEC_TASK_H
+#ifndef __TASK_MODBUS_MASTER_H
+#define __TASK_MODBUS_MASTER_H
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx.h"
 #include "cmsis_os.h"
 
+#include "mb.h"
+#include "mb_m.h"
+#include "user_mb_app.h"
+
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
-
-
-
 /* Exported functions --------------------------------------------------------*/
 
 // 建立任务
-portBASE_TYPE tec_task_create(void);
-
-
-
-
-
+portBASE_TYPE modbus_master_task_create(void);
 
 #endif
-/******************* (C) COPYRIGHT 2017 APPOTRONICS ************END OF FILE****/
+/******************* (C) COPYRIGHT 2016 APPOTRONICS ************END OF FILE****/

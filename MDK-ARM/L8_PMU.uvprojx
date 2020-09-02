@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F427xx,USE_HAL_DRIVER,STM32F427xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc; ../Drivers/STM32F4xx_HAL_Driver/Inc; ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy; ../Drivers/CMSIS/Device/ST/STM32F4xx/Include; ../Drivers/CMSIS/Include; ../Middlewares/Third_Party/FreeRTOS/Source/include; ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS; ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F; ..\TASK; ..\BSP; ..\Src; ..\vdebug; ..\protocol; ..\protocol\at_protocol; ..\protocol\at_protocol\gtest</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;..\TASK;..\BSP;..\Src;..\vdebug;..\protocol;..\protocol\at_protocol;..\protocol\at_protocol\gtest;..\Middlewares\Third_Party\FreeModbus\port;..\Middlewares\Third_Party\FreeModbus\modbus\include;..\Middlewares\Third_Party\FreeModbus\modbus\rtu</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -437,6 +437,11 @@
               <FileName>stm32f4xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/stm32f4xx_hal_msp.c</FilePath>
+            </File>
+            <File>
+              <FileName>tec.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\tec.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -636,6 +641,86 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Middlewares/FreeModbus</GroupName>
+          <Files>
+            <File>
+              <FileName>user_mb_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FreeModbus\port\user_mb_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_mb_app_m.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FreeModbus\port\user_mb_app_m.c</FilePath>
+            </File>
+            <File>
+              <FileName>portevent_m.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FreeModbus\port\freertos\portevent_m.c</FilePath>
+            </File>
+            <File>
+              <FileName>portserial_m.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FreeModbus\port\freertos\portserial_m.c</FilePath>
+            </File>
+            <File>
+              <FileName>porttimer_m.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FreeModbus\port\freertos\porttimer_m.c</FilePath>
+            </File>
+            <File>
+              <FileName>port_modbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FreeModbus\port\freertos\port_modbus.c</FilePath>
+            </File>
+            <File>
+              <FileName>mb_m.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FreeModbus\modbus\mb_m.c</FilePath>
+            </File>
+            <File>
+              <FileName>mbrtu_m.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FreeModbus\modbus\rtu\mbrtu_m.c</FilePath>
+            </File>
+            <File>
+              <FileName>mbfunccoils_m.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FreeModbus\modbus\functions\mbfunccoils_m.c</FilePath>
+            </File>
+            <File>
+              <FileName>mbfuncdisc_m.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FreeModbus\modbus\functions\mbfuncdisc_m.c</FilePath>
+            </File>
+            <File>
+              <FileName>mbfuncholding_m.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FreeModbus\modbus\functions\mbfuncholding_m.c</FilePath>
+            </File>
+            <File>
+              <FileName>mbfuncinput_m.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FreeModbus\modbus\functions\mbfuncinput_m.c</FilePath>
+            </File>
+            <File>
+              <FileName>mbfuncother.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FreeModbus\modbus\functions\mbfuncother.c</FilePath>
+            </File>
+            <File>
+              <FileName>mbutils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FreeModbus\modbus\functions\mbutils.c</FilePath>
+            </File>
+            <File>
+              <FileName>mbcrc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FreeModbus\modbus\rtu\mbcrc.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Task</GroupName>
           <Files>
             <File>
@@ -693,6 +778,11 @@
               <FileType>1</FileType>
               <FilePath>..\TASK\laser_task.c</FilePath>
             </File>
+            <File>
+              <FileName>task_modbus_master.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TASK\task_modbus_master.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -717,11 +807,6 @@
               <FileName>ADS7830.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BSP\ADS7830.c</FilePath>
-            </File>
-            <File>
-              <FileName>uart_tec.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\BSP\uart_tec.c</FilePath>
             </File>
             <File>
               <FileName>i2c5.c</FileName>

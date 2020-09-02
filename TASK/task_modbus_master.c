@@ -1,9 +1,9 @@
-/******************** (C) COPYRIGHT 2017 APPOTRONICS ***************************
-* File Name          : tec_task.h
+/******************** (C) COPYRIGHT 2016 APPOTRONICS ***************************
+* File Name          : task_modbus_master.c
 * Author             : WWZ
 * Version            : V1.0.0
-* Date(mm/dd/yy)     : 2017-12-13
-* Description        : Header for tec_task.c file. 
+* Date(mm/dd/yy)     : 2016-06-23
+* Description        : This file provides all the modbus_master task function.
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
@@ -14,67 +14,56 @@
 *******************************************************************************/
 
 /* Includes ------------------------------------------------------------------*/
-#include "tec_task.h"
+#include "task_modbus_master.h"
+
 #include "main.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 
 // 任务参数
-#define TASK_PRIORITY     (tskIDLE_PRIORITY + 1)
-#define TASK_STACK_SIZE   (512) // *4 字节
+#define TASK_PRIORITY     (tskIDLE_PRIORITY + 2)
+#define TASK_STACK_SIZE   (256) // *4 字节
+
+// 超时
+#define MSG_TIMEOUT_MS  20
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 
 // 任务句柄
-xTaskHandle g_xTaskHandle_tec = NULL;
-
-
+xTaskHandle g_xTaskHandle_modbus_master = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
-* Function Name  : tec_task
+* Function Name  : modbus_master_task
 * Description    : 任务处理入口
 * Input          : None
 * Output         : None
 * Return         : None
 *******************************************************************************/
-static portTASK_FUNCTION(tec_task, pvParameters)
+static portTASK_FUNCTION(modbus_master_task, pvParameters)
 {
-    int i = 0;
-
-    #ifdef MODBUS_MASTER
-    modbus_master_task_create();
-    #endif
-    #ifdef TEC_EN
-    tec_init(&g_tec, TEC1_DEVICE_ID);
-    #endif
-    // 等待TEC板初始化完成
-    delay_ms(500);
-	g_tec.on(&g_tec);
-
+    eMBMasterInit(MB_RTU, 1, 115200, MB_PAR_NONE);
+    eMBMasterEnable();
     while(1){
-        delay_ms(1000);
-        
-        #ifdef TEC_EN
-        g_tec.update(&g_tec);
-        #endif
+        eMBMasterPoll();
+        delay_ms(5);
     }
 }
 
 /*******************************************************************************
-* Function Name  : tec_task_create
+* Function Name  : modbus_master_task_create
 * Description    : 建立任务
 * Input          : None
 * Output         : None
 * Return         : None
 *******************************************************************************/
-portBASE_TYPE tec_task_create(void)
+portBASE_TYPE modbus_master_task_create(void)
 {
-    return xTaskCreate(tec_task, "tec", TASK_STACK_SIZE, NULL, TASK_PRIORITY, &g_xTaskHandle_tec);
+    return xTaskCreate(modbus_master_task, "modbus master", TASK_STACK_SIZE, NULL, TASK_PRIORITY, &g_xTaskHandle_modbus_master);
 }
 
-/******************* (C) COPYRIGHT 2014 APPOTRONICS ************END OF FILE****/
+/******************* (C) COPYRIGHT 2016 APPOTRONICS ************END OF FILE****/

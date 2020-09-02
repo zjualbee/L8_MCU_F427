@@ -20,7 +20,8 @@
 
 #define PUMP_EN
 #define TEC_SUPPORT
-//#define TEC2_EN
+#define TEC_EN
+#define MODBUS_MASTER
 
 #define MOTOR_36V_EN
 #define CW_PRINTF_ON
@@ -73,9 +74,14 @@
 #define PRESCALER_20M   (20000000)
 #define APB1_TIMER_CLOCK_HZ (SystemCoreClock/2)
 #define APB2_TIMER_CLOCK_HZ  SystemCoreClock
+#define TIM1_PRESCALER  (98)
+#define TIM1_PERIOD     (1000)
 #define TIM4_PRESCALER  ((uint32_t)(APB1_TIMER_CLOCK_HZ / PRESCALER_2M) - 1)            // CK_CNT的计数频率
 #define TIM4_PERIOD     (100 - 1)      // 2M / (100-1) = 20KHz
 
+// FreeModbus
+#define TIM7_PRESCALER  ((uint32_t)(APB1_TIMER_CLOCK_HZ / PRESCALER_100K) - 1)
+#define TIM7_PERIOD     (5 - 1)      // 100K / (5-1) = 20000Hz
 //0x40 11.3V, 0x82 7.0V
 #define FAN_DAC_MAX  (0x82)//(0xE6)
 #define FAN_DAC_MIN   (0x40)//(0x46)
@@ -83,5 +89,15 @@
 //PD13, Pwm控制电压：50，9.42V; 0, 11.73V   ;5, 11.63V; 10, 11.38V; 100, 6.98V;
 #define FAN_PWM_MAX  (100)
 #define FAN_PWM_MIN  (10)
+//time out definitions
+#define TIMEOUT_0MS     (0)
+#define TIMEOUT_100MS   (100)
+#define TIMEOUT_200MS   (200)
+#define TIMEOUT_500MS   (500)
+#define TIMEOUT_1000MS  (1000)
+#define TIMEOUT_2000MS  (2000)
+#define TIMEOUT_3000MS  (3000)
+#define TIMEOUT_5000MS  (5000)
+#define TIMEOUT_6000MS  (5000)
 
 #endif

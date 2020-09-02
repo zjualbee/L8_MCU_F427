@@ -23,10 +23,6 @@
 #include "stm32f4xx_it.h"
 #include "FreeRTOS.h"
 #include "task.h"
-#include "Decode.h"
-#include "Do_message.h"
-#include "stm32f427xx.h"
-#include "stm32f4xx_hal.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -64,6 +60,7 @@
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim7;
 extern UART_HandleTypeDef huart4;
 extern UART_HandleTypeDef huart5;
 extern UART_HandleTypeDef huart7;
@@ -301,11 +298,95 @@ void UART5_IRQHandler(void)
 {
   /* USER CODE BEGIN UART5_IRQn 0 */
 
-  /* USER CODE END UART5_IRQn 0 */
-  HAL_UART_IRQHandler(&huart5);
-  /* USER CODE BEGIN UART5_IRQn 1 */
+  uint32_t tmp1 = 0;
+    uint32_t tmp2 = 0;
+    UART_HandleTypeDef *huart = &huart5;
+    
+#if 1
+    tmp1 = __HAL_UART_GET_FLAG(huart, UART_FLAG_PE);
+    tmp2 = __HAL_UART_GET_IT_SOURCE(huart, UART_IT_PE);  
+    /* UART parity error interrupt occurred ------------------------------------*/
+    if((tmp1 != RESET) && (tmp2 != RESET))
+    { 
+      __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_PE);
+    }
+    
+    tmp1 = __HAL_UART_GET_FLAG(huart, UART_FLAG_FE);
+    tmp2 = __HAL_UART_GET_IT_SOURCE(huart, UART_IT_ERR);
+    /* UART frame error interrupt occurred -------------------------------------*/
+    if((tmp1 != RESET) && (tmp2 != RESET))
+    { 
+      __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_FE);
+    }
+    
+    tmp1 = __HAL_UART_GET_FLAG(huart, UART_FLAG_NE);
+    tmp2 = __HAL_UART_GET_IT_SOURCE(huart, UART_IT_ERR);
+    /* UART noise error interrupt occurred -------------------------------------*/
+    if((tmp1 != RESET) && (tmp2 != RESET))
+    { 
+      __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_NE);
+    }
+    
+    tmp1 = __HAL_UART_GET_FLAG(huart, UART_FLAG_ORE);
+    tmp2 = __HAL_UART_GET_IT_SOURCE(huart, UART_IT_ERR);
+    /* UART Over-Run interrupt occurred ----------------------------------------*/
+    if((tmp1 != RESET) && (tmp2 != RESET))
+    { 
+      __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_ORE);
+    }
+
+    tmp1 = __HAL_UART_GET_FLAG(huart, UART_FLAG_RXNE);
+    tmp2 = __HAL_UART_GET_IT_SOURCE(huart, UART_IT_RXNE);
+    /* UART in mode Receiver ---------------------------------------------------*/
+    if((tmp1 != RESET) && (tmp2 != RESET)){ 
+
+        #ifdef MODBUS_MASTER
+        prvvUARTRxISR();  // ***************************************************
+        #endif
+        
+        __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_RXNE);
+    }
+
+    tmp1 = __HAL_UART_GET_FLAG(huart, UART_FLAG_TXE);
+    tmp2 = __HAL_UART_GET_IT_SOURCE(huart, UART_IT_TXE);
+    /* UART in mode Transmitter ------------------------------------------------*/
+    if((tmp1 != RESET) && (tmp2 != RESET))
+    {
+        //UART_Transmit_IT(huart);
+        #ifdef MODBUS_MASTER
+        prvvUARTTxReadyISR();  // ***************************************************
+        #endif
+        
+      __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_TXE);
+    }
+
+    tmp1 = __HAL_UART_GET_FLAG(huart, UART_FLAG_TC);
+    tmp2 = __HAL_UART_GET_IT_SOURCE(huart, UART_IT_TC);
+    /* UART in mode Transmitter ------------------------------------------------*/
+    if((tmp1 != RESET) && (tmp2 != RESET))
+    {
+      __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_TC);
+    }
+
+#else
+    HAL_UART_IRQHandler(huart);
+#endif
 
   /* USER CODE END UART5_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM7 global interrupt.
+  */
+void TIM7_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM7_IRQn 0 */
+
+  /* USER CODE END TIM7_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim7);
+  /* USER CODE BEGIN TIM7_IRQn 1 */
+
+  /* USER CODE END TIM7_IRQn 1 */
 }
 
 /**
@@ -351,6 +432,17 @@ void UART8_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
+#ifdef MODBUS_MASTER
+extern void prvvTIMERExpiredISR(void);
+#endif
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (&htim7 == htim){
+        #ifdef MODBUS_MASTER
+        prvvTIMERExpiredISR();
+        #endif
+    }
+}
 
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

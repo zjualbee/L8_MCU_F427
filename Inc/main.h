@@ -56,10 +56,17 @@ extern "C" {
 #include "power_cmd_task.h"
 
 #include "motor_task.h"
+#ifdef TEC_SUPPORT
+#include "tec.h"
+#include "tec_task.h"
+#endif
+
+#ifdef MODBUS_MASTER
+#include "task_modbus_master.h"
+#endif
 #include "heat_sink_task.h"
 #include "led_task.h"
 #include "temprature_task.h"
-#include "tec_task.h"
 #include "uart_task.h"
 #include "dlp4422_task.h"
 
@@ -86,6 +93,7 @@ extern SPI_HandleTypeDef hspi4;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim7;
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
@@ -95,8 +103,6 @@ extern UART_HandleTypeDef huart7;
 extern UART_HandleTypeDef huart8;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart5;
-
-
 
 extern int decode_it_flag;
 extern int g_CW_speed_cnt;
@@ -119,6 +125,8 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
+
+void MX_UART5_Init(void);
 
 /* USER CODE BEGIN EFP */
 

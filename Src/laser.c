@@ -122,24 +122,9 @@ static int laser_sys_on(struct Laser *thiz)
     }
     #endif
 
-	#ifdef TEC_SUPPORT
+	#if 1
 	ret = 1;
-	for(i=0;i<5;i++)
-	{
-		if(Uart_Tec3.cool_temp[0]>0 && Uart_Tec3.cool_temp[0]<500)
-		{
-		    ret=0;
-			break;
-		}
-		delay_ms(500);
-		
-	}
-	if(ret!=0)
-		{
-			laser_err_handle(&sys_err);
-			printf("TEC Error, Temp not normal, laser sys task\n");
-            return ret;
-		}
+	return ret;
 	#endif
 
 	#ifdef PUMP_EN

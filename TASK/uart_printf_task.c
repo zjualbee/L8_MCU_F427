@@ -46,17 +46,24 @@ static void uart_printf(void)
     int i = 0,j=0;
     
 #ifdef TEC_SUPPORT
-    // TEC 
-    printf("========TEC Info========\r\n"); 
-    for(i=0;i<TEC_CH_MAX;i++){
-		printf("Channel %d ObjTemp: %d.%d, ",i+1,Uart_Tec3.obj_temp[i]/10,Uart_Tec3.obj_temp[i]%10);
-	    printf("CoolTemp: %d.%d, ",Uart_Tec3.cool_temp[i]/10,Uart_Tec3.cool_temp[i]%10);
-		printf("HotTemp: %d.%d \r\n",Uart_Tec3.hot_temp[i]/10,Uart_Tec3.hot_temp[i]%10);
+    printf("======TEC Param======\r\n");
+#ifdef TEC_EN
+    if (g_tec.monitor_on)
+        printf("TEC: ON ");
+    else
+        printf("TEC: OFF");
+    if (g_tec.sw_on)
+        printf("(ON) , ");
+    else
+        printf("(OFF), ");
+    printf("DC:%.1fV,  ErrCode:%d,  ReqErrCode:%d,  Status:0x%08X, Tick:%d\r\n", (float)g_tec.dc_v/10, g_tec.err_code, g_tec.req_err_code, (uint32_t)(g_tec.status[0]|(g_tec.status[1]<<8)|(g_tec.status[2]<<16)|(g_tec.status[3]<<24)), g_tec.tick);
+    for (i = 0; i < TEC_CH_MAX; i++){
+        printf("CH %d  Obj:%.1f(%.1f)¡ãC,  Cool:%.1f¡ãC,  Hot:%.1f¡ãC,  Curr:%.1fA,  Pwm:%d%%,  Err:%d,  Lock: %d\r\n", i, (float)g_tec.obj_temp[i]/10, (float)g_tec.sw_obj_temp[i]/10, (float)g_tec.cool_temp[i]/10, (float)g_tec.hot_temp[i]/10, (float)g_tec.tec_a[i]/10, g_tec.pwm[i], g_tec.tec_err[i], g_tec.tec_lock[i]);
     }
 		printf("\r\n");
 #endif
 
-    
+#endif
 
 	#ifdef MOTOR_36V_EN
     // MOTOR 36V
