@@ -33,7 +33,7 @@ typedef struct ADS7830
 
     uint8_t  dev_addr; 
     uint8_t reg[ADS7830_CH_MAX];                   // 读取电压值
-    uint16_t temperature[ADS7830_CH_MAX];          // 换算温度值
+    int16_t temperature[ADS7830_CH_MAX];          // 换算温度值
 
      Ads7830_Bsp_Recv      iic_recv;  //
      Ads7830_Bsp_Transmit  iic_transmit; //Transmit

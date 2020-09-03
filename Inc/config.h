@@ -22,6 +22,7 @@
 #define TEC_SUPPORT
 #define TEC_EN
 #define MODBUS_MASTER
+#define TEC_3_OBJ_TEMP_EN
 
 #define MOTOR_36V_EN
 #define CW_PRINTF_ON
@@ -42,6 +43,8 @@
 #define NTC_CH_NUM (NTC_NUM*8)
 
 #define TEMP_MAX  (150)
+#define TEMP_INVALID  (-50)
+
 
 // **************** fan **********************
 #define FAN_SUPPORT

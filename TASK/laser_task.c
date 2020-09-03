@@ -47,7 +47,7 @@ static void laser_status_check(void)
     int i = 0;
 	int j=0;
     static int s_fan_speed_low[MAX_FAN_GROUP*6] = {0};
-    static int s_tec_off[3] = 0;
+    static int s_tec_off = 0;
 	static int temp_high[NTC_CH_NUM] = {0};
 	static int power_temp_high[POWER_NUM*POWER_TEMP_USER]={0};
 	static int cw_speed_low=0;
@@ -80,20 +80,23 @@ static void laser_status_check(void)
 		}
 	}
 
-    #if 0
+    #ifdef TEC_SUPPORT
     // ******** TEC ********
-    for(i=0;i<3;i++){
-	    if(Uart_Tec3.cool_temp[0]/10>TEC_HIGH || Uart_Tec3.cool_temp[0]/10>TEC_HIGH)
-            s_tec_off[i]++;
-		else
-		    s_tec_off[i] = 0;
-		if (s_tec_off[i] >= LIGHT_TEC_ON_ERR_CHECK_SEC){
-        
-        printf("\r\nERROR !!!!!!!!!!!!!!! TEC TEMP HIGH!\r\n");
-		laser_err_handle(&err);
+    #ifdef TEC_EN
+    if (0 == g_tec.tick) {
+        laser_err_handle(&err);
         return;
-		}
     }
+    if ((1==g_tec.sw_on) && (0==g_tec.monitor_on))
+        s_tec_off++;
+    else
+        s_tec_off = 0;
+    if (s_tec_off >= LIGHT_TEC_ON_ERR_CHECK_SEC){
+        laser_err_handle(&err);
+        printf("\r\nERROR !!!!!!!!!!!!!!! TEC NO RUN!\r\n");
+        return;
+    }
+    #endif
     #endif
 
     // ******** Temp ******** Laser, Len温度过高关灯

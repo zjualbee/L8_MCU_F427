@@ -304,7 +304,7 @@ int tec_init(struct_Tec *thiz, uint32_t device_id)
     thiz->tick_reset        = tec_tick_reset;
 
     for (i = 0; i < TEC_CH_MAX; i++)
-        thiz->sw_obj_temp[i] = 350;
+        thiz->sw_obj_temp[i] = 250;
 
     // 关闭本地外设
     // thiz->off(thiz);

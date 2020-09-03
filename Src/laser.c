@@ -32,7 +32,7 @@ static int laser_temp_update(struct Laser *thiz)
 		for(i=0;i<8;i++)
 		{
 			thiz->temp[i+j*8]=sNtc_Group[j].temperature[i];
-			if(sNtc_Group[j].temperature[i]>TEMP_MAX)
+			if(sNtc_Group[j].temperature[i]<TEMP_INVALID)
 				thiz->useful_flag[i+j*8]=0;
 			else
 				thiz->useful_flag[i+j*8]=1;
@@ -122,10 +122,16 @@ static int laser_sys_on(struct Laser *thiz)
     }
     #endif
 
-	#if 1
-	ret = 1;
-	return ret;
-	#endif
+	// TEC
+    #ifdef TEC_SUPPORT
+    #ifdef TEC_EN
+    // tick
+    if (0 == g_tec.tick) {    
+        laser_err_handle(&sys_err);
+        return 2;
+    }
+    #endif
+    #endif
 
 	#ifdef PUMP_EN
 	ret=MAX_PUMP_NUM;

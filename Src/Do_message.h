@@ -71,7 +71,6 @@ typedef struct tag_TEC
     uint16_t  command;
     int16_t objTemp[TEC_CH_MAX];
 	int16_t coolTemp[TEC_CH_MAX];
-	int16_t hotTemp[TEC_CH_MAX];
 }TEC_GET_TEM,*pTEC_GET_TEM;
 
 typedef struct tag_LightSource

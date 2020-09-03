@@ -11,7 +11,7 @@
 #define RECV_CHANNEL_A 1
 #define RECV_CHANNEL_B 0
 
-#define CMD_SIZE 50
+#define CMD_SIZE 70
 
 #ifndef     __IO
 #define     __IO    volatile         /*!< defines 'read / write' permissions  */
@@ -69,7 +69,7 @@ typedef struct tag_CMD_PACKET
     uint8_t  packet_route_to; 
     uint8_t  command_h;
     uint8_t  command_l;
-    uint8_t  pdata[50];
+    uint8_t  pdata[60];
 }CMD_PACKET,*pCMD_PACKET;
 
 

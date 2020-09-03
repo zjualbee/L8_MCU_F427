@@ -178,11 +178,10 @@ int On_TEC_GetTemperature(pTEC_GET_TEM p)
 	{
 	    temp.objTemp[i]=BigLittleSwap16(g_tec.sw_obj_temp[i]);
 		temp.coolTemp[i]=BigLittleSwap16(g_tec.cool_temp[i]);
-		temp.hotTemp[i]=BigLittleSwap16(g_tec.hot_temp[i]);
 	}
 	L8_Cmd_Send(p->route_to,p->route_from,(uint8_t*)&temp,sizeof(TEC_GET_TEM));
-
 }
+
 int On_NTC_GetTemperature(pNTC_GET_TEM p)
 {
 		NTC_GET_TEM temp={0};
@@ -213,9 +212,9 @@ int On_Power_GetTemperature(pPOWER_GET_TEM p)
 
 int Do_Pmu_Route(pCMD_PACKET p,uint16_t len)
 {
- 		HAL_UART_Transmit(ROUTE_PORT_PMU,(uint8_t*)p,len, 100);
 
-	
+	HAL_UART_Transmit(ROUTE_PORT_PMU,(uint8_t*)p,len, 100);
+
 	return 0;		
 }
 
@@ -275,7 +274,7 @@ int Do_Mcu_Msg(pCMD_PACKET p,uint16_t len)
 			 	}
 				 else
 			 	{
-			 	    g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,select-1,p->pdata[2+i]);
+			 	    g_fan_cooling.fan_set_pwm_single(&g_fan_cooling,select-1,p->pdata[2-1+select]);
 			 	
 			 	}
 			}

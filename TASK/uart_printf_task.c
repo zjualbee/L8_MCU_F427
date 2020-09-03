@@ -58,7 +58,7 @@ static void uart_printf(void)
         printf("(OFF), ");
     printf("DC:%.1fV,  ErrCode:%d,  ReqErrCode:%d,  Status:0x%08X, Tick:%d\r\n", (float)g_tec.dc_v/10, g_tec.err_code, g_tec.req_err_code, (uint32_t)(g_tec.status[0]|(g_tec.status[1]<<8)|(g_tec.status[2]<<16)|(g_tec.status[3]<<24)), g_tec.tick);
     for (i = 0; i < TEC_CH_MAX; i++){
-        printf("CH %d  Obj:%.1f(%.1f)¡ãC,  Cool:%.1f¡ãC,  Hot:%.1f¡ãC,  Curr:%.1fA,  Pwm:%d%%,  Err:%d,  Lock: %d\r\n", i, (float)g_tec.obj_temp[i]/10, (float)g_tec.sw_obj_temp[i]/10, (float)g_tec.cool_temp[i]/10, (float)g_tec.hot_temp[i]/10, (float)g_tec.tec_a[i]/10, g_tec.pwm[i], g_tec.tec_err[i], g_tec.tec_lock[i]);
+        printf("CH %d  Obj:%.1f(%.1f)¡ãC,  Cool:%.1f¡ãC, Hot:%.1f¡ãC,  Curr:%.1fA,  Pwm:%d%%,  Err:%d,  Lock: %d\r\n", i, (float)g_tec.obj_temp[i]/10, (float)g_tec.sw_obj_temp[i]/10, (float)g_tec.cool_temp[i]/10,(float)g_tec.hot_temp[i]/10, (float)g_tec.tec_a[i]/10, g_tec.pwm[i], g_tec.tec_err[i], g_tec.tec_lock[i]);
     }
 		printf("\r\n");
 #endif
