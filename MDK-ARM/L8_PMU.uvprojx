@@ -739,11 +739,6 @@
               <FilePath>..\TASK\motor_task.c</FilePath>
             </File>
             <File>
-              <FileName>heat_sink_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\TASK\heat_sink_task.c</FilePath>
-            </File>
-            <File>
               <FileName>temprature_task.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\TASK\temprature_task.c</FilePath>

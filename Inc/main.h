@@ -64,7 +64,7 @@ extern "C" {
 #ifdef MODBUS_MASTER
 #include "task_modbus_master.h"
 #endif
-#include "heat_sink_task.h"
+
 #include "led_task.h"
 #include "temprature_task.h"
 #include "uart_task.h"

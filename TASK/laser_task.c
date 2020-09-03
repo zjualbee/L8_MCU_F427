@@ -182,9 +182,10 @@ static portTASK_FUNCTION(laser_task, pvParameters)
     static int s_onece = 0;
     static int s_laser_on_sec = 0;
     static int s_laser_on_min = 0;
-
+	
+    fan_cooling_init(&g_fan_cooling);
     laser_init(&g_laser);
-    
+	
     delay_ms(500);
 
     while(1){
@@ -218,7 +219,8 @@ static portTASK_FUNCTION(laser_task, pvParameters)
             
             // ÂÖÑ¯
             g_laser.temp_update(&g_laser);
-			//
+			g_fan_cooling.fan_speed_update(&g_fan_cooling);
+			
             laser_status_check();
         }
     }

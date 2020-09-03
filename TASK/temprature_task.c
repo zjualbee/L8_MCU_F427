@@ -83,7 +83,7 @@ static portTASK_FUNCTION(temprature_task, pvParameters)
 	osDelay(5000);
     while(1)
 	{
-	    osDelay(5000);
+	    osDelay(100);
 		Update_Ads7830();
     }  
 }

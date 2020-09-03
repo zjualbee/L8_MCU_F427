@@ -88,7 +88,7 @@ static int laser_sys_on(struct Laser *thiz)
  
     // FAN
     #ifdef FAN_SUPPORT
-    //g_fan_cooling.fan_on(&g_fan_cooling,pwm);
+    g_fan_cooling.fan_on(&g_fan_cooling,pwm);
     #endif
 	
 	//色轮转速达到80Hz以上，
@@ -149,17 +149,22 @@ static int laser_sys_on(struct Laser *thiz)
 
 	#ifdef PUMP_EN
 	ret=MAX_PUMP_NUM;
+	uint8_t index;
 	for(i=0;i<MAX_PUMP_NUM;i++)
 	{
 	    if(g_fan_cooling.fan_speed[Pump1+i]>LIGHT_PUMP_SPEED_ERR_MIN && g_fan_cooling.fan_speed[Pump1+i]<LIGHT_PUMP_SPEED_ERR_MAX){
 			ret--;
 	    	}
+		else{
+			index=i;
+			break;
+			}
 		delay_ms(500);
 	}
 	if(ret!=0)
 	{
         laser_err_handle(&sys_err);
-        printf("Pump Error, Pump %d Speed Low: %d RPM\r\n",i+1, g_fan_cooling.fan_speed[Pump1+i]);
+        printf("Pump Error, Pump %d Speed Low: %d RPM\r\n",index, g_fan_cooling.fan_speed[Pump1+index]);
         return ret;
 	}
 

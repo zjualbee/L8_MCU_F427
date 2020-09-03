@@ -1069,7 +1069,7 @@ void StartDefaultTask(void const * argument)
     led_task_create();
     uart_task_create();
     motor_task_create();
-    heat_sink_task_create();
+    //heat_sink_task_create();
     temprature_task_create();
     tec_task_create();
 	laser_task_create();

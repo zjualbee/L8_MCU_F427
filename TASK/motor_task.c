@@ -118,7 +118,7 @@ static portTASK_FUNCTION(motor_task, pvParameters)
             Speed_Error_Cnt = 0;
             printf("reset motor drive\r\n");
             motor_36V_init(&g_motor_36v);
-            g_motor_36v.on(&g_motor_36v);
+            //g_motor_36v.on(&g_motor_36v);
         }
         
         g_motor_36v.speed_ISR_set_Hz_sensor(&g_motor_36v,g_CW_speed_cnt);
