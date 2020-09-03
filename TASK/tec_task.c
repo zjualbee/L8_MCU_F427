@@ -44,8 +44,6 @@ xTaskHandle g_xTaskHandle_tec = NULL;
 *******************************************************************************/
 static portTASK_FUNCTION(tec_task, pvParameters)
 {
-    int i = 0;
-
     #ifdef MODBUS_MASTER
     modbus_master_task_create();
     #endif
@@ -54,7 +52,9 @@ static portTASK_FUNCTION(tec_task, pvParameters)
     #endif
     // 等待TEC板初始化完成
     delay_ms(500);
-	g_tec.on(&g_tec);
+    #ifdef TEC_EN
+    g_tec.off(&g_tec);
+    #endif
 
     while(1){
         delay_ms(1000);

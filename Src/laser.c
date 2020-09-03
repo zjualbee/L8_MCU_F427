@@ -125,10 +125,24 @@ static int laser_sys_on(struct Laser *thiz)
 	// TEC
     #ifdef TEC_SUPPORT
     #ifdef TEC_EN
-    // tick
-    if (0 == g_tec.tick) {    
+    if (0 == g_tec.tick) {
         laser_err_handle(&sys_err);
         return 2;
+    }
+    // Æô¶¯
+    ret = 2;
+    for (i = 0; i < 3; i++) {
+        if ((0==g_tec.set_obj_temp(&g_tec, g_tec.sw_obj_temp[0], g_tec.sw_obj_temp[1], g_tec.sw_obj_temp[2])) && 
+            (0==g_tec.on(&g_tec))) {
+            ret = 0;
+            break;
+        }
+        delay_ms(500);
+    }
+	
+    if (ret != 0){
+        laser_err_handle(&sys_err);
+        return ret;
     }
     #endif
     #endif
@@ -179,6 +193,11 @@ static int laser_sys_off(struct Laser *thiz)
 	g_power3.power_off(&g_power3);
 	#endif
 
+    // TEC
+    #ifdef TEC_EN
+    g_tec.off(&g_tec);
+    #endif
+	
     thiz->sys_on_flag = 0;
     return 0;
 }
