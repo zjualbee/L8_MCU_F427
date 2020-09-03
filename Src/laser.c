@@ -306,7 +306,7 @@ int sys_set_current(uint8_t select,uint16_t value)
         }
 	}
 	else
-		printf("Can't be defined\n");
+		printf("Current Can't be defined\n");
 	return 1;
 }
 
